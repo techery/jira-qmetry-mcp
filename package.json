@@ -1,0 +1,21 @@
+{
+  "name": "jira-qmetry-mcp-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx main.mts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.17.0",
+    "node-fetch": "2.6.7",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "0.16.2",
+    "@types/node": "24.1.0",
+    "ts-node": "10.9.2",
+    "typescript": "5.4.5"
+  }
+}
