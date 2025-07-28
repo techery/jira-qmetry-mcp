@@ -10,13 +10,16 @@ const server = new McpServer({
     description: "Jira Qmetry MCP",
 });
 
-server.tool(
+server.registerTool(
     'list-qmetry-projects',
-    'List all Qmetry projects',
     {
-        projectName: z.string().describe('The name of the project to search for'),
-        maxResults: z.number().optional().describe('Maximum number of results to return'),
-        startAt: z.number().optional().describe('Starting index for pagination')
+        title: "List all Qmetry projects",
+        description: "List all Qmetry projects",
+        inputSchema: {
+            projectName: z.string().describe('The name of the project to search for'),
+            maxResults: z.number().optional().describe('Maximum number of results to return'),
+            startAt: z.number().optional().describe('Starting index for pagination')
+        }
     },
     async ({ projectName, maxResults, startAt }) => {
         const result = await listQmetryProjects(projectName, maxResults, startAt);
