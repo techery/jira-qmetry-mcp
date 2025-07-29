@@ -14,6 +14,12 @@ import {
     editQmetryTestCycleFolder,
     moveQmetryTestCycleFolder
 } from "./tools/qmetry-test-cycle-folders";
+import {
+    getQmetryTestPlanFolders,
+    createQmetryTestPlanFolder,
+    editQmetryTestPlanFolder,
+    moveQmetryTestPlanFolder
+} from "./tools/qmetry-test-plan-folders";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
     ListProjectsParams,
@@ -26,6 +32,10 @@ import {
     CreateTestCycleFolderParams,
     EditTestCycleFolderParams,
     MoveTestCycleFolderParams,
+    GetTestPlanFoldersParams,
+    CreateTestPlanFolderParams,
+    EditTestPlanFolderParams,
+    MoveTestPlanFolderParams,
 } from "./interfaces/index";
 
 const server = new McpServer({
@@ -343,6 +353,112 @@ server.registerTool(
     },
     async ({ projectId, folderId, newParentId }: MoveTestCycleFolderParams) => {
         const result = await moveQmetryTestCycleFolder(projectId, folderId, newParentId);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the get test plan folders tool
+server.registerTool(
+    "get-qmetry-test-plan-folders",
+    {
+        title: "Get Qmetry test plan folders",
+        description: "Get Qmetry test plan folders for a given project",
+        inputSchema: {
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            sort: z.string().optional().describe('Possible values - NAME,CREATED_ON,UPDATED_ON' +
+                'Pattern - sortField:sortOrder(asc/desc)' +
+                'For example if want to sorting on createOn in ascending order then need to pass CREATED_ON:asc'),
+            withCount: z.boolean().optional().describe('Show count of test plans associated with Folder'),
+        },
+    },
+    async ({ projectId, sort, withCount }: GetTestPlanFoldersParams) => {
+        const result = await getQmetryTestPlanFolders(projectId, sort, withCount);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the create test plan folder tool
+server.registerTool(
+    "create-qmetry-test-plan-folder",
+    {
+        title: "Create a Qmetry test plan folder",
+        description: "Create a Qmetry test plan folder for a given project",
+        inputSchema: {
+            folderName: z.string().describe("Name of the folder"),
+            description: z.string().optional().describe("Description of the folder"),
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            parentId: z.number().describe('Refer id from the response of API "Get test plan folders".' +
+                'If you want to create a folder at the root level, pass "-1".'),
+        },
+    },
+    async ({ folderName, projectId, parentId, description }: CreateTestPlanFolderParams) => {
+        const result = await createQmetryTestPlanFolder(folderName, projectId, parentId, description);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the update test plan folder tool
+server.registerTool(
+    "edit-qmetry-test-plan-folder",
+    {
+        title: "Edit a Qmetry test plan folder",
+        description: "Edit a Qmetry test plan folder for a given project",
+        inputSchema: {
+            folderName: z.string().describe("New name of the folder"),
+            description: z.string().optional().describe("New description of the folder"),
+            folderId: z.number().describe("ID of the folder to update."),
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+        },
+    },
+    async ({ folderName, description, folderId, projectId }: EditTestPlanFolderParams) => {
+        const result = await editQmetryTestPlanFolder(folderName, folderId, projectId, description);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the move test plan folder tool
+server.registerTool(
+    "move-qmetry-test-plan-folder",
+    {
+        title: "Move a Qmetry test plan folder",
+        description: "Move a Qmetry test plan folder to a new parent folder",
+        inputSchema: {
+            folderId: z.number().describe('Refer id from the response of API "Get test plan folders".'),
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            newParentId: z.number().describe('Folder Id of where you want to move the folder.' +
+                'Refer id from the response of API "Get test plan folders".'),
+        },
+    },
+    async ({ folderId, projectId, newParentId }: MoveTestPlanFolderParams) => {
+        const result = await moveQmetryTestPlanFolder(folderId, projectId, newParentId);
         return {
             content: [
                 {
