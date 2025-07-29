@@ -8,6 +8,12 @@ import {
     copyQmetryFolder,
     moveQmetryFolder
 } from "./tools/qmetry-test-case-folders";
+import {
+    getQmetryTestCycleFolders,
+    createQmetryTestCycleFolder,
+    editQmetryTestCycleFolder,
+    moveQmetryTestCycleFolder
+} from "./tools/qmetry-test-cycle-folders";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
     ListProjectsParams,
@@ -15,7 +21,11 @@ import {
     CreateFolderParams,
     UpdateFolderParams,
     CopyFolderParams,
-    MoveFolderParams
+    MoveFolderParams,
+    GetTestCycleFoldersParams,
+    CreateTestCycleFolderParams,
+    EditTestCycleFolderParams,
+    MoveTestCycleFolderParams,
 } from "./interfaces/index";
 
 const server = new McpServer({
@@ -227,6 +237,112 @@ server.registerTool(
             folderId,
             newParentId
         );
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the get test cycle folders tool
+server.registerTool(
+    "get-qmetry-test-cycle-folders",
+    {
+        title: "Get Qmetry test cycle folders",
+        description: "Get Qmetry test cycle folders for a given project",
+        inputSchema: {
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            sort: z.string().optional().describe('Possible values - NAME,CREATED_ON,UPDATED_ON' +
+                'Pattern - sortField:sortOrder(asc/desc) ' +
+                'For example if want to sorting on createOn in ascending order then need to pass CREATED_ON:asc'),
+            withCount: z.boolean().optional().describe('Show count of test cycles associated with Folder'),
+        },
+    },
+    async ({ projectId, sort, withCount }: GetTestCycleFoldersParams) => {
+        const result = await getQmetryTestCycleFolders(projectId, sort, withCount);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the create test cycle folder tool
+server.registerTool(
+    "create-qmetry-test-cycle-folder",
+    {
+        title: "Create a Qmetry test cycle folder",
+        description: "Create a Qmetry test cycle folder for a given project",
+        inputSchema: {
+            folderName: z.string().describe("Name of Folder"),
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            parentId: z.number().describe('Refer id from the response of API \"Get test cycle folders\".' +
+                'If you want to create a folder at the root level, pass "-1".'),
+            description: z.string().optional().describe("Description of Folder"),
+        },
+    },
+    async ({ folderName, projectId, parentId, description }: CreateTestCycleFolderParams) => {
+        const result = await createQmetryTestCycleFolder(folderName, projectId, parentId, description);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the update test cycle folder tool
+server.registerTool(
+    "edit-qmetry-test-cycle-folder",
+    {
+        title: "Edit a Qmetry test cycle folder",
+        description: "Edit a Qmetry test cycle folder for a given project",
+        inputSchema: {
+            folderName: z.string().describe("Name of Folder"),
+            description: z.string().optional().describe("Description of Folder"),
+            projectId: z.number().describe('Refer id from the response of API "Get test cycle folders".'),
+            folderId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+        },
+    },
+    async ({ folderName, description, projectId, folderId }: EditTestCycleFolderParams) => {
+        const result = await editQmetryTestCycleFolder(folderName, projectId, folderId, description);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the move test cycle folder tool
+server.registerTool(
+    "move-qmetry-test-cycle-folder",
+    {
+        title: "Move a Qmetry test cycle folder",
+        description: "Move a Qmetry test cycle folder to a new parent folder",
+        inputSchema: {
+            folderId: z.number().describe('Refer id from the response of API "Get test cycle folders".'),
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            newParentId: z.number().describe('Folder Id of where you want to move the folder.' +
+                'Refer id from the response of API "Get test cycle folders".'),
+        },
+    },
+    async ({ projectId, folderId, newParentId }: MoveTestCycleFolderParams) => {
+        const result = await moveQmetryTestCycleFolder(projectId, folderId, newParentId);
         return {
             content: [
                 {
