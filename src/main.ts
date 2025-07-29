@@ -1,7 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { listQmetryProjects } from "./tools/list-qmetry-projects";
-import { createQmetryFolder, listQmetryFolders } from "./tools/qmetry-folders";
+import { createQmetryFolder, listQmetryFolders } from "./tools/qmetry-test-case-folders";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
 const server = new McpServer({
