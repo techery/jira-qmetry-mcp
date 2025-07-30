@@ -142,3 +142,38 @@ export async function moveQmetryTestCycleFolder(projectId: number, folderId: num
         throw error;
     }
 }
+
+// Corresponds to "Search a test cycle folder"
+export async function searchQmetryTestCycleFolders(projectId: number, folderName: string, mode?: string) {
+    const api_key = process.env.QMETRY_API_KEY;
+    if (!api_key) {
+        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+    }
+
+    try {
+        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcycle-folders/search`);
+        if (folderName !== undefined) {
+            url.searchParams.append('folderName', folderName.toString());
+        }
+        if (mode !== undefined) {
+            url.searchParams.append('mode', mode.toString());
+        }
+
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'apikey': api_key
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: 'Failed to parse error response' }));
+            throw new Error(`Error searching test cycle folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Error in searchQmetryTestCycleFolders:', error);
+        throw error;
+    }
+}

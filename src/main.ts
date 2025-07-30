@@ -6,19 +6,22 @@ import {
     listQmetryFolders,
     updateQmetryFolder,
     copyQmetryFolder,
-    moveQmetryFolder
+    moveQmetryFolder,
+    searchQmetryTestCaseFolders
 } from "./tools/qmetry-test-case-folders";
 import {
     getQmetryTestCycleFolders,
     createQmetryTestCycleFolder,
     editQmetryTestCycleFolder,
-    moveQmetryTestCycleFolder
+    moveQmetryTestCycleFolder,
+    searchQmetryTestCycleFolders
 } from "./tools/qmetry-test-cycle-folders";
 import {
     getQmetryTestPlanFolders,
     createQmetryTestPlanFolder,
     editQmetryTestPlanFolder,
-    moveQmetryTestPlanFolder
+    moveQmetryTestPlanFolder,
+    searchQmetryTestPlanFolders
 } from "./tools/qmetry-test-plan-folders";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -36,6 +39,9 @@ import {
     CreateTestPlanFolderParams,
     EditTestPlanFolderParams,
     MoveTestPlanFolderParams,
+    SearchTestPlanFoldersParams,
+    SearchTestCaseFoldersParams,
+    SearchTestCycleFoldersParams,
 } from "./interfaces/index";
 
 const server = new McpServer({
@@ -46,10 +52,10 @@ const server = new McpServer({
 });
 
 server.registerTool(
-    "list-qmetry-projects",
+    "get-qmetry-projects",
     {
-        title: "List all Qmetry projects",
-        description: "List all Qmetry projects",
+        title: "Get all Qmetry projects",
+        description: "Get all Qmetry projects",
         inputSchema: {
             projectName: z.string().describe("The name of the project to search for"),
             maxResults: z
@@ -73,10 +79,10 @@ server.registerTool(
 );
 
 server.registerTool(
-    "list-qmetry-folders",
+    "get-qmetry-test-case-folders",
     {
-        title: "List all Qmetry folders for a project",
-        description: "List all Qmetry folders for a given project key",
+        title: "Get all Qmetry test case folders for a project",
+        description: "Get all Qmetry test case folders for a given project key",
         inputSchema: {
             projectId: z
                 .string()
@@ -110,10 +116,10 @@ server.registerTool(
 );
 
 server.registerTool(
-    "create-qmetry-folder",
+    "create-qmetry-test-case-folder",
     {
-        title: "Create a Qmetry folder",
-        description: "Create a Qmetry folder for a given project key",
+        title: "Create a Qmetry test case folder",
+        description: "Create a Qmetry test case folder for a given project key",
         inputSchema: {
             folderName: z.string().describe("Name of Folder"),
             description: z.string().optional().describe("Description of Folder"),
@@ -149,10 +155,10 @@ server.registerTool(
 );
 
 server.registerTool(
-    "update-qmetry-folder",
+    "edit-qmetry-test-case-folder",
     {
-        title: "Update a Qmetry folder",
-        description: "Update a Qmetry folder for a given project key",
+        title: "Edit a Qmetry test case folder",
+        description: "Edit a Qmetry test case folder for a given project key",
         inputSchema: {
             folderName: z.string().describe("Name of Folder"),
             description: z.string().optional().describe("Description of Folder"),
@@ -188,10 +194,10 @@ server.registerTool(
 
 // Register the copy folder tool
 server.registerTool(
-    "copy-qmetry-folder",
+    "copy-qmetry-test-case-folder",
     {
-        title: "Copy a Qmetry folder",
-        description: "Copy a Qmetry folder and optionally its contents to another location",
+        title: "Copy a Qmetry test case folder",
+        description: "Copy a Qmetry test case folder and optionally its contents to another location",
         inputSchema: {
             folderId: z.string().describe('Refer id from the response of API "Get test case folders".'),
             projectId: z.string().describe('Refer id from the response of API "Get qmetry enabled projects".'),
@@ -224,10 +230,10 @@ server.registerTool(
 
 // Register the move folder tool
 server.registerTool(
-    "move-qmetry-folder",
+    "move-qmetry-test-case-folder",
     {
-        title: "Move a Qmetry folder",
-        description: "Move a Qmetry folder to a new parent folder",
+        title: "Move a Qmetry test case folder",
+        description: "Move a Qmetry test case folder to a new parent folder",
         inputSchema: {
             folderId: z.string().describe('Refer id from the response of API "Get test case folders".'),
             projectId: z.string().describe('Refer id from the response of API "Get qmetry enabled projects".'),
@@ -247,6 +253,32 @@ server.registerTool(
             folderId,
             newParentId
         );
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the search test plan folder tool
+server.registerTool(
+    "search-qmetry-test-case-folders",
+    {
+        title: "Search a Qmetry test case folder",
+        description: "Search a Qmetry test case folder for a given project",
+        inputSchema: {
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            folderName: z.string().describe("Provide the actual folder name to search its details"),
+            mode: z.string().optional().describe('Allowed value - "STRICT",' +
+                'if passed folder search will be absolute otherwise relative.'),
+        },
+    },
+    async ({ projectId, folderName, mode }: SearchTestCaseFoldersParams) => {
+        const result = await searchQmetryTestCaseFolders(projectId, folderName, mode);
         return {
             content: [
                 {
@@ -364,6 +396,32 @@ server.registerTool(
     }
 );
 
+// Register the search test cycle folder tool
+server.registerTool(
+    "search-qmetry-test-cycle-folder",
+    {
+        title: "Search a Qmetry test cycle folder",
+        description: "Search a Qmetry test cycle folder for a given project",
+        inputSchema: {
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            folderName: z.string().describe("Provide the actual folder name to search its details"),
+            mode: z.string().optional().describe('Allowed value - "STRICT",' +
+                'if passed folder search will be absolute otherwise relative.'),
+        },
+    },
+    async ({ projectId, folderName, mode }: SearchTestCycleFoldersParams) => {
+        const result = await searchQmetryTestCycleFolders(projectId, folderName, mode);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
 // Register the get test plan folders tool
 server.registerTool(
     "get-qmetry-test-plan-folders",
@@ -459,6 +517,32 @@ server.registerTool(
     },
     async ({ folderId, projectId, newParentId }: MoveTestPlanFolderParams) => {
         const result = await moveQmetryTestPlanFolder(folderId, projectId, newParentId);
+        return {
+            content: [
+                {
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                },
+            ],
+        };
+    }
+);
+
+// Register the search test plan folder tool
+server.registerTool(
+    "search-qmetry-test-plan-folder",
+    {
+        title: "Search a Qmetry test plan folder",
+        description: "Search a Qmetry test plan folder for a given project",
+        inputSchema: {
+            projectId: z.number().describe('Refer id from the response of API "Get qmetry enabled projects".'),
+            folderName: z.string().describe("Provide the actual folder name to search its details"),
+            mode: z.string().optional().describe('Allowed value - "STRICT",' +
+                'if passed folder search will be absolute otherwise relative.'),
+        },
+    },
+    async ({ projectId, folderName, mode }: SearchTestPlanFoldersParams) => {
+        const result = await searchQmetryTestPlanFolders(projectId, folderName, mode);
         return {
             content: [
                 {

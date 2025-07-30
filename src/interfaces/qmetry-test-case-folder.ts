@@ -96,3 +96,17 @@ export interface UpdateFolderParams {
   /** Optional new description for the folder */
   description?: string;
 }
+
+/**
+ * Parameters for the searchQmetryTestCaseFolders function.
+ * @interface SearchTestCaseFoldersParams
+ * @property {number} projectId - The ID of the project to search in.
+ * @property {string} folderName - The name of the folder to search for.
+ * @property {string} [mode] - Allowed value - "STRICT", if passed folder 
+ * search will be absolute otherwise relative
+ */
+export interface SearchTestCaseFoldersParams {
+    projectId: number;
+    folderName: string;
+    mode?: string;
+}

@@ -53,3 +53,17 @@ export interface MoveTestCycleFolderParams {
     folderId: number;
     newParentId: number;
 }
+
+/**
+ * Parameters for the searchQmetryTestCycleFolders function.
+ * @interface SearchTestCycleFoldersParams
+ * @property {number} projectId - The ID of the project to search in.
+ * @property {string} folderName - The name of the folder to search for.
+ * @property {string} [mode] - Allowed value - "STRICT", if passed folder 
+ * search will be absolute otherwise relative.
+ */
+export interface SearchTestCycleFoldersParams {
+    projectId: number;
+    folderName: string;
+    mode?: string;
+}
