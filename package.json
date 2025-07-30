@@ -5,7 +5,7 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
-    "start": "tsx main.mts"
+    "start": "npx tsx src/main.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.17.0",
@@ -16,6 +16,7 @@
     "@modelcontextprotocol/inspector": "0.16.2",
     "@types/node": "24.1.0",
     "ts-node": "10.9.2",
+    "tsx": "4.20.3",
     "typescript": "5.4.5"
   }
 }
