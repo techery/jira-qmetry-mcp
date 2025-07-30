@@ -1,11 +1,11 @@
 /**
  * Defines the parameters for the copyQmetryFolder function.
- * @interface CopyFolderParams
+ * @interface CopyTestCaseFolderParams
  * @property {string} folderId - The ID of the folder to be copied.
  * @property {string} projectId - The ID of the project containing the folder.
  * @property {string} newParentId - The ID of the parent folder where the folder will be copied.
  */
-export interface CopyFolderParams {
+export interface CopyTestCaseFolderParams {
   folderId: string;
   projectId: string;
   newParentId: string;
@@ -13,13 +13,13 @@ export interface CopyFolderParams {
 
 /**
  * Defines the parameters for the createQmetryFolder function.
- * @interface CreateFolderParams
+ * @interface CreateTestCaseFolderParams
  * @property {string} folderName - The name of the new folder.
  * @property {string} parentId - The ID of the parent folder. Use "-1" for the root.
  * @property {string} projectId - The ID of the project where the folder will be created.
  * @property {string} [description] - An optional description for the folder.
  */
-export interface CreateFolderParams {
+export interface CreateTestCaseFolderParams {
   /** Name of the folder to create */
   folderName: string;
   
@@ -38,30 +38,32 @@ export interface CreateFolderParams {
 
 /**
  * Defines the parameters for the listQmetryProjects function.
- * @interface ListProjectsParams
- * @property {string} projectName - The name of the project to search for.
- * @property {number} [maxResults] - The maximum number of results to return.
- * @property {number} [startAt] - The starting index for pagination.
+ * @interface GetTestCaseFoldersParams
+ * @property {string} projectId - The ID of the project to search for.
+ * @property {string} [short] - Possible values - NAME,CREATED_ON,UPDATED_ON
+Pattern - sortField:sortOrder(asc/desc)
+For example if want to sorting on createOn in ascending order then need to pass CREATED_ON:asc
+ * @property {boolean} [withCount] - The starting index for pagination.
  */
-export interface ListProjectsParams {
-  /** The name of the project to search for */
-  projectName: string;
+export interface GetTestCaseFoldersParams {
+  /** The ID of the project to search for */
+  projectId: number;
   
   /** Maximum number of results to return */
-  maxResults?: number;
+  short?: string;
   
   /** Starting index for pagination */
-  startAt?: number;
+  withCount?: boolean;
 }
 
 /**
  * Defines the parameters for the moveQmetryFolder function.
- * @interface MoveFolderParams
+ * @interface MoveTestCaseFolderParams
  * @property {string} folderId - The ID of the folder to be moved.
  * @property {string} projectId - The ID of the project containing the folder.
  * @property {string} newParentId - The ID of the new parent folder. Use "-1" to move to the root.
  */
-export interface MoveFolderParams {
+export interface MoveTestCaseFolderParams {
   /** ID of the folder to move */
   folderId: string;
   
@@ -77,13 +79,13 @@ export interface MoveFolderParams {
 
 /**
  * Defines the parameters for the updateQmetryFolder function.
- * @interface UpdateFolderParams
+ * @interface EditTestCaseFolderParams
  * @property {string} folderName - The new name for the folder.
  * @property {string} folderId - The ID of the folder to be updated.
  * @property {string} projectId - The ID of the project containing the folder.
  * @property {string} [description] - An optional new description for the folder.
  */
-export interface UpdateFolderParams {
+export interface EditTestCaseFolderParams {
   /** New name for the folder */
   folderName: string;
   

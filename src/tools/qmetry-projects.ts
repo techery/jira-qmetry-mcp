@@ -13,7 +13,7 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-export async function listQmetryProjects(projectName: string, maxResults?: number, startAt?: number) {
+export async function getQmetryProjects(fields: string, projectName: string, maxResults?: number, startAt?: number) {
     const api_key = process.env.QMETRY_API_KEY;
 
     if (!api_key) {
@@ -22,8 +22,8 @@ export async function listQmetryProjects(projectName: string, maxResults?: numbe
 
     try {
         const url = new URL(`${qmetry_api_url}projects`);
-        if (projectName) {
-            url.searchParams.append('fields', "key,name");
+        if (fields) {
+            url.searchParams.append('fields', fields);
         }
         if (maxResults !== undefined) {
             url.searchParams.append('maxResults', maxResults.toString());

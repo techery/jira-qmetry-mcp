@@ -14,7 +14,7 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-export async function createQmetryFolder(folderName: string, parentId: string, projectId: string, description?: string) {
+export async function createQmetryTestCaseFolder(folderName: string, parentId: string, projectId: string, description?: string) {
     const api_key = process.env.QMETRY_API_KEY;
 
     if (!api_key) {
@@ -65,7 +65,7 @@ export async function createQmetryFolder(folderName: string, parentId: string, p
     }
 }
 
-export async function listQmetryFolders(projectId: string, short?: string, withCount?: boolean) {
+export async function getQmetryTestCaseFolders(projectId: number, short?: string, withCount?: boolean) {
     const api_key = process.env.QMETRY_API_KEY;
 
     if (!api_key) {
@@ -118,7 +118,7 @@ export async function listQmetryFolders(projectId: string, short?: string, withC
     }
 }
 
-export async function updateQmetryFolder(folderName: string, folderId: string, projectId: string, description?: string) {
+export async function editQmetryTestCaseFolder(folderName: string, folderId: string, projectId: string, description?: string) {
     const api_key = process.env.QMETRY_API_KEY;
 
     if (!api_key) {
@@ -168,7 +168,7 @@ export async function updateQmetryFolder(folderName: string, folderId: string, p
     }
 }
 
-export async function copyQmetryFolder(
+export async function copyQmetryTestCaseFolder(
     projectId: string,
     folderId: string,
     newParentId: string
@@ -221,7 +221,7 @@ export async function copyQmetryFolder(
     }
 }
 
-export async function moveQmetryFolder(projectId: string, folderId: string, newParentId: string) {
+export async function moveQmetryTestCaseFolder(projectId: string, folderId: string, newParentId: string) {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
         throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');

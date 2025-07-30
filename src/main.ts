@@ -1,13 +1,13 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { listQmetryProjects } from "./tools/list-qmetry-projects";
+import { getQmetryProjects } from "./tools/qmetry-projects";
 import {
-    createQmetryFolder,
-    listQmetryFolders,
-    updateQmetryFolder,
-    copyQmetryFolder,
-    moveQmetryFolder,
-    searchQmetryTestCaseFolders
+    createQmetryTestCaseFolder,
+    copyQmetryTestCaseFolder,
+    moveQmetryTestCaseFolder,
+    searchQmetryTestCaseFolders,
+    getQmetryTestCaseFolders,
+    editQmetryTestCaseFolder
 } from "./tools/qmetry-test-case-folders";
 import {
     getQmetryTestCycleFolders,
@@ -25,12 +25,7 @@ import {
 } from "./tools/qmetry-test-plan-folders";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
-    ListProjectsParams,
-    ListFoldersParams,
-    CreateFolderParams,
-    UpdateFolderParams,
-    CopyFolderParams,
-    MoveFolderParams,
+    GetProjectsParams,
     GetTestCycleFoldersParams,
     CreateTestCycleFolderParams,
     EditTestCycleFolderParams,
@@ -42,6 +37,11 @@ import {
     SearchTestPlanFoldersParams,
     SearchTestCaseFoldersParams,
     SearchTestCycleFoldersParams,
+    GetTestCaseFoldersParams,
+    EditTestCaseFolderParams,
+    CreateTestCaseFolderParams,
+    MoveTestCaseFolderParams,
+    CopyTestCaseFolderParams,
 } from "./interfaces/index";
 
 const server = new McpServer({
@@ -57,6 +57,7 @@ server.registerTool(
         title: "Get all Qmetry projects",
         description: "Get all Qmetry projects",
         inputSchema: {
+            fields: z.string().describe("Refer Parameters for fields to be fetched for projects"),
             projectName: z.string().describe("The name of the project to search for"),
             maxResults: z
                 .number()
@@ -65,8 +66,8 @@ server.registerTool(
             startAt: z.number().optional().describe("Starting index for pagination"),
         },
     },
-    async ({ projectName, maxResults, startAt }: ListProjectsParams) => {
-        const result = await listQmetryProjects(projectName, maxResults, startAt);
+    async ({ fields, projectName, maxResults, startAt }: GetProjectsParams) => {
+        const result = await getQmetryProjects(fields, projectName, maxResults, startAt);
         return {
             content: [
                 {
@@ -85,7 +86,7 @@ server.registerTool(
         description: "Get all Qmetry test case folders for a given project key",
         inputSchema: {
             projectId: z
-                .string()
+                .number()
                 .describe(
                     'Refer id from the response of API "Get qmetry enabled projects".'
                 ),
@@ -102,8 +103,8 @@ server.registerTool(
                 .describe("Show count of testCases associated with Folder"),
         },
     },
-    async ({ projectId, short, withCount }: ListFoldersParams) => {
-        const result = await listQmetryFolders(projectId, short, withCount);
+    async ({ projectId, short, withCount }: GetTestCaseFoldersParams) => {
+        const result = await getQmetryTestCaseFolders(projectId, short, withCount);
         return {
             content: [
                 {
@@ -136,8 +137,8 @@ server.registerTool(
                 ),
         },
     },
-    async ({ projectId, folderName, description, parentId }: CreateFolderParams) => {
-        const result = await createQmetryFolder(
+    async ({ projectId, folderName, description, parentId }: CreateTestCaseFolderParams) => {
+        const result = await createQmetryTestCaseFolder(
             folderName,
             parentId,
             projectId,
@@ -174,8 +175,8 @@ server.registerTool(
                 ),
         },
     },
-    async ({ folderName, folderId, projectId, description }: UpdateFolderParams) => {
-        const result = await updateQmetryFolder(
+    async ({ folderName, folderId, projectId, description }: EditTestCaseFolderParams) => {
+        const result = await editQmetryTestCaseFolder(
             folderName,
             folderId,
             projectId,
@@ -211,8 +212,8 @@ server.registerTool(
         projectId,
         folderId,
         newParentId
-    }: CopyFolderParams) => {
-        const result = await copyQmetryFolder(
+    }: CopyTestCaseFolderParams) => {
+        const result = await copyQmetryTestCaseFolder(
             projectId,
             folderId,
             newParentId
@@ -247,8 +248,8 @@ server.registerTool(
         projectId,
         folderId,
         newParentId,
-    }: MoveFolderParams) => {
-        const result = await moveQmetryFolder(
+    }: MoveTestCaseFolderParams) => {
+        const result = await moveQmetryTestCaseFolder(
             projectId,
             folderId,
             newParentId
