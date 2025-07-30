@@ -13,18 +13,25 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-export async function getQmetryProjects(fields: string, projectName: string, maxResults?: number, startAt?: number) {
+/**
+ * Retrieves a list of Qmetry projects matching the given name.
+ * @param projectName The name of the project to search for.
+ * @param maxResults The maximum number of results to return.
+ * @param startAt The starting index for pagination.
+ * @returns A promise that resolves to an object with a content property
+ * containing an array of objects with type and text properties. The text
+ * property contains the JSON response from the API.
+ */
+export async function getQmetryProjects(projectName: string, maxResults?: number, startAt?: number): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
 
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
         const url = new URL(`${qmetry_api_url}projects`);
-        if (fields) {
-            url.searchParams.append('fields', fields);
-        }
+        url.searchParams.append('search', 'key,name');
         if (maxResults !== undefined) {
             url.searchParams.append('maxResults', maxResults.toString());
         }
@@ -51,25 +58,9 @@ export async function getQmetryProjects(fields: string, projectName: string, max
             throw new Error(`Error fetching projects: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
         }
 
-        const data = await response.json();
-
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: JSON.stringify(data, null, 2),
-                },
-            ],
-        };
+        return await response.json();
     } catch (error) {
-        console.error('Error in listQmetryProjects:', error);
-        return {
-            content: [
-                {
-                    type: "text",
-                    text: error,
-                },
-            ],
-        };
+        console.error('Error in getQmetryProjects:', error);
+        throw error;
     }
 }
