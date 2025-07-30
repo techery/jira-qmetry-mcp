@@ -14,11 +14,17 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-// Corresponds to "Get test cycle folders"
-export async function getQmetryTestCycleFolders(projectId: number, sort?: string, withCount?: boolean) {
+/**
+ * Fetches test cycle folders for a given project.
+ * @param {number} projectId The ID of the project.
+ * @param {string} [sort] The sorting criteria.
+ * @param {boolean} [withCount] Whether to include the count of test cases.
+ * @returns {Promise<{ content: [{ type: string; text: string; }]; }>} The response from the API.
+ */
+export async function getQmetryTestCycleFolders(projectId: number, sort?: string, withCount?: boolean): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
@@ -49,11 +55,18 @@ export async function getQmetryTestCycleFolders(projectId: number, sort?: string
     }
 }
 
-// Corresponds to "Create a test cycle folder"
-export async function createQmetryTestCycleFolder(folderName: string, projectId: number, parentId: number, description?: string) {
+/**
+ * Creates a new test cycle folder.
+ * @param {string} folderName The name of the folder.
+ * @param {number} projectId The ID of the project.
+ * @param {number} parentId The ID of the parent folder.
+ * @param {string} [description] The description of the folder.
+ * @returns {Promise<{ content: [{ type: string; text: string; }]; }>} The response from the API.
+ */
+export async function createQmetryTestCycleFolder(folderName: string, projectId: number, parentId: number, description?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
@@ -83,11 +96,18 @@ export async function createQmetryTestCycleFolder(folderName: string, projectId:
     }
 }
 
-// Corresponds to "Edit a test cycle folder"
-export async function editQmetryTestCycleFolder(folderName: string, projectId: number, folderId: number, description?: string) {
+/**
+ * Edits an existing test cycle folder.
+ * @param {string} folderName The name of the folder.
+ * @param {number} projectId The ID of the project.
+ * @param {number} folderId The ID of the folder to edit.
+ * @param {string} [description] The description of the folder.
+ * @returns {Promise<{ content: [{ type: string; text: string; }]; }>} The response from the API.
+ */
+export async function editQmetryTestCycleFolder(folderName: string, projectId: number, folderId: number, description?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
@@ -113,11 +133,17 @@ export async function editQmetryTestCycleFolder(folderName: string, projectId: n
     }
 }
 
-// Corresponds to "Move a test cycle folder"
-export async function moveQmetryTestCycleFolder(projectId: number, folderId: number, newParentId: number) {
+/**
+ * Moves an existing test cycle folder.
+ * @param {number} projectId The ID of the project.
+ * @param {number} folderId The ID of the folder to move.
+ * @param {number} newParentId The ID of the new parent folder.
+ * @returns {Promise<{ content: [{ type: string; text: string; }]; }>} The response from the API.
+ */
+export async function moveQmetryTestCycleFolder(projectId: number, folderId: number, newParentId: number): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
@@ -143,11 +169,17 @@ export async function moveQmetryTestCycleFolder(projectId: number, folderId: num
     }
 }
 
-// Corresponds to "Search a test cycle folder"
-export async function searchQmetryTestCycleFolders(projectId: number, folderName: string, mode?: string) {
+/**
+ * Searches for test cycle folders.
+ * @param {number} projectId The ID of the project.
+ * @param {string} folderName The name of the folder to search for.
+ * @param {string} [mode] The search mode.
+ * @returns {Promise<{ content: [{ type: string; text: string; }]; }>} The response from the API.
+ */
+export async function searchQmetryTestCycleFolders(projectId: number, folderName: string, mode?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
     const api_key = process.env.QMETRY_API_KEY;
     if (!api_key) {
-        throw new Error('La variable de entorno QMETRY_API_KEY no está configurada.');
+        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
     }
 
     try {
