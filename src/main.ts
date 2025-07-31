@@ -6,6 +6,7 @@ import { projectTools } from "./tools/project-tools";
 import { testCaseFolderTools } from "./tools/test-case-folder-tools";
 import { testCycleFolderTools } from "./tools/test-cycle-folder-tools";
 import { testPlanFolderTools } from "./tools/test-plan-folder-tools";
+import { testCasesTools } from "./tools/test-cases-tools";
 
 /**
  * Creates a new MCP server instance.
@@ -49,7 +50,7 @@ function registerTools(server: McpServer, tools: ToolDefinition[]) {
  * If a tool cannot be registered (for example, if a tool with the same name already exists)
  * an error will be logged and the process will exit with a non-zero status code.
  */
-registerTools(server, [...projectTools, ...testCaseFolderTools, ...testCycleFolderTools, ...testPlanFolderTools]);
+registerTools(server, [...projectTools, ...testCaseFolderTools, ...testCycleFolderTools, ...testPlanFolderTools, ...testCasesTools]);
 
 /**
  * The main function that starts the server.
