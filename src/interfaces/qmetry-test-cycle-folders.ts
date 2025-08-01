@@ -6,9 +6,9 @@
  * @property {boolean} [withCount] - Whether to include the count of test cases.
  */
 export interface GetTestCycleFoldersParams {
-    projectId: number;
-    sort?: string;
-    withCount?: boolean;
+  projectId: number;
+  sort?: string;
+  withCount?: boolean;
 }
 
 /**
@@ -20,10 +20,10 @@ export interface GetTestCycleFoldersParams {
  * @property {number} parentId - The ID of the parent folder.
  */
 export interface CreateTestCycleFolderParams {
-    folderName: string;
-    description?: string;
-    projectId: number;
-    parentId: number;
+  folderName: string;
+  description?: string;
+  projectId: number;
+  parentId: number;
 }
 
 /**
@@ -35,10 +35,10 @@ export interface CreateTestCycleFolderParams {
  * @property {number} folderId - The ID of the folder to be updated.
  */
 export interface EditTestCycleFolderParams {
-    folderName: string;
-    description?: string;
-    projectId: number;
-    folderId: number;
+  folderName: string;
+  description?: string;
+  projectId: number;
+  folderId: number;
 }
 
 /**
@@ -49,9 +49,9 @@ export interface EditTestCycleFolderParams {
  * @property {number} newParentId - The ID of the new parent folder.
  */
 export interface MoveTestCycleFolderParams {
-    projectId: number;
-    folderId: number;
-    newParentId: number;
+  projectId: number;
+  folderId: number;
+  newParentId: number;
 }
 
 /**
@@ -59,11 +59,11 @@ export interface MoveTestCycleFolderParams {
  * @interface SearchTestCycleFoldersParams
  * @property {number} projectId - The ID of the project to search in.
  * @property {string} folderName - The name of the folder to search for.
- * @property {string} [mode] - Allowed value - "STRICT", if passed folder 
+ * @property {string} [mode] - Allowed value - "STRICT", if passed folder
  * search will be absolute otherwise relative.
  */
 export interface SearchTestCycleFoldersParams {
-    projectId: number;
-    folderName: string;
-    mode?: string;
+  projectId: number;
+  folderName: string;
+  mode?: string;
 }

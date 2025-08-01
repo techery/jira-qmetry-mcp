@@ -6,9 +6,9 @@
  * @property {boolean} [withCount] - Whether to include the count of test cases.
  */
 export interface GetTestPlanFoldersParams {
-    projectId: number;
-    sort?: string;
-    withCount?: boolean;
+  projectId: number;
+  sort?: string;
+  withCount?: boolean;
 }
 
 /**
@@ -20,10 +20,10 @@ export interface GetTestPlanFoldersParams {
  * @property {number} [parentId] - The ID of the parent folder (optional).
  */
 export interface CreateTestPlanFolderParams {
-    folderName: string;
-    description?: string;
-    projectId: number;
-    parentId?: number;
+  folderName: string;
+  description?: string;
+  projectId: number;
+  parentId?: number;
 }
 
 /**
@@ -35,10 +35,10 @@ export interface CreateTestPlanFolderParams {
  * @property {number} projectId - The ID of the project containing the folder.
  */
 export interface EditTestPlanFolderParams {
-    folderName: string;
-    description?: string;
-    folderId: number;
-    projectId: number;
+  folderName: string;
+  description?: string;
+  folderId: number;
+  projectId: number;
 }
 
 /**
@@ -49,9 +49,9 @@ export interface EditTestPlanFolderParams {
  * @property {number} newParentId - The ID of the new parent folder.
  */
 export interface MoveTestPlanFolderParams {
-    folderId: number;
-    projectId: number;
-    newParentId: number;
+  folderId: number;
+  projectId: number;
+  newParentId: number;
 }
 
 /**
@@ -59,11 +59,11 @@ export interface MoveTestPlanFolderParams {
  * @interface SearchTestPlanFoldersParams
  * @property {number} projectId - The ID of the project to search in.
  * @property {string} folderName - The name of the folder to search for.
- * @property {string} [mode] - Allowed value - "STRICT", if passed folder 
+ * @property {string} [mode] - Allowed value - "STRICT", if passed folder
  * search will be absolute otherwise relative.
  */
 export interface SearchTestPlanFoldersParams {
-    projectId: number;
-    folderName: string;
-    mode?: string;
+  projectId: number;
+  folderName: string;
+  mode?: string;
 }

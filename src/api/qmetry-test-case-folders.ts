@@ -1,4 +1,3 @@
-
 import fetch from 'node-fetch';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -25,39 +24,52 @@ const qmetry_api_url = config.qmetry_api_url;
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function createQmetryTestCaseFolder(folderName: string, parentId: string, projectId: string, description?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
+export async function createQmetryTestCaseFolder(
+  folderName: string,
+  parentId: string,
+  projectId: string,
+  description?: string
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
 
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders`
+    );
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify({
+        folderName,
+        description,
+        parentId,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Failed to parse error response' }));
+      throw new Error(
+        `Error creating folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders`);
-
-        const response = await fetch(url.toString(), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-            body: JSON.stringify({
-                folderName,
-                description,
-                parentId
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'Failed to parse error response' }));
-            throw new Error(`Error creating folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in createQmetryFolder:', error);
-        throw error;
-    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in createQmetryFolder:', error);
+    throw error;
+  }
 }
 
 /**
@@ -70,41 +82,53 @@ export async function createQmetryTestCaseFolder(folderName: string, parentId: s
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function getQmetryTestCaseFolders(projectId: number, short?: string, withCount?: boolean): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
+export async function getQmetryTestCaseFolders(
+  projectId: number,
+  short?: string,
+  withCount?: boolean
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
 
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders`
+    );
+
+    if (short !== undefined) {
+      url.searchParams.append('short', short.toString());
+    }
+    if (withCount !== undefined) {
+      url.searchParams.append('withCount', withCount.toString());
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders`);
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
 
-        if (short !== undefined) {
-            url.searchParams.append('short', short.toString());
-        }
-        if (withCount !== undefined) {
-            url.searchParams.append('withCount', withCount.toString());
-        }
-
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'Failed to parse error response' }));
-            throw new Error(`Error fetching folders: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in listQmetryFolders:', error);
-        throw error;
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Failed to parse error response' }));
+      throw new Error(
+        `Error fetching folders: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in listQmetryFolders:', error);
+    throw error;
+  }
 }
 
 /**
@@ -118,38 +142,51 @@ export async function getQmetryTestCaseFolders(projectId: number, short?: string
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function editQmetryTestCaseFolder(folderName: string, folderId: string, projectId: string, description?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
+export async function editQmetryTestCaseFolder(
+  folderName: string,
+  folderId: string,
+  projectId: string,
+  description?: string
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
 
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}`
+    );
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify({
+        folderName,
+        description,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Failed to parse error response' }));
+      throw new Error(
+        `Error updating folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}`);
-
-        const response = await fetch(url.toString(), {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-            body: JSON.stringify({
-                folderName,
-                description
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ message: 'Failed to parse error response' }));
-            throw new Error(`Error updating folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in updateQmetryFolder:', error);
-        throw error;
-    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in updateQmetryFolder:', error);
+    throw error;
+  }
 }
 
 /**
@@ -162,38 +199,48 @@ export async function editQmetryTestCaseFolder(folderName: string, folderId: str
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function copyQmetryTestCaseFolder(projectId: string, folderId: string, newParentId: string): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+export async function copyQmetryTestCaseFolder(
+  projectId: string,
+  folderId: string,
+  newParentId: string
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}/copy`
+    );
+
+    const requestBody: any = {
+      newParentId,
+    };
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error copying folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}/copy`);
-
-        const requestBody: any = {
-            newParentId
-        };
-
-        const response = await fetch(url.toString(), {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-            body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`Error copying folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in copyQmetryFolder:', error);
-        throw error;
-    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in copyQmetryFolder:', error);
+    throw error;
+  }
 }
 
 /**
@@ -206,38 +253,48 @@ export async function copyQmetryTestCaseFolder(projectId: string, folderId: stri
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function moveQmetryTestCaseFolder(projectId: string, folderId: string, newParentId: string): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+export async function moveQmetryTestCaseFolder(
+  projectId: string,
+  folderId: string,
+  newParentId: string
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}/move`
+    );
+
+    const requestBody: any = {
+      newParentId,
+    };
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error moving folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders/${folderId}/move`);
-
-        const requestBody: any = {
-            newParentId
-        };
-
-        const response = await fetch(url.toString(), {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-            body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`Error moving folder: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in moveQmetryFolder:', error);
-        throw error;
-    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in moveQmetryFolder:', error);
+    throw error;
+  }
 }
 
 /**
@@ -250,38 +307,48 @@ export async function moveQmetryTestCaseFolder(projectId: string, folderId: stri
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
-export async function searchQmetryTestCaseFolders(projectId: number, folderName: string, mode?: string): Promise<{ content: [{ type: string; text: string; }]; }> {
-    const api_key = process.env.QMETRY_API_KEY;
-    if (!api_key) {
-        throw new Error('The environment variable QMETRY_API_KEY is not configured.');
+export async function searchQmetryTestCaseFolders(
+  projectId: number,
+  folderName: string,
+  mode?: string
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${projectId}/testcase-folders/search`
+    );
+
+    if (folderName !== undefined) {
+      url.searchParams.append('folderName', folderName.toString());
+    }
+    if (mode !== undefined) {
+      url.searchParams.append('mode', mode.toString());
     }
 
-    try {
-        const url = new URL(`${qmetry_api_url}projects/${projectId}/testcase-folders/search`);
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
 
-        if (folderName !== undefined) {
-            url.searchParams.append('folderName', folderName.toString());
-        }
-        if (mode !== undefined) {
-            url.searchParams.append('mode', mode.toString());
-        }
-
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': api_key
-            },
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`Error searching folders: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error in searchQmetryTestCaseFolders:', error);
-        throw error;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error searching folders: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in searchQmetryTestCaseFolders:', error);
+    throw error;
+  }
 }

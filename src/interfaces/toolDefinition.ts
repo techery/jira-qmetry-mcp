@@ -10,11 +10,11 @@
  * @property {Promise<any>} handler - Returns a promise that resolves when the operation is complete.
  */
 export interface ToolDefinition {
-    name: string;
-    definition: {
-        title: string;
-        description: string;
-        inputSchema: Record<string, any>;
-    };
-    handler: (...args: any[]) => Promise<any>;
+  name: string;
+  definition: {
+    title: string;
+    description: string;
+    inputSchema: Record<string, any>;
+  };
+  handler: (...args: any[]) => Promise<any>;
 }

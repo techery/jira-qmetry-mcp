@@ -29,27 +29,45 @@
  * @property {number} [startAt] - The starting index for pagination.
  */
 export interface SearchTestCasesParams {
-    projectId: number;
-    assignee?: string;
-    components?: string[];
-    createdBy?: string;
-    createdOn?: string;
-    description?: string;
-    estimatedTime?: string;
-    fixVersions?: string[];
-    folderId?: string;
-    key?: string;
-    labels?: string[];
-    priority?: string;
-    reporter?: string;
-    sprint?: string;
-    status?: string[];
-    summary?: string;
-    updatedBy?: string;
-    updatedOn?: string;
-    maxResults?: number;
-    sort?: string;
-    startAt?: number;
+  projectId: number;
+  assignee?: string;
+  components?: string[];
+  createdBy?: string;
+  createdOn?: string;
+  description?: string;
+  estimatedTime?: string;
+  fixVersions?: string[];
+  folderId?: string;
+  key?: string;
+  labels?: string[];
+  priority?: string;
+  reporter?: string;
+  sprint?: string;
+  status?: string[];
+  summary?: string;
+  updatedBy?: string;
+  updatedOn?: string;
+  maxResults?: number;
+  sort?: string;
+  startAt?: number;
+}
+
+/**
+ * Defines the parameters for moving a test case to a different folder.
+ * @interface MoveTestCaseParams
+ * @property {string[]} testCaseIds - 	list of test case id or Search filter. For Test case id
+ * - Refer id from the response of API "Search Test Case".
+ * @property {number} targetFolderId - Folder Id of where you want to move testcases to folder.
+ * Refer id from the response of API "Get test case folders".
+ * @property {number} projectId - Refer id from the response of API "Get QMetry Enabled Projects".
+ * @property {number} selectedFolderId - Folder Id of where you want to move testcases from folder.
+ * Refer id from the response of API "Get test case folders".
+ */
+export interface MoveTestCaseParams {
+  testcaseIds: string[];
+  targetFolderId: number;
+  projectId: number;
+  selectedFolderId: number;
 }
 
 /**
@@ -63,12 +81,12 @@ export interface SearchTestCasesParams {
  * @property {boolean} isExpanded - Whether the step is expanded in the UI
  */
 interface TestStep {
-    stepDetails: string;
-    testData: string;
-    expectedResult: string;
-    id: number;
-    isChecked?: boolean;
-    isExpanded?: boolean;
+  stepDetails: string;
+  testData: string;
+  expectedResult: string;
+  id: number;
+  isChecked?: boolean;
+  isExpanded?: boolean;
 }
 
 /**
@@ -92,21 +110,20 @@ interface TestStep {
  * @property {boolean} [isAutomated] - Indicates whether the test case is automated.
  */
 export interface CreateTestCaseParams {
-    summary: string;
-    projectId: string;
-    folderId: string;
-    assignee?: string;
-    components?: string[];
-    description?: string;
-    precondition?: string;
-    estimatedTime?: string;
-    fixVersions?: string[];
-    labels?: string[];
-    priority?: string;
-    reporter?: string;
-    sprint?: string;
-    status?: string;
-    steps?: TestStep[];
-    isAutomated?: boolean;
+  summary: string;
+  projectId: string;
+  folderId: string;
+  assignee?: string;
+  components?: string[];
+  description?: string;
+  precondition?: string;
+  estimatedTime?: string;
+  fixVersions?: string[];
+  labels?: string[];
+  priority?: string;
+  reporter?: string;
+  sprint?: string;
+  status?: string;
+  steps?: TestStep[];
+  isAutomated?: boolean;
 }
-    

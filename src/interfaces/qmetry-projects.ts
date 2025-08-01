@@ -7,8 +7,8 @@
  * @property {number} [startAt] - The starting index for pagination.
  */
 export interface GetProjectsParams {
-    fields: string;
-    projectName: string;
-    maxResults?: number;
-    startAt?: number;
+  fields: string;
+  projectName: string;
+  maxResults?: number;
+  startAt?: number;
 }

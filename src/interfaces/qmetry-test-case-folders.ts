@@ -22,16 +22,16 @@ export interface CopyTestCaseFolderParams {
 export interface CreateTestCaseFolderParams {
   /** Name of the folder to create */
   folderName: string;
-  
-  /** 
+
+  /**
    * Parent folder ID
    * Use "-1" for root level folders
    */
   parentId: string;
-  
+
   /** Project ID where the folder will be created */
   projectId: string;
-  
+
   /** Optional description for the folder */
   description?: string;
 }
@@ -48,10 +48,10 @@ For example if want to sorting on createOn in ascending order then need to pass 
 export interface GetTestCaseFoldersParams {
   /** The ID of the project to search for */
   projectId: number;
-  
+
   /** Maximum number of results to return */
   short?: string;
-  
+
   /** Starting index for pagination */
   withCount?: boolean;
 }
@@ -66,11 +66,11 @@ export interface GetTestCaseFoldersParams {
 export interface MoveTestCaseFolderParams {
   /** ID of the folder to move */
   folderId: string;
-  
+
   /** Project ID that contains the folder */
   projectId: string;
-  
-  /** 
+
+  /**
    * ID of the new parent folder
    * Use "-1" to move to the root level
    */
@@ -88,13 +88,13 @@ export interface MoveTestCaseFolderParams {
 export interface EditTestCaseFolderParams {
   /** New name for the folder */
   folderName: string;
-  
+
   /** ID of the folder to update */
   folderId: string;
-  
+
   /** Project ID that contains the folder */
   projectId: string;
-  
+
   /** Optional new description for the folder */
   description?: string;
 }
@@ -104,11 +104,11 @@ export interface EditTestCaseFolderParams {
  * @interface SearchTestCaseFoldersParams
  * @property {number} projectId - The ID of the project to search in.
  * @property {string} folderName - The name of the folder to search for.
- * @property {string} [mode] - Allowed value - "STRICT", if passed folder 
+ * @property {string} [mode] - Allowed value - "STRICT", if passed folder
  * search will be absolute otherwise relative
  */
 export interface SearchTestCaseFoldersParams {
-    projectId: number;
-    folderName: string;
-    mode?: string;
+  projectId: number;
+  folderName: string;
+  mode?: string;
 }
