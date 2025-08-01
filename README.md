@@ -2,6 +2,40 @@
 
 Este proyecto implementa un Protocolo de Contexto de Modelo (MCP) diseñado para interactuar con la API de QMetry para Jira. Permite que los modelos de lenguaje grandes (LLM) o cualquier aplicación cliente accedan a funcionalidades de QMetry a través de un conjunto de herramientas bien definidas.
 
+## Configuración de Desarrollo
+
+### ESLint y Prettier
+
+Este proyecto está configurado con ESLint y Prettier para mantener un código consistente y de alta calidad.
+
+#### Scripts Disponibles
+
+```bash
+# Ejecutar el linter para verificar problemas
+pnpm lint
+
+# Ejecutar el linter y arreglar automáticamente los problemas
+pnpm lint:fix
+
+# Formatear el código con Prettier
+pnpm format
+
+# Verificar si el código está formateado correctamente
+pnpm format:check
+```
+
+#### Configuración del Editor
+
+El proyecto incluye configuraciones de VS Code para:
+- Formateo automático al guardar
+- Corrección automática de problemas de ESLint
+- Validación de TypeScript
+
+Asegúrate de tener instaladas las siguientes extensiones de VS Code:
+- Prettier - Code formatter
+- ESLint
+- TypeScript and JavaScript Language Features
+
 ## Estructura del Proyecto
 
 El proyecto está organizado en los siguientes componentes principales:
