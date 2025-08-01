@@ -5,7 +5,11 @@
   "main": "main.ts",
   "type": "module",
   "scripts": {
-    "start": "npx tsx src/main.ts"
+    "start": "npx tsx src/main.ts",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "format:check": "prettier --check src/**/*.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.17.0",
@@ -13,8 +17,16 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@eslint/js": "9.32.0",
     "@modelcontextprotocol/inspector": "0.16.2",
     "@types/node": "24.1.0",
+    "@types/node-fetch": "2.6.13",
+    "@typescript-eslint/eslint-plugin": "8.38.0",
+    "@typescript-eslint/parser": "8.38.0",
+    "eslint": "9.32.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.3",
+    "prettier": "3.6.2",
     "ts-node": "10.9.2",
     "tsx": "4.20.3",
     "typescript": "5.4.5"
