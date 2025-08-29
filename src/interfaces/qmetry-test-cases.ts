@@ -63,7 +63,7 @@ export interface SearchTestCasesParams {
  * @property {number} selectedFolderId - Folder Id of where you want to move testcases from folder.
  * Refer id from the response of API "Get test case folders".
  */
-export interface MoveTestCaseParams {
+export interface MoveOrCopyTestCaseParams {
   testcaseIds: string[];
   targetFolderId: number;
   projectId: number;

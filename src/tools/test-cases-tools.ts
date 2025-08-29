@@ -4,11 +4,12 @@ import {
   createQmetryTestCase,
   getQmetryTestCases,
   moveQmetryTestCase,
+  copyQmetryTestCase,
 } from '../api/qmetry-test-case';
 import {
   CreateTestCaseParams,
   SearchTestCasesParams,
-  MoveTestCaseParams,
+  MoveOrCopyTestCaseParams,
 } from '../interfaces/qmetry-test-cases';
 
 export const testCasesTools: Array<ToolDefinition> = [
@@ -222,8 +223,43 @@ export const testCasesTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async (params: MoveTestCaseParams) => {
+    handler: async (params: MoveOrCopyTestCaseParams) => {
       const result = await moveQmetryTestCase(params);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  },
+  {
+    name: 'copy-qmetry-test-case',
+    definition: {
+      title: 'Copy a Qmetry test case to a different folder',
+      description: 'Copy a Qmetry test case from one folder to another folder',
+      inputSchema: {
+        testcaseIds: z
+          .array(z.string())
+          .describe(
+            'The IDs of the test cases to move. Refer id from the response of API "Get test cases".'
+          ),
+        targetFolderId: z
+          .number()
+          .describe(
+            'The ID of the destination folder. Refer id from the response of API "Get test case folders".'
+          ),
+        projectId: z
+          .number()
+          .describe(
+            'The ID of the project containing the test case. Refer id from the response of API "Get QMetry Enabled Projects".'
+          ),
+        selectedFolderId: z
+          .number()
+          .describe(
+            'The ID of the folder to move the test cases from. Refer id from the response of API "Get test case folders".'
+          ),
+      },
+    },
+    handler: async (params: MoveOrCopyTestCaseParams) => {
+      const result = await copyQmetryTestCase(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

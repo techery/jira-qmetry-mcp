@@ -7,7 +7,7 @@ import { dirname } from 'path';
 import {
   SearchTestCasesParams,
   CreateTestCaseParams,
-  MoveTestCaseParams,
+  MoveOrCopyTestCaseParams,
 } from '../interfaces/qmetry-test-cases';
 
 // Get __dirname equivalent in ES modules
@@ -109,7 +109,7 @@ export async function createQmetryTestCase(
  * with the JSON response from the API.
  */
 export async function moveQmetryTestCase(
-  params: MoveTestCaseParams
+  params: MoveOrCopyTestCaseParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -136,13 +136,62 @@ export async function moveQmetryTestCase(
         .catch(() => ({ message: 'Failed to parse error response' }));
       throw new Error(
         `Error moving test case: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
-          `\nRequest body: ${JSON.stringify(params)}, api_key: ${api_key}`
+          `\nRequest body: ${JSON.stringify(params)}`
       );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error in moveQmetryTestCase:', error);
+    console.error('Error in moveOrCopyQmetryTestCase:', error);
+    throw error;
+  }
+}
+
+/**
+ * Moves a test case to a different folder in Qmetry.
+ * @param testCaseId The ID of the test case to move.
+ * @param newFolderId The ID of the destination folder.
+ * @param projectId The ID of the project containing the test case.
+ * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
+ * The content property of the response contains an array with a single
+ * object that has a type property with value "text" and a text property
+ * with the JSON response from the API.
+ */
+export async function copyQmetryTestCase(
+  params: MoveOrCopyTestCaseParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/reuse`);
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(params),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Failed to parse error response' }));
+      throw new Error(
+        `Error copying test case: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
+          `\nRequest body: ${JSON.stringify(params)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in copyQmetryTestCase:', error);
     throw error;
   }
 }

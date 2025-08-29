@@ -1,12 +1,13 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
-import { ToolDefinition } from "./interfaces/toolDefinition";
-import { projectTools } from "./tools/project-tools";
-import { testCaseFolderTools } from "./tools/test-case-folder-tools";
-import { testCycleFolderTools } from "./tools/test-cycle-folder-tools";
-import { testPlanFolderTools } from "./tools/test-plan-folder-tools";
-import { testCasesTools } from "./tools/test-cases-tools";
+import { ToolDefinition } from './interfaces/toolDefinition';
+import { projectTools } from './tools/project-tools';
+import { testCaseFolderTools } from './tools/test-case-folder-tools';
+import { testCycleFolderTools } from './tools/test-cycle-folder-tools';
+import { testPlanFolderTools } from './tools/test-plan-folder-tools';
+import { testCasesTools } from './tools/test-cases-tools';
+import { testStepTools } from './tools/test-step-tools';
 
 /**
  * Creates a new MCP server instance.
@@ -17,10 +18,10 @@ import { testCasesTools } from "./tools/test-cases-tools";
  * @returns A new MCP server instance.
  */
 const server = new McpServer({
-    name: "Jira Qmetry MCP",
-    version: "1.0.0",
-    title: "Jira Qmetry MCP",
-    description: "Jira Qmetry MCP",
+  name: 'Jira Qmetry MCP',
+  version: '1.0.0',
+  title: 'Jira Qmetry MCP',
+  description: 'Jira Qmetry MCP',
 });
 
 /**
@@ -32,14 +33,14 @@ const server = new McpServer({
  * an error will be logged and the process will exit with a non-zero status code.
  */
 function registerTools(server: McpServer, tools: ToolDefinition[]) {
-    tools.forEach(tool => {
-        try {
-            return server.registerTool(tool.name, tool.definition, tool.handler);
-        } catch (error) {
-            console.error(`Error registering tool ${tool.name}:`, error);
-            throw error;
-        }
-    });
+  tools.forEach(tool => {
+    try {
+      return server.registerTool(tool.name, tool.definition, tool.handler);
+    } catch (error) {
+      console.error(`Error registering tool ${tool.name}:`, error);
+      throw error;
+    }
+  });
 }
 
 /**
@@ -50,7 +51,14 @@ function registerTools(server: McpServer, tools: ToolDefinition[]) {
  * If a tool cannot be registered (for example, if a tool with the same name already exists)
  * an error will be logged and the process will exit with a non-zero status code.
  */
-registerTools(server, [...projectTools, ...testCaseFolderTools, ...testCycleFolderTools, ...testPlanFolderTools, ...testCasesTools]);
+registerTools(server, [
+  ...projectTools,
+  ...testCaseFolderTools,
+  ...testCycleFolderTools,
+  ...testPlanFolderTools,
+  ...testCasesTools,
+  ...testStepTools,
+]);
 
 /**
  * The main function that starts the server.
@@ -58,9 +66,9 @@ registerTools(server, [...projectTools, ...testCaseFolderTools, ...testCycleFold
  * @throws An error if the server cannot be started.
  */
 async function main() {
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.log("MCP server is running...");
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.log('MCP server is running...');
 }
 
 /**
@@ -68,7 +76,7 @@ async function main() {
  * @param main The main function to run.
  * @param error The error to handle.
  */
-main().catch((error) => {
-    console.error("Server error:", error);
-    process.exit(1);
+main().catch(error => {
+  console.error('Server error:', error);
+  process.exit(1);
 });
