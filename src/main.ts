@@ -37,7 +37,8 @@ function registerTools(server: McpServer, tools: ToolDefinition[]) {
     try {
       return server.registerTool(tool.name, tool.definition, tool.handler);
     } catch (error) {
-      console.error(`Error registering tool ${tool.name}:`, error);
+      // Log to stderr instead of stdout to avoid interfering with MCP protocol
+      process.stderr.write(`Error registering tool ${tool.name}: ${error}\n`);
       throw error;
     }
   });
@@ -68,7 +69,6 @@ registerTools(server, [
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.log('MCP server is running...');
 }
 
 /**
@@ -77,6 +77,6 @@ async function main() {
  * @param error The error to handle.
  */
 main().catch(error => {
-  console.error('Server error:', error);
+  process.stderr.write(`Server error: ${error}\n`);
   process.exit(1);
 });

@@ -67,7 +67,7 @@ export async function createQmetryTestCaseFolder(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in createQmetryFolder:', error);
+    process.stderr.write(`Error in createQmetryFolder: ${error}\n`);
     throw error;
   }
 }
@@ -126,7 +126,7 @@ export async function getQmetryTestCaseFolders(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in listQmetryFolders:', error);
+    process.stderr.write(`Error in listQmetryFolders: ${error}\n`);
     throw error;
   }
 }
@@ -184,7 +184,7 @@ export async function editQmetryTestCaseFolder(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in updateQmetryFolder:', error);
+    process.stderr.write(`Error in updateQmetryFolder: ${error}\n`);
     throw error;
   }
 }
@@ -238,7 +238,7 @@ export async function copyQmetryTestCaseFolder(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in copyQmetryFolder:', error);
+    process.stderr.write(`Error in copyQmetryFolder: ${error}\n`);
     throw error;
   }
 }
@@ -292,7 +292,7 @@ export async function moveQmetryTestCaseFolder(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in moveQmetryFolder:', error);
+    process.stderr.write(`Error in moveQmetryFolder: ${error}\n`);
     throw error;
   }
 }
@@ -348,7 +348,7 @@ export async function searchQmetryTestCaseFolders(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in searchQmetryTestCaseFolders:', error);
+    process.stderr.write(`Error in searchQmetryTestCaseFolders: ${error}\n`);
     throw error;
   }
 }

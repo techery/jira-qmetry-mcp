@@ -54,7 +54,7 @@ export async function getQmetryTestCases(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in getQmetryTestCases:', error);
+    process.stderr.write(`Error in getQmetryTestCases: ${error}\n`);
     throw error;
   }
 }
@@ -93,7 +93,7 @@ export async function createQmetryTestCase(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in createQmetryTestCase:', error);
+    process.stderr.write(`Error in createQmetryTestCase: ${error}\n`);
     throw error;
   }
 }
@@ -142,7 +142,7 @@ export async function moveQmetryTestCase(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in moveOrCopyQmetryTestCase:', error);
+    process.stderr.write(`Error in moveOrCopyQmetryTestCase: ${error}\n`);
     throw error;
   }
 }
@@ -191,7 +191,7 @@ export async function copyQmetryTestCase(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in copyQmetryTestCase:', error);
+    process.stderr.write(`Error in copyQmetryTestCase: ${error}\n`);
     throw error;
   }
 }

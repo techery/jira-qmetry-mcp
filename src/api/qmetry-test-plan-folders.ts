@@ -64,7 +64,7 @@ export async function getQmetryTestPlanFolders(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in getQmetryTestPlanFolders:', error);
+    process.stderr.write(`Error in getQmetryTestPlanFolders: ${error}\n`);
     throw error;
   }
 }
@@ -121,7 +121,7 @@ export async function createQmetryTestPlanFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in createQmetryTestPlanFolder:', error);
+    process.stderr.write(`Error in createQmetryTestPlanFolder: ${error}\n`);
     throw error;
   }
 }
@@ -177,7 +177,7 @@ export async function editQmetryTestPlanFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in editQmetryTestPlanFolder:', error);
+    process.stderr.write(`Error in editQmetryTestPlanFolder: ${error}\n`);
     throw error;
   }
 }
@@ -230,7 +230,7 @@ export async function moveQmetryTestPlanFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in moveQmetryTestPlanFolder:', error);
+    process.stderr.write(`Error in moveQmetryTestPlanFolder: ${error}\n`);
     throw error;
   }
 }
@@ -286,7 +286,7 @@ export async function searchQmetryTestPlanFolders(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in searchQmetryTestPlanFolders:', error);
+    process.stderr.write(`Error in searchQmetryTestPlanFolders: ${error}\n`);
     throw error;
   }
 }

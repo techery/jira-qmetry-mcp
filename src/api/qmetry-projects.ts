@@ -70,7 +70,7 @@ export async function getQmetryProjects(
 
     return await response.json();
   } catch (error) {
-    console.error('Error in getQmetryProjects:', error);
+    process.stderr.write(`Error in getQmetryProjects: ${error}\n`);
     throw error;
   }
 }

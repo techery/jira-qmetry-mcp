@@ -61,7 +61,7 @@ export async function getQmetryTestCycleFolders(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in getQmetryTestCycleFolders:', error);
+    process.stderr.write(`Error in getQmetryTestCycleFolders: ${error}\n`);
     throw error;
   }
 }
@@ -115,7 +115,7 @@ export async function createQmetryTestCycleFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in createQmetryTestCycleFolder:', error);
+    process.stderr.write(`Error in createQmetryTestCycleFolder: ${error}\n`);
     throw error;
   }
 }
@@ -165,7 +165,7 @@ export async function editQmetryTestCycleFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in updateQmetryTestCycleFolder:', error);
+    process.stderr.write(`Error in updateQmetryTestCycleFolder: ${error}\n`);
     throw error;
   }
 }
@@ -213,7 +213,7 @@ export async function moveQmetryTestCycleFolder(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in moveQmetryTestCycleFolder:', error);
+    process.stderr.write(`Error in moveQmetryTestCycleFolder: ${error}\n`);
     throw error;
   }
 }
@@ -266,7 +266,7 @@ export async function searchQmetryTestCycleFolders(
     }
     return await response.json();
   } catch (error) {
-    console.error('Error in searchQmetryTestCycleFolders:', error);
+    process.stderr.write(`Error in searchQmetryTestCycleFolders: ${error}\n`);
     throw error;
   }
 }
