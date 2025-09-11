@@ -8,6 +8,8 @@ import { testCycleFolderTools } from './tools/test-cycle-folder-tools';
 import { testPlanFolderTools } from './tools/test-plan-folder-tools';
 import { testCasesTools } from './tools/test-cases-tools';
 import { testStepTools } from './tools/test-step-tools';
+import { priorityTools } from './tools/priority-tools';
+import { labelTools } from './tools/label-tools';
 
 /**
  * Creates a new MCP server instance.
@@ -59,6 +61,8 @@ registerTools(server, [
   ...testPlanFolderTools,
   ...testCasesTools,
   ...testStepTools,
+  ...priorityTools,
+  ...labelTools,
 ]);
 
 /**
