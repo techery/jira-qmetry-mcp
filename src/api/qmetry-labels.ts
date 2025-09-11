@@ -8,6 +8,7 @@ import {
   CreateLabelParams,
   UpdateLabelParams,
   DeleteLabelParams,
+  GetLabelReferenceCountParams,
 } from '../interfaces/qmetry-labels';
 import { logger } from '../utils/logger';
 
@@ -278,6 +279,47 @@ export async function deleteQmetryLabel(
     }
   } catch (error) {
     logger.error('Error in deleteQmetryLabel', error, 'deleteQmetryLabel');
+    throw error;
+  }
+}
+
+export async function getQmetryLabelReferenceCount(
+  params: GetLabelReferenceCountParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}projects/${params.projectId}/labels/${params.labelId}/count`
+    );
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error getting label reference count: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    logger.error(
+      'Error in getQmetryLabelReferenceCount',
+      error,
+      'getQmetryLabelReferenceCount'
+    );
     throw error;
   }
 }
