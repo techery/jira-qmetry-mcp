@@ -2,9 +2,3 @@
 startCommand = "npm run start:sse"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
-
-✅ GET  /events                    // SSE - Cualquiera puede conectarse
-✅ POST /api/qmetry/:operation     // API - Cualquiera puede ejecutar operaciones
-✅ GET  /api/tools                 // Listar herramientas
-✅ GET  /api/clients               // Ver clientes conectados
-✅ GET  /health                    // Health check
