@@ -13,6 +13,7 @@ import { priorityTools } from './tools/priority-tools';
 import { testCaseStatusTools } from './tools/test-cases-status-tools';
 import { testCycleStatusTools } from './tools/test-cycle-status-tools';
 import { testPlanStatusTools } from './tools/test-plan-status-tools';
+import { linkedRequirementsTools } from './tools/linked-requirements-tools';
 
 /**
  * Creates a new MCP server instance.
@@ -69,6 +70,7 @@ registerTools(server, [
   ...testCaseStatusTools,
   ...testCycleStatusTools,
   ...testPlanStatusTools,
+  ...linkedRequirementsTools,
 ]);
 
 /**
