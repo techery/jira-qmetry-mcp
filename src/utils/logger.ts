@@ -54,7 +54,7 @@ export function log(
 export const logger = {
   debug: (message: string, data?: any, context?: string) =>
     log(LOG_LEVELS.DEBUG, message, data, context),
-  info: (message: string, data?: any, context?: string) =>
+  info: (message: string, data: any, context?: string) =>
     log(LOG_LEVELS.INFO, message, data, context),
   warn: (message: string, data?: any, context?: string) =>
     log(LOG_LEVELS.WARN, message, data, context),

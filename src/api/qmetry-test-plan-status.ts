@@ -4,11 +4,11 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import {
-  GetTestCaseStatusesParams,
-  CreateTestCaseStatusParams,
-  UpdateTestCaseStatusParams,
-  DeleteTestCaseStatusParams,
-  GetTestCaseStatusReferenceCountParams,
+  GetTestPlanStatusesParams,
+  CreateTestPlanStatusParams,
+  UpdateTestPlanStatusParams,
+  DeleteTestPlanStatusParams,
+  GetTestPlanStatusReferenceCountParams,
 } from '../interfaces/qmetry-status';
 import { logger } from '../utils/logger';
 
@@ -20,13 +20,14 @@ const __dirname = dirname(dirname(__filename));
 const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
+
 /**
- * Get QMetry test case statuses for a given project with optional filtering and pagination.
- * @param params - Parameters for getting test case statuses
- * @returns Promise with the test case statuses data
+ * Get QMetry test plan statuses for a given project with optional filtering.
+ * @param params - Parameters for getting test plan statuses
+ * @returns Promise with the test plan statuses data
  */
-export async function getQmetryTestCaseStatuses(
-  params: GetTestCaseStatusesParams
+export async function getQmetryTestPlanStatuses(
+  params: GetTestPlanStatusesParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -37,8 +38,13 @@ export async function getQmetryTestCaseStatuses(
 
   try {
     const url = new URL(
-      `${qmetry_api_url}projects/${params.projectId}/testcase-statuses`
+      `${qmetry_api_url}projects/${params.projectId}/testplan-statuses`
     );
+
+    // Add status filter parameter
+    if (params.status) {
+      url.searchParams.append('status', params.status);
+    }
 
     const response = await fetch(url.toString(), {
       method: 'GET',
@@ -51,30 +57,33 @@ export async function getQmetryTestCaseStatuses(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Error getting test case statuses: ${response.status} ${response.statusText} - ${JSON.stringify(
+        `Error getting test plan statuses: ${response.status} ${response.statusText} - ${JSON.stringify(
           errorData
         )}`
       );
     }
 
-    return await response.json();
+    const data = await response.json();
+    return {
+      content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+    };
   } catch (error) {
     logger.error(
-      'Error in getQmetryTestCaseStatuses',
+      'Error in getQmetryTestPlanStatuses',
       error,
-      'getQmetryTestCaseStatuses'
+      'getQmetryTestPlanStatuses'
     );
     throw error;
   }
 }
 
 /**
- * Create a new test case status in QMetry.
- * @param params - Parameters for creating a test case status
- * @returns Promise with the created test case status data
+ * Create a new test plan status in QMetry.
+ * @param params - Parameters for creating a test plan status
+ * @returns Promise with the created test plan status data
  */
-export async function createQmetryTestCaseStatus(
-  params: CreateTestCaseStatusParams
+export async function createQmetryTestPlanStatus(
+  params: CreateTestPlanStatusParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -85,10 +94,10 @@ export async function createQmetryTestCaseStatus(
 
   try {
     const url = new URL(
-      `${qmetry_api_url}projects/${params.projectId}/testcase-statuses`
+      `${qmetry_api_url}projects/${params.projectId}/testplan-statuses`
     );
 
-    const requestBody: any = {
+    const requestBody: { name: string; color: string; description?: string } = {
       name: params.name,
       color: params.color,
     };
@@ -110,30 +119,33 @@ export async function createQmetryTestCaseStatus(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Error creating test case status: ${response.status} ${response.statusText} - ${JSON.stringify(
+        `Error creating test plan status: ${response.status} ${response.statusText} - ${JSON.stringify(
           errorData
         )}`
       );
     }
 
-    return await response.json();
+    const data = await response.json();
+    return {
+      content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+    };
   } catch (error) {
     logger.error(
-      'Error in createQmetryTestCaseStatus',
+      'Error in createQmetryTestPlanStatus',
       error,
-      'createQmetryTestCaseStatus'
+      'createQmetryTestPlanStatus'
     );
     throw error;
   }
 }
 
 /**
- * Update an existing test case status in QMetry.
- * @param params - Parameters for updating a test case status
- * @returns Promise with the updated test case status data
+ * Update an existing test plan status in QMetry.
+ * @param params - Parameters for updating a test plan status
+ * @returns Promise with the updated test plan status data
  */
-export async function updateQmetryTestCaseStatus(
-  params: UpdateTestCaseStatusParams
+export async function updateQmetryTestPlanStatus(
+  params: UpdateTestPlanStatusParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -144,10 +156,10 @@ export async function updateQmetryTestCaseStatus(
 
   try {
     const url = new URL(
-      `${qmetry_api_url}projects/${params.projectId}/testcase-statuses/${params.statusId}`
+      `${qmetry_api_url}projects/${params.projectId}/testplan-statuses/${params.statusId}`
     );
 
-    const requestBody: any = {
+    const requestBody: { name: string; color: string; description?: string } = {
       name: params.name,
       color: params.color,
     };
@@ -169,7 +181,7 @@ export async function updateQmetryTestCaseStatus(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Error updating test case status: ${response.status} ${response.statusText} - ${JSON.stringify(
+        `Error updating test plan status: ${response.status} ${response.statusText} - ${JSON.stringify(
           errorData
         )}`
       );
@@ -185,7 +197,7 @@ export async function updateQmetryTestCaseStatus(
             text: JSON.stringify(
               {
                 success: true,
-                message: 'Test case status updated successfully',
+                message: 'Test plan status updated successfully',
                 statusId: params.statusId,
                 projectId: params.projectId,
               },
@@ -214,7 +226,8 @@ export async function updateQmetryTestCaseStatus(
             text: JSON.stringify(
               {
                 success: true,
-                message: 'Test case status updated successfully',
+                message: 'Test plan status updated successfully',
+                rawResponse: responseText,
                 statusId: params.statusId,
                 projectId: params.projectId,
               },
@@ -227,21 +240,21 @@ export async function updateQmetryTestCaseStatus(
     }
   } catch (error) {
     logger.error(
-      'Error in updateQmetryTestCaseStatus',
+      'Error in updateQmetryTestPlanStatus',
       error,
-      'updateQmetryTestCaseStatus'
+      'updateQmetryTestPlanStatus'
     );
     throw error;
   }
 }
 
 /**
- * Delete a test case status from QMetry.
- * @param params - Parameters for deleting a test case status
+ * Delete a test plan status from QMetry.
+ * @param params - Parameters for deleting a test plan status
  * @returns Promise with the deletion confirmation
  */
-export async function deleteQmetryTestCaseStatus(
-  params: DeleteTestCaseStatusParams
+export async function deleteQmetryTestPlanStatus(
+  params: DeleteTestPlanStatusParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -252,7 +265,7 @@ export async function deleteQmetryTestCaseStatus(
 
   try {
     const url = new URL(
-      `${qmetry_api_url}projects/${params.projectId}/testcase-statuses/${params.statusId}`
+      `${qmetry_api_url}projects/${params.projectId}/testplan-statuses/${params.statusId}`
     );
 
     const response = await fetch(url.toString(), {
@@ -266,7 +279,7 @@ export async function deleteQmetryTestCaseStatus(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Error deleting test case status: ${response.status} ${response.statusText} - ${JSON.stringify(
+        `Error deleting test plan status: ${response.status} ${response.statusText} - ${JSON.stringify(
           errorData
         )}`
       );
@@ -282,7 +295,7 @@ export async function deleteQmetryTestCaseStatus(
             text: JSON.stringify(
               {
                 success: true,
-                message: 'Test case status deleted successfully',
+                message: 'Test plan status deleted successfully',
                 statusId: params.statusId,
                 projectId: params.projectId,
               },
@@ -311,7 +324,7 @@ export async function deleteQmetryTestCaseStatus(
             text: JSON.stringify(
               {
                 success: true,
-                message: 'Test case status deleted successfully',
+                message: 'Test plan status deleted successfully',
                 rawResponse: responseText,
                 statusId: params.statusId,
                 projectId: params.projectId,
@@ -325,21 +338,21 @@ export async function deleteQmetryTestCaseStatus(
     }
   } catch (error) {
     logger.error(
-      'Error in deleteQmetryTestCaseStatus',
+      'Error in deleteQmetryTestPlanStatus',
       error,
-      'deleteQmetryTestCaseStatus'
+      'deleteQmetryTestPlanStatus'
     );
     throw error;
   }
 }
 
 /**
- * Get the reference count of a test case status in QMetry.
- * @param params - Parameters for getting test case status reference count
+ * Get the reference count of a test plan status in QMetry.
+ * @param params - Parameters for getting test plan status reference count
  * @returns Promise with the reference count data
  */
-export async function getQmetryTestCaseStatusReferenceCount(
-  params: GetTestCaseStatusReferenceCountParams
+export async function getQmetryTestPlanStatusReferenceCount(
+  params: GetTestPlanStatusReferenceCountParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -350,7 +363,7 @@ export async function getQmetryTestCaseStatusReferenceCount(
 
   try {
     const url = new URL(
-      `${qmetry_api_url}projects/${params.projectId}/testcase-statuses/${params.statusId}/count`
+      `${qmetry_api_url}projects/${params.projectId}/testplan-statuses/${params.statusId}/count`
     );
 
     const response = await fetch(url.toString(), {
@@ -364,18 +377,21 @@ export async function getQmetryTestCaseStatusReferenceCount(
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(
-        `Error getting test case status reference count: ${response.status} ${response.statusText} - ${JSON.stringify(
+        `Error getting test plan status reference count: ${response.status} ${response.statusText} - ${JSON.stringify(
           errorData
         )}`
       );
     }
 
-    return await response.json();
+    const data = await response.json();
+    return {
+      content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+    };
   } catch (error) {
     logger.error(
-      'Error in getQmetryTestCaseStatusReferenceCount',
+      'Error in getQmetryTestPlanStatusReferenceCount',
       error,
-      'getQmetryTestCaseStatusReferenceCount'
+      'getQmetryTestPlanStatusReferenceCount'
     );
     throw error;
   }
