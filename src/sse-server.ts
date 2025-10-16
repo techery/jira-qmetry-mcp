@@ -244,81 +244,149 @@ app.get('/events', (req: Request, res: Response) => {
 });
 
 /**
- * Execute QMetry operation endpoint
+ * MCP JSON-RPC endpoint for N8N compatibility
  */
-app.post('/api/qmetry/:operation', async (req: Request, res: Response) => {
+app.post('/message', async (req: Request, res: Response) => {
   try {
-    const { operation } = req.params;
-    const params = req.body;
+    const { jsonrpc, method, params, id } = req.body;
 
-    const result = await executeQMetryOperation(operation, params);
+    // Validate JSON-RPC 2.0 format
+    if (jsonrpc !== '2.0') {
+      return res.status(400).json({
+        jsonrpc: '2.0',
+        error: {
+          code: -32600,
+          message: 'Invalid Request',
+        },
+        id: id || null,
+      });
+    }
 
-    if (result.success) {
-      // Broadcast success event
-      broadcastSSEEvent({
-        event: 'operation_complete',
-        data: JSON.stringify(result),
-      });
-      res.json(result);
-    } else {
-      // Broadcast error event
-      broadcastSSEEvent({
-        event: 'operation_error',
-        data: JSON.stringify(result),
-      });
-      res.status(500).json(result);
+    // Handle different MCP methods
+    switch (method) {
+      case 'initialize':
+        res.json({
+          jsonrpc: '2.0',
+          result: {
+            protocolVersion: '2024-11-05',
+            capabilities: {
+              tools: {},
+            },
+            serverInfo: {
+              name: 'Jira Qmetry MCP SSE',
+              version: '1.0.0',
+            },
+          },
+          id,
+        });
+        break;
+
+      case 'tools/list': {
+        const toolsList = Array.from(toolRegistry.entries()).map(
+          ([name, tool]) => ({
+            name,
+            description: tool.definition.description,
+            inputSchema: {
+              type: 'object',
+              properties: tool.definition.inputSchema,
+              required: Object.keys(tool.definition.inputSchema).filter(
+                key => !tool.definition.inputSchema[key].isOptional()
+              ),
+            },
+          })
+        );
+
+        res.json({
+          jsonrpc: '2.0',
+          result: {
+            tools: toolsList,
+          },
+          id,
+        });
+        break;
+      }
+
+      case 'tools/call': {
+        const { name: toolName, arguments: toolArgs } = params;
+        const result = await executeQMetryOperation(toolName, toolArgs);
+
+        if (result.success) {
+          res.json({
+            jsonrpc: '2.0',
+            result: {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result.data, null, 2),
+                },
+              ],
+            },
+            id,
+          });
+        } else {
+          res.json({
+            jsonrpc: '2.0',
+            error: {
+              code: -32000,
+              message: result.error,
+            },
+            id,
+          });
+        }
+        break;
+      }
+
+      default:
+        res.status(400).json({
+          jsonrpc: '2.0',
+          error: {
+            code: -32601,
+            message: 'Method not found',
+          },
+          id,
+        });
     }
   } catch (error) {
-    const errorResult: QMetryOperationResult = {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      operation: req.params.operation,
-      timestamp: new Date().toISOString(),
-    };
-
-    broadcastSSEEvent({
-      event: 'operation_error',
-      data: JSON.stringify(errorResult),
+    res.status(500).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32603,
+        message: error instanceof Error ? error.message : 'Internal error',
+      },
+      id: req.body.id || null,
     });
-
-    res.status(500).json(errorResult);
   }
 });
 
 /**
- * Get available tools
+ * Health check and server info endpoint
  */
-app.get('/api/tools', (req: Request, res: Response) => {
-  const tools = Array.from(toolRegistry.entries()).map(([name, tool]) => ({
-    name,
-    description: tool.definition.description,
-    inputSchema: tool.definition.inputSchema,
-  }));
-
-  res.json({ tools });
-});
-
-/**
- * Get connected clients info
- */
-app.get('/api/clients', (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
   const clients = Array.from(sseClients.values()).map(client => ({
     id: client.id,
     lastEventId: client.lastEventId,
   }));
 
-  res.json({ clients, count: clients.length });
-});
+  const tools = Array.from(toolRegistry.keys());
 
-/**
- * Health check endpoint
- */
-app.get('/health', (req: Request, res: Response) => {
   res.json({
     status: 'healthy',
     mcpServer: 'connected',
-    sseClients: sseClients.size,
-    availableTools: toolRegistry.size,
+    protocol: 'MCP JSON-RPC 2.0',
+    protocolVersion: '2024-11-05',
+    sseClients: {
+      count: sseClients.size,
+      clients: clients,
+    },
+    tools: {
+      count: toolRegistry.size,
+      available: tools,
+    },
+    endpoints: {
+      jsonrpc: '/message (POST) - MCP JSON-RPC 2.0',
+      sse: '/events (GET) - Server-Sent Events',
+      health: '/health (GET) - Health check and info',
+    },
     timestamp: new Date().toISOString(),
   });
 });
@@ -352,14 +420,17 @@ async function main() {
 
     // Start Express SSE server
     app.listen(PORT, () => {
-      console.log(`SSE server running on http://localhost:${PORT}`);
-      console.log(`SSE endpoint: http://localhost:${PORT}/events`);
+      console.log(`\n🚀 MCP Server running on http://localhost:${PORT}`);
+      console.log(`\n📡 Endpoints:`);
+      console.log(`   • JSON-RPC: http://localhost:${PORT}/message (POST)`);
+      console.log(`   • SSE:      http://localhost:${PORT}/events (GET)`);
+      console.log(`   • Health:   http://localhost:${PORT}/health (GET)`);
+      console.log(`\n🔧 Available tools: ${toolRegistry.size}`);
       console.log(
-        `API endpoint: http://localhost:${PORT}/api/qmetry/:operation`
+        `   ${Array.from(toolRegistry.keys()).slice(0, 5).join(', ')}...`
       );
-      console.log(
-        `Available tools: ${Array.from(toolRegistry.keys()).join(', ')}`
-      );
+      console.log(`\n✅ MCP Protocol: JSON-RPC 2.0 (v2024-11-05)`);
+      console.log(`✅ Ready for N8N integration\n`);
     });
 
     // Broadcast server status
