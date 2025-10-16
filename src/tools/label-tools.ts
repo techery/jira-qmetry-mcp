@@ -1,17 +1,20 @@
 import { z } from 'zod';
 import {
   getQmetryLabels,
+  getQmetryLabelReferenceCount,
   createQmetryLabel,
   updateQmetryLabel,
   deleteQmetryLabel,
 } from '../api/qmetry-labels';
-import {
-  GetLabelsParams,
-  CreateLabelParams,
-  UpdateLabelParams,
-  DeleteLabelParams,
-} from '../interfaces/qmetry-labels';
+
 import { ToolDefinition } from '../interfaces';
+import {
+  CreateLabelParams,
+  DeleteLabelParams,
+  GetLabelReferenceCountParams,
+  GetLabelsParams,
+  UpdateLabelParams,
+} from '../interfaces/qmetry-labels';
 
 export const labelTools: Array<ToolDefinition> = [
   {
@@ -24,7 +27,7 @@ export const labelTools: Array<ToolDefinition> = [
         projectId: z
           .number()
           .describe(
-            'Refer id from the response of API "Get qmetry enabled projects".'
+            'Refer id from the response of API "Get QMetry Enabled Projects".'
           ),
       },
     },
@@ -44,7 +47,7 @@ export const labelTools: Array<ToolDefinition> = [
         projectId: z
           .number()
           .describe(
-            'Refer id from the response of API "Get qmetry enabled projects".'
+            'Refer id from the response of API "Get QMetry Enabled Projects".'
           ),
         name: z.string().describe('Name of Label'),
       },
@@ -65,7 +68,7 @@ export const labelTools: Array<ToolDefinition> = [
         projectId: z
           .number()
           .describe(
-            'Name of LabelRefer id from the response of API "Get qmetry enabled projects".'
+            'Name of LabelRefer id from the response of API "Get QMetry Enabled Projects".'
           ),
         labelId: z
           .number()
@@ -89,7 +92,7 @@ export const labelTools: Array<ToolDefinition> = [
         projectId: z
           .number()
           .describe(
-            'Refer id from the response of API "Get qmetry enabled projects".'
+            'Refer id from the response of API "Get QMetry Enabled Projects".'
           ),
         labelId: z
           .number()
@@ -98,6 +101,29 @@ export const labelTools: Array<ToolDefinition> = [
     },
     handler: async (params: DeleteLabelParams) => {
       const result = await deleteQmetryLabel(params);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  },
+  {
+    name: 'get-qmetry-label-reference-count',
+    definition: {
+      title: 'Get Qmetry label reference count',
+      description: 'Get Qmetry label reference count for a given project',
+      inputSchema: {
+        projectId: z
+          .number()
+          .describe(
+            'Refer id from the response of API "Get QMetry Enabled Projects".'
+          ),
+        labelId: z
+          .number()
+          .describe('Refer id from the response of API "Get labels".'),
+      },
+    },
+    handler: async (params: GetLabelReferenceCountParams) => {
+      const result = await getQmetryLabelReferenceCount(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
