@@ -1,9 +1,24 @@
 {
   "name": "jira-qmetry-mcp-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "MCP Server for QMetry Test Management in Jira",
   "main": "main.ts",
   "type": "module",
+  "license": "Apache-2.0",
+  "author": "Alberto Zapata",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/jira-qmetry-mcp"
+  },
+  "keywords": [
+    "mcp",
+    "qmetry",
+    "jira",
+    "test-management",
+    "qa",
+    "testing",
+    "model-context-protocol"
+  ],
   "scripts": {
     "start": "npx tsx src/main.ts",
     "start:sse": "npx tsx src/sse-server.ts",
