@@ -1,0 +1,61 @@
+Jira QMetry MCP Server
+Copyright 2025 Alberto Zapata
+
+This product includes software developed by Alberto Zapata.
+
+This software is licensed under the Apache License, Version 2.0.
+See the LICENSE file for the full license text.
+
+================================================================================
+
+This project integrates with and uses the following third-party software:
+
+1. Model Context Protocol (MCP) SDK
+   - Copyright: Anthropic
+   - License: MIT License
+   - URL: https://github.com/modelcontextprotocol/sdk
+
+2. QMetry for Jira API
+   - This software integrates with QMetry for Jira via its public REST API
+   - QMetry is a trademark of Zoho Corporation
+   - API Documentation: https://qmetry.com/qmetry-for-jira/
+
+3. Jira Software API
+   - This software integrates with Atlassian Jira via its public REST API
+   - Jira is a registered trademark of Atlassian
+   - API Documentation: https://developer.atlassian.com/cloud/jira/platform/
+
+4. Node.js Runtime Dependencies:
+   - node-fetch (MIT License)
+   - zod (MIT License)
+   - express (MIT License)
+   - cors (MIT License)
+
+5. Development Dependencies:
+   - TypeScript (Apache License 2.0)
+   - ESLint (MIT License)
+   - Prettier (MIT License)
+
+================================================================================
+
+TRADEMARKS
+
+QMetry and QMetry Test Management are trademarks of Zoho Corporation.
+Jira is a registered trademark of Atlassian Pty Ltd.
+
+This project is not affiliated with, endorsed by, or sponsored by
+Zoho Corporation or Atlassian Pty Ltd.
+
+The use of these trademarks is for identification purposes only and does not
+imply any endorsement or affiliation.
+
+================================================================================
+
+DISCLAIMER
+
+This software is provided "as is", without warranty of any kind, express or
+implied. See the LICENSE file for the full disclaimer.
+
+The integration with QMetry and Jira APIs requires valid API keys and
+appropriate licenses for those products. This software does not provide
+or grant any licenses to use QMetry or Jira.

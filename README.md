@@ -1,394 +1,322 @@
-# Proyecto de Protocolo de Contexto de Modelo (MCP) para QMetry
+# Jira QMetry MCP Server
 
-Este proyecto implementa un Protocolo de Contexto de Modelo (MCP) diseñado para interactuar con la API de QMetry para Jira. Permite que los modelos de lenguaje grandes (LLM) o cualquier aplicación cliente accedan a funcionalidades de QMetry a través de un conjunto de herramientas bien definidas.
+> 🌐 **Language**: **English** | [Español](README_ES.md)
 
-## Configuración de Desarrollo
+MCP (Model Context Protocol) server to interact with the QMetry for Jira API. Allows large language models (LLMs) and client applications to access QMetry test management functionalities through well-defined tools.
 
-### ESLint y Prettier
+## 📋 Project Description
 
-Este proyecto está configurado con ESLint y Prettier para mantener un código consistente y de alta calidad.
+This project implements a server based on the Model Context Protocol (MCP) that provides a complete interface to manage test cases, test cycles, test plans, and their associated configurations in QMetry. The server is built with TypeScript and uses the official MCP SDK.
 
-#### Scripts Disponibles
+### Key Features
 
-```bash
-# Ejecutar el linter para verificar problemas
-pnpm lint
+- ✅ **Complete Test Case Management**: Create, search, edit, move, and copy test cases
+- ✅ **Test Steps Management**: Create, update, delete, and retrieve test steps
+- ✅ **Folder Organization**: Manage folders for test cases, test cycles, and test plans
+- ✅ **Status Configuration**: Manage custom statuses for test cases, test cycles, and test plans
+- ✅ **Priority Management**: Full CRUD of priorities with custom colors
+- ✅ **Label System**: Create, update, and delete labels for organization
+- ✅ **Linked Requirements**: Link and unlink requirements (Jira issues) with test cases
+- ✅ **Robust Architecture**: Logging system, error handling, and schema validation with Zod
 
-# Ejecutar el linter y arreglar automáticamente los problemas
-pnpm lint:fix
+## 🏗️ Project Structure
 
-# Formatear el código con Prettier
-pnpm format
-
-# Verificar si el código está formateado correctamente
-pnpm format:check
+```
+jira-qmetry-mcp/
+├── src/
+│   ├── api/                          # QMetry API call functions
+│   │   ├── qmetry-projects.ts
+│   │   ├── qmetry-test-case.ts
+│   │   ├── qmetry-test-case-folders.ts
+│   │   ├── qmetry-test-case-status.ts
+│   │   ├── qmetry-test-cycle-folders.ts
+│   │   ├── qmetry-test-cycle-status.ts
+│   │   ├── qmetry-test-plan-folders.ts
+│   │   ├── qmetry-test-plan-status.ts
+│   │   ├── qmetry-test-steps.ts
+│   │   ├── qmetry-priorities.ts
+│   │   ├── qmetry-labels.ts
+│   │   ├── qmetry-components.ts
+│   │   └── qmetry-linked-requirements.ts
+│   ├── interfaces/                   # TypeScript type definitions
+│   │   ├── qmetry-projects.ts
+│   │   ├── qmetry-test-cases.ts
+│   │   ├── qmetry-test-case-folders.ts
+│   │   ├── qmetry-test-cycle-folders.ts
+│   │   ├── qmetry-test-plan-folders.ts
+│   │   ├── qmetry-test-steps.ts
+│   │   ├── qmetry-priorities.ts
+│   │   ├── qmetry-labels.ts
+│   │   ├── qmetry-status.ts
+│   │   ├── qmetry-linked-requirements.ts
+│   │   ├── toolDefinition.ts
+│   │   └── index.ts
+│   ├── tools/                        # MCP tool definitions
+│   │   ├── project-tools.ts
+│   │   ├── test-cases-tools.ts
+│   │   ├── test-case-folder-tools.ts
+│   │   ├── test-cases-status-tools.ts
+│   │   ├── test-cycle-folder-tools.ts
+│   │   ├── test-cycle-status-tools.ts
+│   │   ├── test-plan-folder-tools.ts
+│   │   ├── test-plan-status-tools.ts
+│   │   ├── test-step-tools.ts
+│   │   ├── priority-tools.ts
+│   │   ├── label-tools.ts
+│   │   └── linked-requirements-tools.ts
+│   ├── utils/                        # Utilities and helpers
+│   │   ├── logger.ts
+│   │   ├── object.utils.ts
+│   │   └── index.ts
+│   ├── main.ts                       # MCP server entry point
+│   ├── sse-server.ts                 # Optional SSE server
+│   └── config.json                   # API configuration
+├── package.json
+├── tsconfig.json
+├── eslint.config.js
+├── LICENSE
+├── NOTICE
+├── CONTRIBUTING.md
+└── README.md
 ```
 
-#### Configuración del Editor
+## 🔧 Setup
 
-El proyecto incluye configuraciones de VS Code para:
-
-- Formateo automático al guardar
-- Corrección automática de problemas de ESLint
-- Validación de TypeScript
-
-Asegúrate de tener instaladas las siguientes extensiones de VS Code:
-
-- Prettier - Code formatter
-- ESLint
-- TypeScript and JavaScript Language Features
-
-## Estructura del Proyecto
-
-El proyecto está organizado en los siguientes componentes principales:
-
-- **`src/`**: Contiene la implementación del servidor MCP.
-  - **`src/main.ts`**: El punto de entrada principal del servidor MCP, donde se inicializa el servidor y se registran las herramientas.
-  - **`src/tools/`**: Contiene los módulos TypeScript que implementan las herramientas específicas para interactuar con la API de QMetry.
-- **`config.json`**: Archivo de configuración para la URL base de la API de QMetry (ubicado en la raíz del proyecto).
-
-## Configuración
-
-Antes de iniciar la aplicación, asegúrate de configurar lo siguiente:
-
-### 1. Variable de Entorno
-
-- `QMETRY_API_KEY`: Tu clave de API para la autenticación con QMetry. Esta clave debe generarse desde la interfaz de Jira (QMetry > Configuration > Open API > Generate).
+### 1. Install Dependencies
 
 ```bash
-export QMETRY_API_KEY="tu-clave-de-api-aqui"
-```
-
-### 2. Archivo de Configuración (`config.json`)
-
-Verifica que la URL de la API de QMetry esté configurada correctamente en `config.json` (ubicado en la raíz del proyecto):
-
-```json
-{
-  "qmetry_api_url": "https://qtmcloud.qmetry.com/rest/api/latest/"
-}
-```
-
-## Cómo Empezar
-
-### 1. Instalación de Dependencias
-
-Para instalar las dependencias de cada componente, ejecuta `pnpm install` en sus respectivos directorios:
-
-```bash
-# En el directorio raíz del proyecto
 pnpm install
 ```
 
-### 2. Ejecución del Servidor MCP
+### 2. Environment Variable
 
-Desde el directorio `src/`, inicia el servidor MCP. Asegúrate de que la variable de entorno `QMETRY_API_KEY` esté configurada.
+Configure your QMetry API key:
 
 ```bash
-cd src
+export QMETRY_API_KEY="your-api-key-here"
+```
+
+> 💡 **Note**: The API key is generated from the Jira interface: `QMetry > Configuration > Open API > Generate`
+
+### 4. Run the Server
+
+```bash
 pnpm start
-# O para usar el inspector del SDK (si está configurado):
-# npx tsx main.ts
 ```
 
-## Herramientas MCP Disponibles
+To use the MCP inspector:
 
-El servidor MCP expone las siguientes herramientas para interactuar con QMetry:
-
-## 🎯 **Prioridades (NUEVO)**
-
-- **Obtener prioridades**: Listar todas las prioridades de un proyecto
-- **Crear prioridades**: Crear nuevas prioridades con nombre, descripción y color
-- **Actualizar prioridades**: Modificar prioridades existentes
-- **Eliminar prioridades**: Remover prioridades del proyecto
-- **Buscar prioridades**: Encontrar prioridades por nombre
-- **Gestión de colores**: Soporte para códigos de color hexadecimales
-- **Prioridad por defecto**: Configurar prioridades predeterminadas
-- **Ordenamiento**: Control del orden de visualización de prioridades
-
-### `list-qmetry-projects`
-
-Obtiene una lista de proyectos habilitados en QMetry, con opciones de filtrado y paginación.
-
-- **Descripción:** Consulta la API de QMetry para obtener proyectos. Permite filtrar por nombre o clave del proyecto y controlar la paginación.
-- **Parámetros:**
-  - `projectName` (opcional, `string`): Nombre o clave del proyecto para filtrar la búsqueda.
-  - `maxResults` (opcional, `number`): Número máximo de resultados a devolver (por defecto 50, máximo 100).
-  - `startAt` (opcional, `number`): Índice inicial de los resultados (por defecto 0).
-
-## 🎯 Herramientas de Prioridades
-
-### `get_qmetry_priorities`
-
-Obtiene todas las prioridades de un proyecto específico.
-
-- **Descripción:** Lista todas las prioridades disponibles en un proyecto de QMetry.
-- **Parámetros:**
-  - `projectId` (requerido, `number`): ID del proyecto.
-
-### `create_qmetry_priority`
-
-Crea una nueva prioridad en el proyecto.
-
-- **Descripción:** Permite crear prioridades personalizadas con nombre, descripción, color y configuración adicional.
-- **Parámetros:**
-  - `name` (requerido, `string`): Nombre de la prioridad (ej: "High", "Medium", "Low").
-  - `description` (requerido, `string`): Descripción de la prioridad.
-  - `color` (requerido, `string`): Código de color en formato hex (ej: "#FF0000").
-  - `projectId` (requerido, `number`): ID del proyecto.
-  - `iconUrl` (opcional, `string`): URL del icono de la prioridad.
-  - `isDefault` (opcional, `boolean`): Si debe ser la prioridad por defecto.
-  - `orderIndex` (opcional, `number`): Índice de orden para clasificación.
-
-### `update_qmetry_priority`
-
-Actualiza una prioridad existente.
-
-- **Descripción:** Permite modificar los campos de una prioridad existente.
-- **Parámetros:**
-  - `priorityId` (requerido, `string`): ID de la prioridad a actualizar.
-  - Todos los campos de `create_qmetry_priority` son opcionales para actualización.
-
-### `delete_qmetry_priority`
-
-Elimina una prioridad del proyecto.
-
-- **Descripción:** Remueve permanentemente una prioridad del proyecto.
-- **Parámetros:**
-  - `priorityId` (requerido, `string`): ID de la prioridad a eliminar.
-  - `projectId` (requerido, `number`): ID del proyecto.
-
-### `search_qmetry_priorities`
-
-Busca prioridades por nombre en un proyecto.
-
-- **Descripción:** Encuentra prioridades que coincidan con un patrón de nombre específico.
-- **Parámetros:**
-  - `projectId` (requerido, `number`): ID del proyecto.
-  - `priorityName` (requerido, `string`): Patrón de nombre a buscar.
-
-> 📖 **Documentación Detallada**: Para más información sobre la gestión de prioridades, consulta [PRIORITIES_README.md](./PRIORITIES_README.md).
-
-## 🧪 Herramientas de Test Steps
-
-### `get-qmetry-test-steps`
-
-Obtiene los pasos de prueba de un caso de prueba específico.
-
-- **Descripción:** Lista todos los pasos de prueba asociados a un caso de prueba de QMetry, con opciones de filtrado, ordenamiento y paginación.
-- **Parámetros:**
-  - `id` (requerido, `string`): ID del caso de prueba (obtenido de la respuesta de la API "Search Test Case").
-  - `no` (requerido, `number`): Número de versión del caso de prueba (obtenido de `{version.versionNo}` en la respuesta de la API "Search Test Case").
-  - `maxResults` (opcional, `number`): Número máximo de resultados a devolver.
-  - `sort` (opcional, `string`): Campo y orden de clasificación. Valores posibles: `stepDetails`, `testData`, `seqNo`, `expectedResult`. Formato: `campo:orden(asc/desc)`. Ejemplo: `seqNo:asc`.
-  - `startAt` (opcional, `number`): Índice inicial para paginación.
-
-### `create-qmetry-test-step`
-
-Crea nuevos pasos de prueba para un caso de prueba.
-
-- **Descripción:** Permite crear múltiples pasos de prueba con detalles, datos de prueba y resultados esperados.
-- **Parámetros:**
-  - `id` (requerido, `string`): ID del caso de prueba (obtenido de la respuesta de la API "Search Test Case").
-  - `no` (requerido, `number`): Número de versión del caso de prueba.
-  - `steps` (requerido, `array`): Array de objetos de pasos de prueba, cada uno con:
-    - `stepDetails` (requerido, `string`): Detalles del paso de prueba.
-    - `testData` (requerido, `string`): Datos de prueba para el paso.
-    - `expectedResult` (requerido, `string`): Resultado esperado del paso.
-
-### `update-qmetry-test-step`
-
-Actualiza pasos de prueba existentes.
-
-- **Descripción:** Permite modificar los detalles, datos de prueba y resultados esperados de pasos de prueba existentes.
-- **Parámetros:**
-  - `testCaseId` (requerido, `string`): ID del caso de prueba.
-  - `no` (requerido, `number`): Número de versión del caso de prueba.
-  - `steps` (requerido, `array`): Array de objetos de pasos de prueba a actualizar, cada uno con:
-    - `id` (requerido, `number`): ID del paso de prueba (obtenido de la respuesta de la API "Get Test Steps").
-    - `stepDetails` (requerido, `string`): Nuevos detalles del paso de prueba.
-    - `testData` (requerido, `string`): Nuevos datos de prueba.
-    - `expectedResult` (requerido, `string`): Nuevo resultado esperado.
-
-### `delete-qmetry-test-step`
-
-Elimina pasos de prueba de un caso de prueba.
-
-- **Descripción:** Remueve permanentemente uno o más pasos de prueba de un caso de prueba específico.
-- **Parámetros:**
-  - `id` (requerido, `string`): ID del caso de prueba.
-  - `no` (requerido, `number`): Número de versión del caso de prueba.
-  - `stepIds` (requerido, `array`): Array de IDs de los pasos de prueba a eliminar (obtenidos de la respuesta de la API "Get Test Steps").
-
-## 📋 Ejemplos de Uso
-
-### Obtener pasos de prueba
-
-```json
-{
-  "id": "test-case-123",
-  "no": 1,
-  "maxResults": 50,
-  "sort": "seqNo:asc",
-  "startAt": 0
-}
+```bash
+pnpm run:inspector
 ```
 
-### Crear pasos de prueba
+## 🛠️ Available Tools
 
-```json
-{
-  "id": "test-case-123",
-  "no": 1,
-  "steps": [
-    {
-      "stepDetails": "Navegar a la página de login",
-      "testData": "URL: https://example.com/login",
-      "expectedResult": "La página de login se carga correctamente"
-    },
-    {
-      "stepDetails": "Ingresar credenciales",
-      "testData": "Usuario: test@example.com, Contraseña: password123",
-      "expectedResult": "El usuario se autentica exitosamente"
-    }
-  ]
-}
+### 📁 Projects
+
+**Tool**: `list-qmetry-projects`
+
+- **Get projects**: List all QMetry-enabled projects with filtering and pagination
+
+---
+
+### 📝 Test Cases
+
+**Tools**: `get-qmetry-test-cases`, `create-qmetry-test-case`, `move-qmetry-test-case`, `copy-qmetry-test-case`
+
+- **Get**: Search test cases with advanced filters (assignee, status, labels, etc.)
+- **Create**: Create new test cases with steps, descriptions, and configurations
+- **Move**: Move test cases between folders
+- **Copy**: Copy test cases to different locations
+
+---
+
+### 📂 Test Case Folders
+
+**Tools**: `get-qmetry-test-case-folders`, `create-qmetry-test-case-folder`, `edit-qmetry-test-case-folder`, `copy-qmetry-test-case-folder`, `move-qmetry-test-case-folder`, `search-qmetry-test-case-folders`
+
+- **Get**: List all test case folders in a project
+- **Create**: Create new folders with parent-child hierarchy
+- **Edit**: Modify name and description of existing folders
+- **Copy**: Copy folders to new locations
+- **Move**: Move folders to different parent folders
+- **Search**: Search folders by name (strict or relative mode)
+
+---
+
+### 🎯 Test Case Status
+
+**Tools**: `get-qmetry-test-case-statuses`, `create-qmetry-test-case-status`, `update-qmetry-test-case-status`, `delete-qmetry-test-case-status`, `get-qmetry-test-case-status-reference-count`
+
+- **Get**: List all test case statuses (active/archived)
+- **Create**: Create custom statuses with colors
+- **Update**: Modify existing statuses
+- **Delete**: Remove statuses from project
+- **Reference count**: Check how many cases use a specific status
+
+---
+
+### 🔄 Test Cycle Folders
+
+**Tools**: `get-qmetry-test-cycle-folders`, `create-qmetry-test-cycle-folder`, `edit-qmetry-test-cycle-folder`, `move-qmetry-test-cycle-folder`, `search-qmetry-test-cycle-folder`
+
+- **Get**: List test cycle folders with optional count
+- **Create**: Create new cycle folders with hierarchy
+- **Edit**: Update name and description of folders
+- **Move**: Relocate folders in the hierarchy
+- **Search**: Locate folders by name
+
+---
+
+### 🔄 Test Cycle Status
+
+**Tools**: `get-qmetry-test-cycle-statuses`, `create-qmetry-test-cycle-status`, `update-qmetry-test-cycle-status`, `delete-qmetry-test-cycle-status`, `get-qmetry-test-cycle-status-reference-count`
+
+- **Get**: List test cycle statuses
+- **Create**: Create custom statuses for cycles
+- **Update**: Modify existing statuses
+- **Delete**: Remove unused statuses
+- **Reference count**: Check status usage
+
+---
+
+### 📋 Test Plan Folders
+
+**Tools**: `get-qmetry-test-plan-folders`, `create-qmetry-test-plan-folder`, `edit-qmetry-test-plan-folder`, `move-qmetry-test-plan-folder`, `search-qmetry-test-plan-folder`
+
+- **Get**: List test plan folders
+- **Create**: Create organizational folders for plans
+- **Edit**: Update folder information
+- **Move**: Reorganize folder hierarchy
+- **Search**: Search for specific folders
+
+---
+
+### 📋 Test Plan Status
+
+**Tools**: `get-qmetry-test-plan-statuses`, `create-qmetry-test-plan-status`, `update-qmetry-test-plan-status`, `delete-qmetry-test-plan-status`, `get-qmetry-test-plan-status-reference-count`
+
+- **Get**: List test plan statuses
+- **Create**: Create custom statuses
+- **Update**: Modify existing statuses
+- **Delete**: Remove statuses from project
+- **Reference count**: View status usage
+
+---
+
+### 🪜 Test Steps
+
+**Tools**: `get-qmetry-test-steps`, `create-qmetry-test-step`, `update-qmetry-test-step`, `delete-qmetry-test-step`
+
+- **Get**: List all steps of a test case with pagination
+- **Create**: Create multiple steps with details, test data, and expected results
+- **Update**: Modify existing steps
+- **Delete**: Remove steps from a test case
+
+---
+
+### ⚡ Priorities
+
+**Tools**: `get-qmetry-priorities`, `create-qmetry-priority`, `update-qmetry-priority`, `delete-qmetry-priority`, `search-qmetry-priorities`
+
+- **Get**: List all project priorities
+- **Create**: Create custom priorities with hexadecimal colors
+- **Update**: Modify existing priorities
+- **Delete**: Remove unused priorities
+- **Search**: Locate priorities by name
+
+---
+
+### 🏷️ Labels
+
+**Tools**: `get-qmetry-labels`, `create-qmetry-label`, `update-qmetry-label`, `delete-qmetry-label`, `get-qmetry-label-reference-count`
+
+- **Get**: List all project labels
+- **Create**: Create new labels for categorization
+- **Update**: Modify label names
+- **Delete**: Remove labels from project
+- **Reference count**: See how many items use a label
+
+---
+
+### 🔗 Linked Requirements
+
+**Tools**: `get-qmetry-linked-requirements`, `link-qmetry-requirements`, `unlink-qmetry-requirements`
+
+- **Get**: List all requirements (Jira issues) linked to a test case
+- **Link**: Associate one or more Jira issues with a test case
+- **Unlink**: Remove association between requirements and test cases
+
+## 🚨 Troubleshooting
+
+### Error: QMETRY_API_KEY not configured
+
+```bash
+export QMETRY_API_KEY="your-api-key"
 ```
 
-### Actualizar pasos de prueba
+## 📚 Resources
 
-```json
-{
-  "testCaseId": "test-case-123",
-  "no": 1,
-  "steps": [
-    {
-      "id": 456,
-      "stepDetails": "Navegar a la página de login actualizada",
-      "testData": "URL: https://new-example.com/login",
-      "expectedResult": "La página de login se carga correctamente"
-    }
-  ]
-}
-```
+- [Official MCP Documentation](https://modelcontextprotocol.io/)
+- [QMetry for Jira API](https://qmetry.com/qmetry-for-jira/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Zod Documentation](https://zod.dev/)
 
-### Eliminar pasos de prueba
+## 📄 License
 
-```json
-{
-  "id": "test-case-123",
-  "no": 1,
-  "stepIds": [456, 457]
-}
-```
+This project is licensed under **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
 
-## 🔧 Sistema de Logging
+### Why Apache License 2.0?
 
-El proyecto incluye un sistema de logging robusto diseñado específicamente para servidores MCP que no interfiere con el protocolo JSON.
+- ✅ **Patent protection**: Explicit grant of patent rights
+- ✅ **Trademark control**: Protection over trademark usage
+- ✅ **Change declaration**: Requires documenting modifications
+- ✅ **Enterprise use**: Widely accepted in corporate environments
+- ✅ **Compatible**: With most open source licenses
 
-### Características del Logger
+### Important Notices
 
-- **✅ Compatible con MCP**: Todos los logs van a stderr para no interferir con la comunicación JSON
-- **✅ Estructurado**: Logs en formato JSON con timestamp y contexto
-- **✅ Niveles de log**: debug, info, warn, error
-- **✅ Contexto**: Incluye función/módulo donde ocurrió el evento
-- **✅ Datos opcionales**: Soporte para objetos complejos en los logs
+This software integrates with QMetry and Jira through their public APIs. QMetry is a registered trademark of Zoho Corporation and Jira is a registered trademark of Atlassian Pty Ltd. This project is not affiliated with, endorsed by, or sponsored by these companies.
 
-### Uso del Logger
+See the [NOTICE](NOTICE) file for complete information about attributions and legal notices.
+
+## 👥 Contributing
+
+To contribute to the project:
+
+1. **Fork & Pull Request**: Fork the project and submit your changes via pull requests
+2. **Clean code**: Keep code clean using ESLint and Prettier (`pnpm lint:fix`)
+3. **Logging**: Use the provided logging system (never `console.log`)
+4. **Documentation**: Document all functions with JSDoc
+5. **Patterns**: Follow established patterns in the project
+6. **Testing**: Test your changes with MCP Inspector (`pnpm run:inspector`)
+7. **License**: By contributing, you agree that your code will be licensed under Apache License 2.0
+8. **Changes**: Clearly document what changes you made and why
+
+### License Header
+
+Add this header at the beginning of new TypeScript files:
 
 ```typescript
-import { logger } from '../utils/logger';
-
-// Diferentes niveles de logging
-logger.debug('Información de debug', { userId: 123 }, 'functionName');
-logger.info('Operación exitosa', { result: 'created' }, 'createUser');
-logger.warn('Advertencia', { remaining: 5 }, 'apiCall');
-logger.error('Error ocurrido', error, 'createUser');
-
-// Para debugging rápido durante desarrollo
-import { debug } from '../utils/logger';
-debug('Debug rápido', { data: 'value' }); // Solo en NODE_ENV=development
+/**
+ * Copyright 2025 Alberto Zapata
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 ```
 
-### Estructura de los Logs
+For detailed contribution guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Los logs se escriben en formato JSON estructurado:
+## 🔄 Version
 
-```json
-{
-  "timestamp": "2024-01-15T10:30:00.000Z",
-  "level": "info",
-  "message": "Test step created successfully",
-  "data": { "testCaseId": "123" },
-  "context": "createQmetryTestStep"
-}
-```
-
-### Configuración
-
-El logger está configurado automáticamente para:
-
-- Escribir a stderr (no interfiere con MCP)
-- Incluir timestamps ISO
-- Proporcionar contexto de función
-- Soporte para datos estructurados
-- Modo debug solo en desarrollo
-
-> ⚠️ **Importante**: Nunca uses `console.log()` o `console.error()` en servidores MCP, ya que interfieren con el protocolo JSON.
-
-## 🚨 Solución de Problemas
-
-### Error de Sintaxis JSON
-
-**Síntoma**: `SyntaxError: Unexpected token 'M', "MCP server"... is not valid JSON`
-
-**Causa**: El servidor está imprimiendo texto plano al stdout, interfiriendo con el protocolo MCP.
-
-**Solución**:
-
-- Asegúrate de que no hay `console.log()` o `console.error()` en el código
-- Usa el sistema de logging proporcionado: `logger.info()`, `logger.error()`, etc.
-- Todos los logs deben ir a stderr, no a stdout
-
-### Error de Autenticación
-
-**Síntoma**: `Error: The environment variable QMETRY_API_KEY is not configured`
-
-**Solución**:
-
-```bash
-export QMETRY_API_KEY="tu-clave-de-api-aqui"
-```
-
-### Error de Configuración de API
-
-**Síntoma**: Errores 404 o 500 al hacer llamadas a la API
-
-**Solución**:
-
-- Verifica que la URL en `config.json` sea correcta
-- Asegúrate de que la API key tenga los permisos necesarios
-- Revisa los logs para más detalles del error
-
-### Problemas de Compilación
-
-**Síntoma**: Errores de TypeScript al compilar
-
-**Solución**:
-
-```bash
-# Verificar errores de linting
-pnpm lint
-
-# Corregir automáticamente problemas de formato
-pnpm lint:fix
-
-# Formatear código
-pnpm format
-```
-
-## 📚 Recursos Adicionales
-
-- [Documentación oficial de MCP](https://modelcontextprotocol.io/)
-- [API de QMetry para Jira](https://qmetry.com/qmetry-for-jira/)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+**v1.0.0** - Current MCP server version
