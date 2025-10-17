@@ -200,6 +200,7 @@ app.use(express.static('src'));
 
 /**
  * SSE endpoint for clients to connect
+ * Also handles MCP protocol over SSE for N8N compatibility
  */
 app.get('/events', (req: Request, res: Response) => {
   const clientId = generateClientId();
@@ -218,18 +219,69 @@ app.get('/events', (req: Request, res: Response) => {
     lastEventId: req.headers['last-event-id'] as string,
   });
 
+  // Send initial connection event
   const initialEvent: SSEEvent = {
     id: '1',
     event: 'connected',
     data: JSON.stringify({
       clientId,
       message: 'Connected to QMetry MCP SSE server',
-      availableTools: Array.from(toolRegistry.keys()),
+      protocol: 'MCP JSON-RPC 2.0',
+      protocolVersion: '2024-11-05',
       timestamp: new Date().toISOString(),
     }),
   };
 
   res.write(formatSSEEvent(initialEvent));
+
+  // Send server info for MCP initialization
+  const initEvent: SSEEvent = {
+    id: '2',
+    event: 'message',
+    data: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'notifications/initialized',
+      params: {
+        protocolVersion: '2024-11-05',
+        capabilities: {
+          tools: {},
+        },
+        serverInfo: {
+          name: 'Jira Qmetry MCP SSE',
+          version: '1.0.0',
+        },
+      },
+    }),
+  };
+
+  res.write(formatSSEEvent(initEvent));
+
+  // Send available tools list
+  const toolsList = Array.from(toolRegistry.entries()).map(([name, tool]) => ({
+    name,
+    description: tool.definition.description,
+    inputSchema: {
+      type: 'object',
+      properties: tool.definition.inputSchema,
+      required: Object.keys(tool.definition.inputSchema).filter(
+        key => !tool.definition.inputSchema[key].isOptional()
+      ),
+    },
+  }));
+
+  const toolsEvent: SSEEvent = {
+    id: '3',
+    event: 'tools',
+    data: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'notifications/tools/list_changed',
+      params: {
+        tools: toolsList,
+      },
+    }),
+  };
+
+  res.write(formatSSEEvent(toolsEvent));
 
   req.on('close', () => {
     console.log(`SSE client ${clientId} disconnected`);
@@ -240,6 +292,79 @@ app.get('/events', (req: Request, res: Response) => {
     console.error(`SSE client ${clientId} error:`, error);
     sseClients.delete(clientId);
   });
+});
+
+/**
+ * SSE POST endpoint for tool execution
+ */
+app.post('/events', async (req: Request, res: Response) => {
+  try {
+    const { jsonrpc, method, params, id } = req.body;
+
+    // Validate JSON-RPC 2.0 format
+    if (jsonrpc !== '2.0') {
+      return res.status(400).json({
+        jsonrpc: '2.0',
+        error: {
+          code: -32600,
+          message: 'Invalid Request',
+        },
+        id: id || null,
+      });
+    }
+
+    // Handle different MCP methods
+    switch (method) {
+      case 'tools/call': {
+        const { name: toolName, arguments: toolArgs } = params;
+        const result = await executeQMetryOperation(toolName, toolArgs);
+
+        if (result.success) {
+          res.json({
+            jsonrpc: '2.0',
+            result: {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify(result.data, null, 2),
+                },
+              ],
+            },
+            id,
+          });
+        } else {
+          res.json({
+            jsonrpc: '2.0',
+            error: {
+              code: -32000,
+              message: result.error,
+            },
+            id,
+          });
+        }
+        break;
+      }
+
+      default:
+        res.status(400).json({
+          jsonrpc: '2.0',
+          error: {
+            code: -32601,
+            message: 'Method not found',
+          },
+          id,
+        });
+    }
+  } catch (error) {
+    res.status(500).json({
+      jsonrpc: '2.0',
+      error: {
+        code: -32603,
+        message: error instanceof Error ? error.message : 'Internal error',
+      },
+      id: req.body.id || null,
+    });
+  }
 });
 
 /**
