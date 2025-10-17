@@ -27,7 +27,7 @@ const toolRegistry: Map<string, ToolDefinition> = new Map();
  */
 const server = new McpServer({
   name: 'Jira Qmetry MCP HTTP',
-  version: '1.0.0',
+  version: '1.1.0',
   title: 'Jira Qmetry MCP with Streamable HTTP Support',
   description: 'Jira Qmetry MCP with Streamable HTTP support',
 });

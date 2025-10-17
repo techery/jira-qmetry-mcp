@@ -27,7 +27,7 @@ import { linkedRequirementsTools } from './tools/linked-requirements-tools.js';
  */
 const server = new McpServer({
   name: 'Jira Qmetry MCP',
-  version: '1.0.0',
+  version: '1.1.0',
   title: 'Jira Qmetry MCP',
   description: 'Jira Qmetry MCP',
 });
