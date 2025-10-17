@@ -256,28 +256,18 @@ app.get('/events', (req: Request, res: Response) => {
 
   res.write(formatSSEEvent(initEvent));
 
-  // Send available tools list
-  const toolsList = Array.from(toolRegistry.entries()).map(([name, tool]) => ({
+  // Send available tools list (simplified for SSE)
+  const toolsList = Array.from(toolRegistry.keys()).map(name => ({
     name,
-    description: tool.definition.description,
-    inputSchema: {
-      type: 'object',
-      properties: tool.definition.inputSchema,
-      required: Object.keys(tool.definition.inputSchema).filter(
-        key => !tool.definition.inputSchema[key].isOptional()
-      ),
-    },
+    description: toolRegistry.get(name)?.definition.description || '',
   }));
 
   const toolsEvent: SSEEvent = {
     id: '3',
     event: 'tools',
     data: JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'notifications/tools/list_changed',
-      params: {
-        tools: toolsList,
-      },
+      tools: toolsList,
+      count: toolsList.length,
     }),
   };
 
