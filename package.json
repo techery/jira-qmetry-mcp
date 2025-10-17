@@ -2,7 +2,7 @@
   "name": "jira-qmetry-mcp-server",
   "version": "1.0.0",
   "description": "MCP Server for QMetry Test Management in Jira",
-  "main": "main.ts",
+  "main": "dist/main.js",
   "type": "module",
   "packageManager": "pnpm@9.0.0",
   "license": "Apache-2.0",
@@ -11,6 +11,18 @@
     "type": "git",
     "url": "https://github.com/yourusername/jira-qmetry-mcp"
   },
+  "bin": {
+    "jira-qmetry-mcp": "dist/main.js"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "README_ES.md",
+    "LICENSE",
+    "NOTICE",
+    "CONTRIBUTING.md",
+    "CONTRIBUTING_ES.md"
+  ],
   "keywords": [
     "mcp",
     "qmetry",
@@ -18,9 +30,11 @@
     "test-management",
     "qa",
     "testing",
-    "model-context-protocol"
+    "model-context-protocol",
+    "mcp-server"
   ],
   "scripts": {
+    "build": "tsc",
     "start": "npx tsx src/main.ts",
     "start:http": "npx tsx src/http-server.ts",
     "start:sse": "npx tsx src/http-server.ts",
@@ -28,7 +42,8 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
-    "run:inspector": "npx @modelcontextprotocol/inspector"
+    "run:inspector": "npx @modelcontextprotocol/inspector",
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.17.0",

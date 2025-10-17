@@ -54,16 +54,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           .describe('Show count of testCases associated with Folder'),
       },
     },
-    handler: async ({
-      projectId,
-      short,
-      withCount,
-    }: GetTestCaseFoldersParams) => {
-      const result = await getQmetryTestCaseFolders(
-        projectId,
-        short,
-        withCount
-      );
+    handler: async (params: GetTestCaseFoldersParams) => {
+      const result = await getQmetryTestCaseFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -90,18 +82,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderName,
-      description,
-      parentId,
-    }: CreateTestCaseFolderParams) => {
-      const result = await createQmetryTestCaseFolder(
-        folderName,
-        parentId,
-        projectId,
-        description
-      );
+    handler: async (params: CreateTestCaseFolderParams) => {
+      const result = await createQmetryTestCaseFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -127,18 +109,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      folderName,
-      folderId,
-      projectId,
-      description,
-    }: EditTestCaseFolderParams) => {
-      const result = await editQmetryTestCaseFolder(
-        folderName,
-        folderId,
-        projectId,
-        description
-      );
+    handler: async (params: EditTestCaseFolderParams) => {
+      const result = await editQmetryTestCaseFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -169,16 +141,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderId,
-      newParentId,
-    }: CopyTestCaseFolderParams) => {
-      const result = await copyQmetryTestCaseFolder(
-        projectId,
-        folderId,
-        newParentId
-      );
+    handler: async (params: CopyTestCaseFolderParams) => {
+      const result = await copyQmetryTestCaseFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -208,16 +172,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderId,
-      newParentId,
-    }: MoveTestCaseFolderParams) => {
-      const result = await moveQmetryTestCaseFolder(
-        projectId,
-        folderId,
-        newParentId
-      );
+    handler: async (params: MoveTestCaseFolderParams) => {
+      const result = await moveQmetryTestCaseFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -246,16 +202,8 @@ export const testCaseFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderName,
-      mode,
-    }: SearchTestCaseFoldersParams) => {
-      const result = await searchQmetryTestCaseFolders(
-        projectId,
-        folderName,
-        mode
-      );
+    handler: async (params: SearchTestCaseFoldersParams) => {
+      const result = await searchQmetryTestCaseFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

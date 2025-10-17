@@ -17,7 +17,7 @@ export interface GetTestCycleFoldersParams {
  * @property {string} folderName - The name of the new folder.
  * @property {string} [description] - An optional description for the folder.
  * @property {number} projectId - The ID of the project where the folder will be created.
- * @property {number} parentId - The ID of the parent folder.
+ * @property {number} parentId - The ID of the parent folder. Use "-1" for the root.
  */
 export interface CreateTestCycleFolderParams {
   folderName: string;

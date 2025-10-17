@@ -17,13 +17,13 @@ export interface GetTestPlanFoldersParams {
  * @property {string} folderName - The name of the new folder.
  * @property {string} [description] - An optional description for the folder.
  * @property {number} projectId - The ID of the project where the folder will be created.
- * @property {number} [parentId] - The ID of the parent folder (optional).
+ * @property {number} parentId - The ID of the parent folder. Use "-1" for the root.
  */
 export interface CreateTestPlanFolderParams {
   folderName: string;
   description?: string;
   projectId: number;
-  parentId?: number;
+  parentId: number;
 }
 
 /**

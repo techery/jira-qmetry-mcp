@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { GetProjectsParams } from '../interfaces/qmetry-projects';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -15,17 +16,13 @@ const qmetry_api_url = config.qmetry_api_url;
 
 /**
  * Retrieves a list of Qmetry projects matching the given name.
- * @param projectName The name of the project to search for.
- * @param maxResults The maximum number of results to return.
- * @param startAt The starting index for pagination.
+ * @param params The parameters for getting projects
  * @returns A promise that resolves to an object with a content property
  * containing an array of objects with type and text properties. The text
  * property contains the JSON response from the API.
  */
 export async function getQmetryProjects(
-  projectName: string,
-  maxResults?: number,
-  startAt?: number
+  params: GetProjectsParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
 
@@ -34,6 +31,8 @@ export async function getQmetryProjects(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { projectName, maxResults, startAt } = params;
 
   try {
     const url = new URL(`${qmetry_api_url}projects`);
