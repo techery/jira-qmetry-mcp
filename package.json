@@ -4,6 +4,7 @@
   "description": "MCP Server for QMetry Test Management in Jira",
   "main": "main.ts",
   "type": "module",
+  "packageManager": "pnpm@9.0.0",
   "license": "Apache-2.0",
   "author": "Alberto Zapata",
   "repository": {
