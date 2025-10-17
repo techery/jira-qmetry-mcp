@@ -3,6 +3,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import {
+  CreateTestCaseFolderParams,
+  GetTestCaseFoldersParams,
+  EditTestCaseFolderParams,
+  CopyTestCaseFolderParams,
+  MoveTestCaseFolderParams,
+  SearchTestCaseFoldersParams,
+} from '../interfaces/qmetry-test-case-folders';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -15,20 +23,14 @@ const qmetry_api_url = config.qmetry_api_url;
 
 /**
  * Creates a new folder for test cases in Qmetry.
- * @param folderName The name of the new folder.
- * @param parentId The ID of the parent folder. Use "-1" for the root.
- * @param projectId The ID of the project where the folder will be created.
- * @param description An optional description for the folder.
+ * @param params The parameters for creating a test case folder
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function createQmetryTestCaseFolder(
-  folderName: string,
-  parentId: string,
-  projectId: string,
-  description?: string
+  params: CreateTestCaseFolderParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
 
@@ -37,6 +39,8 @@ export async function createQmetryTestCaseFolder(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { folderName, parentId, projectId, description } = params;
 
   try {
     const url = new URL(
@@ -74,18 +78,14 @@ export async function createQmetryTestCaseFolder(
 
 /**
  * Retrieves a list of folders for test cases in Qmetry.
- * @param projectId The ID of the project to search for folders.
- * @param short An optional boolean parameter to include short information about the folders.
- * @param withCount An optional boolean parameter to include the count of folders.
+ * @param params The parameters for getting test case folders
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function getQmetryTestCaseFolders(
-  projectId: number,
-  short?: string,
-  withCount?: boolean
+  params: GetTestCaseFoldersParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
 
@@ -94,6 +94,8 @@ export async function getQmetryTestCaseFolders(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { projectId, short, withCount } = params;
 
   try {
     const url = new URL(
@@ -133,20 +135,14 @@ export async function getQmetryTestCaseFolders(
 
 /**
  * Edits an existing folder for test cases in Qmetry.
- * @param folderName The new name for the folder.
- * @param folderId The ID of the folder to edit.
- * @param projectId The ID of the project where the folder is located.
- * @param description An optional new description for the folder.
+ * @param params The parameters for editing a test case folder
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function editQmetryTestCaseFolder(
-  folderName: string,
-  folderId: string,
-  projectId: string,
-  description?: string
+  params: EditTestCaseFolderParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
 
@@ -155,6 +151,8 @@ export async function editQmetryTestCaseFolder(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { folderName, folderId, projectId, description } = params;
 
   try {
     const url = new URL(
@@ -191,18 +189,14 @@ export async function editQmetryTestCaseFolder(
 
 /**
  * Copies an existing folder for test cases in Qmetry.
- * @param projectId The ID of the project where the folder is located.
- * @param folderId The ID of the folder to copy.
- * @param newParentId The ID of the new parent folder.
+ * @param params The parameters for copying a test case folder
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function copyQmetryTestCaseFolder(
-  projectId: string,
-  folderId: string,
-  newParentId: string
+  params: CopyTestCaseFolderParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -210,6 +204,8 @@ export async function copyQmetryTestCaseFolder(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { projectId, folderId, newParentId } = params;
 
   try {
     const url = new URL(
@@ -245,18 +241,14 @@ export async function copyQmetryTestCaseFolder(
 
 /**
  * Moves an existing folder for test cases in Qmetry.
- * @param projectId The ID of the project where the folder is located.
- * @param folderId The ID of the folder to move.
- * @param newParentId The ID of the new parent folder.
+ * @param params The parameters for moving a test case folder
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function moveQmetryTestCaseFolder(
-  projectId: string,
-  folderId: string,
-  newParentId: string
+  params: MoveTestCaseFolderParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -264,6 +256,8 @@ export async function moveQmetryTestCaseFolder(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { projectId, folderId, newParentId } = params;
 
   try {
     const url = new URL(
@@ -299,18 +293,14 @@ export async function moveQmetryTestCaseFolder(
 
 /**
  * Searches for folders for test cases in Qmetry.
- * @param projectId The ID of the project to search for folders.
- * @param folderName The name of the folder to search for.
- * @param mode The mode of the search. Can be "name" or "description".
+ * @param params The parameters for searching test case folders
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
  * The content property of the response contains an array with a single
  * object that has a type property with value "text" and a text property
  * with the JSON response from the API.
  */
 export async function searchQmetryTestCaseFolders(
-  projectId: number,
-  folderName: string,
-  mode?: string
+  params: SearchTestCaseFoldersParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -318,6 +308,8 @@ export async function searchQmetryTestCaseFolders(
       'The environment variable QMETRY_API_KEY is not configured.'
     );
   }
+
+  const { projectId, folderName, mode } = params;
 
   try {
     const url = new URL(

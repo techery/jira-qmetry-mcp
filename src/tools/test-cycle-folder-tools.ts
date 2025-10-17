@@ -51,16 +51,8 @@ export const testCycleFolderTools: Array<ToolDefinition> = [
           .describe('Show count of test cycles associated with Folder'),
       },
     },
-    handler: async ({
-      projectId,
-      sort,
-      withCount,
-    }: GetTestCycleFoldersParams) => {
-      const result = await getQmetryTestCycleFolders(
-        projectId,
-        sort,
-        withCount
-      );
+    handler: async (params: GetTestCycleFoldersParams) => {
+      const result = await getQmetryTestCycleFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -87,18 +79,8 @@ export const testCycleFolderTools: Array<ToolDefinition> = [
         description: z.string().optional().describe('Description of Folder'),
       },
     },
-    handler: async ({
-      folderName,
-      projectId,
-      parentId,
-      description,
-    }: CreateTestCycleFolderParams) => {
-      const result = await createQmetryTestCycleFolder(
-        folderName,
-        projectId,
-        parentId,
-        description
-      );
+    handler: async (params: CreateTestCycleFolderParams) => {
+      const result = await createQmetryTestCycleFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -124,18 +106,8 @@ export const testCycleFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      folderName,
-      description,
-      projectId,
-      folderId,
-    }: EditTestCycleFolderParams) => {
-      const result = await editQmetryTestCycleFolder(
-        folderName,
-        projectId,
-        folderId,
-        description
-      );
+    handler: async (params: EditTestCycleFolderParams) => {
+      const result = await editQmetryTestCycleFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -165,16 +137,8 @@ export const testCycleFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderId,
-      newParentId,
-    }: MoveTestCycleFolderParams) => {
-      const result = await moveQmetryTestCycleFolder(
-        projectId,
-        folderId,
-        newParentId
-      );
+    handler: async (params: MoveTestCycleFolderParams) => {
+      const result = await moveQmetryTestCycleFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -203,16 +167,8 @@ export const testCycleFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderName,
-      mode,
-    }: SearchTestCycleFoldersParams) => {
-      const result = await searchQmetryTestCycleFolders(
-        projectId,
-        folderName,
-        mode
-      );
+    handler: async (params: SearchTestCycleFoldersParams) => {
+      const result = await searchQmetryTestCycleFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

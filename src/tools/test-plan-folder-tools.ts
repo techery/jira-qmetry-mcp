@@ -51,12 +51,8 @@ export const testPlanFolderTools: Array<ToolDefinition> = [
           .describe('Show count of test plans associated with Folder'),
       },
     },
-    handler: async ({
-      projectId,
-      sort,
-      withCount,
-    }: GetTestPlanFoldersParams) => {
-      const result = await getQmetryTestPlanFolders(projectId, sort, withCount);
+    handler: async (params: GetTestPlanFoldersParams) => {
+      const result = await getQmetryTestPlanFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -86,18 +82,8 @@ export const testPlanFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      folderName,
-      projectId,
-      parentId,
-      description,
-    }: CreateTestPlanFolderParams) => {
-      const result = await createQmetryTestPlanFolder(
-        folderName,
-        projectId,
-        parentId,
-        description
-      );
+    handler: async (params: CreateTestPlanFolderParams) => {
+      const result = await createQmetryTestPlanFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -122,18 +108,8 @@ export const testPlanFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      folderName,
-      description,
-      folderId,
-      projectId,
-    }: EditTestPlanFolderParams) => {
-      const result = await editQmetryTestPlanFolder(
-        folderName,
-        folderId,
-        projectId,
-        description
-      );
+    handler: async (params: EditTestPlanFolderParams) => {
+      const result = await editQmetryTestPlanFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -163,16 +139,8 @@ export const testPlanFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      folderId,
-      projectId,
-      newParentId,
-    }: MoveTestPlanFolderParams) => {
-      const result = await moveQmetryTestPlanFolder(
-        folderId,
-        projectId,
-        newParentId
-      );
+    handler: async (params: MoveTestPlanFolderParams) => {
+      const result = await moveQmetryTestPlanFolder(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
@@ -201,16 +169,8 @@ export const testPlanFolderTools: Array<ToolDefinition> = [
           ),
       },
     },
-    handler: async ({
-      projectId,
-      folderName,
-      mode,
-    }: SearchTestPlanFoldersParams) => {
-      const result = await searchQmetryTestPlanFolders(
-        projectId,
-        folderName,
-        mode
-      );
+    handler: async (params: SearchTestPlanFoldersParams) => {
+      const result = await searchQmetryTestPlanFolders(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
