@@ -2,13 +2,13 @@ import fetch from 'node-fetch';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cleanObject } from '../utils/object.utils';
+import { cleanObject } from '../utils/object.utils.js';
 import { dirname } from 'path';
 import {
   SearchTestCasesParams,
   CreateTestCaseParams,
   MoveOrCopyTestCaseParams,
-} from '../interfaces/qmetry-test-cases';
+} from '../interfaces/qmetry-test-cases.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

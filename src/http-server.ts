@@ -3,19 +3,19 @@ import cors from 'cors';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 
-import { ToolDefinition } from './interfaces/toolDefinition';
-import { projectTools } from './tools/project-tools';
-import { testCaseFolderTools } from './tools/test-case-folder-tools';
-import { testCycleFolderTools } from './tools/test-cycle-folder-tools';
-import { testPlanFolderTools } from './tools/test-plan-folder-tools';
-import { testCasesTools } from './tools/test-cases-tools';
-import { testStepTools } from './tools/test-step-tools';
-import { labelTools } from './tools/label-tools';
-import { priorityTools } from './tools/priority-tools';
-import { testCaseStatusTools } from './tools/test-cases-status-tools';
-import { testCycleStatusTools } from './tools/test-cycle-status-tools';
-import { testPlanStatusTools } from './tools/test-plan-status-tools';
-import { linkedRequirementsTools } from './tools/linked-requirements-tools';
+import { ToolDefinition } from './interfaces/toolDefinition.js';
+import { projectTools } from './tools/project-tools.js';
+import { testCaseFolderTools } from './tools/test-case-folder-tools.js';
+import { testCycleFolderTools } from './tools/test-cycle-folder-tools.js';
+import { testPlanFolderTools } from './tools/test-plan-folder-tools.js';
+import { testCasesTools } from './tools/test-cases-tools.js';
+import { testStepTools } from './tools/test-step-tools.js';
+import { labelTools } from './tools/label-tools.js';
+import { priorityTools } from './tools/priority-tools.js';
+import { testCaseStatusTools } from './tools/test-cases-status-tools.js';
+import { testCycleStatusTools } from './tools/test-cycle-status-tools.js';
+import { testPlanStatusTools } from './tools/test-plan-status-tools.js';
+import { linkedRequirementsTools } from './tools/linked-requirements-tools.js';
 
 /**
  * Tool registry for executing QMetry operations

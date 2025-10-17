@@ -6,8 +6,8 @@ import { dirname } from 'path';
 import {
   GetPrioritiesParams,
   GetPriorityReferenceCountParams,
-} from '../interfaces/qmetry-priorities';
-import { logger } from '../utils/logger';
+} from '../interfaces/qmetry-priorities.js';
+import { logger } from '../utils/logger.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

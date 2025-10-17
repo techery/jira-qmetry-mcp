@@ -5,7 +5,7 @@ import {
   editQmetryTestPlanFolder,
   moveQmetryTestPlanFolder,
   searchQmetryTestPlanFolders,
-} from '../api/qmetry-test-plan-folders';
+} from '../api/qmetry-test-plan-folders.js';
 import {
   GetTestPlanFoldersParams,
   CreateTestPlanFolderParams,
@@ -13,7 +13,7 @@ import {
   MoveTestPlanFolderParams,
   SearchTestPlanFoldersParams,
   ToolDefinition,
-} from '../interfaces/index';
+} from '../interfaces/index.js';
 
 /**
  * A collection of tools for managing Qmetry test plan folders.

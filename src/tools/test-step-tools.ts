@@ -4,14 +4,14 @@ import {
   createQmetryTestStep,
   updateQmetryTestStep,
   deleteQmetryTestStep,
-} from '../api/qmetry-test-steps';
+} from '../api/qmetry-test-steps.js';
 import {
   GetTestStepsParams,
   CreateTestStepParams,
   UpdateTestStepParams,
   DeleteTestStepParams,
-} from '../interfaces/qmetry-test-steps';
-import { ToolDefinition } from '../interfaces';
+} from '../interfaces/qmetry-test-steps.js';
+import { ToolDefinition } from '../interfaces/index.js';
 
 export const testStepTools: Array<ToolDefinition> = [
   {

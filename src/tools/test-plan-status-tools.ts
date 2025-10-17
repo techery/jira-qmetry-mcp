@@ -1,19 +1,19 @@
 import { z } from 'zod';
-import { ToolDefinition } from '../interfaces';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   GetTestPlanStatusesParams,
   CreateTestPlanStatusParams,
   UpdateTestPlanStatusParams,
   DeleteTestPlanStatusParams,
   GetTestPlanStatusReferenceCountParams,
-} from '../interfaces/qmetry-status';
+} from '../interfaces/qmetry-status.js';
 import {
   getQmetryTestPlanStatuses,
   createQmetryTestPlanStatus,
   updateQmetryTestPlanStatus,
   deleteQmetryTestPlanStatus,
   getQmetryTestPlanStatusReferenceCount,
-} from '../api/qmetry-test-plan-status';
+} from '../api/qmetry-test-plan-status.js';
 
 export const testPlanStatusTools: Array<ToolDefinition> = [
   {

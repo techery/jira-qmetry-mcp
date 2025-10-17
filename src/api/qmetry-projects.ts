@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { GetProjectsParams } from '../interfaces/qmetry-projects';
+import { GetProjectsParams } from '../interfaces/qmetry-projects.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

@@ -1,16 +1,16 @@
 import { z } from 'zod';
-import { ToolDefinition } from '../interfaces/index';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   createQmetryTestCase,
   getQmetryTestCases,
   moveQmetryTestCase,
   copyQmetryTestCase,
-} from '../api/qmetry-test-case';
+} from '../api/qmetry-test-case.js';
 import {
   CreateTestCaseParams,
   SearchTestCasesParams,
   MoveOrCopyTestCaseParams,
-} from '../interfaces/qmetry-test-cases';
+} from '../interfaces/qmetry-test-cases.js';
 
 export const testCasesTools: Array<ToolDefinition> = [
   {
