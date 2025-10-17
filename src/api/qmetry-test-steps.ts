@@ -8,8 +8,8 @@ import {
   CreateTestStepParams,
   UpdateTestStepParams,
   DeleteTestStepParams,
-} from '../interfaces/qmetry-test-steps';
-import { logger } from '../utils/logger';
+} from '../interfaces/qmetry-test-steps.js';
+import { logger } from '../utils/logger.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

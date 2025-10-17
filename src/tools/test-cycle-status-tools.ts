@@ -1,19 +1,19 @@
 import { z } from 'zod';
-import { ToolDefinition } from '../interfaces';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   GetTestCycleStatusesParams,
   CreateTestCycleStatusParams,
   UpdateTestCycleStatusParams,
   DeleteTestCycleStatusParams,
   GetTestCycleStatusReferenceCountParams,
-} from '../interfaces/qmetry-status';
+} from '../interfaces/qmetry-status.js';
 import {
   getQmetryTestCycleStatuses,
   createQmetryTestCycleStatus,
   updateQmetryTestCycleStatus,
   deleteQmetryTestCycleStatus,
   getQmetryTestCycleStatusReferenceCount,
-} from '../api/qmetry-test-cycle-status';
+} from '../api/qmetry-test-cycle-status.js';
 
 export const testCycleStatusTools: Array<ToolDefinition> = [
   {

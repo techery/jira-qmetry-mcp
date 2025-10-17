@@ -1,19 +1,19 @@
 import { z } from 'zod';
-import { ToolDefinition } from '../interfaces';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   GetTestCaseStatusesParams,
   CreateTestCaseStatusParams,
   UpdateTestCaseStatusParams,
   DeleteTestCaseStatusParams,
   GetTestCaseStatusReferenceCountParams,
-} from '../interfaces/qmetry-status';
+} from '../interfaces/qmetry-status.js';
 import {
   getQmetryTestCaseStatuses,
   createQmetryTestCaseStatus,
   updateQmetryTestCaseStatus,
   deleteQmetryTestCaseStatus,
   getQmetryTestCaseStatusReferenceCount,
-} from '../api/qmetry-test-case-status';
+} from '../api/qmetry-test-case-status.js';
 
 export const testCaseStatusTools: Array<ToolDefinition> = [
   {

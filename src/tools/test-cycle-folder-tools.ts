@@ -5,7 +5,7 @@ import {
   editQmetryTestCycleFolder,
   moveQmetryTestCycleFolder,
   searchQmetryTestCycleFolders,
-} from '../api/qmetry-test-cycle-folders';
+} from '../api/qmetry-test-cycle-folders.js';
 import {
   GetTestCycleFoldersParams,
   CreateTestCycleFolderParams,
@@ -13,7 +13,7 @@ import {
   MoveTestCycleFolderParams,
   SearchTestCycleFoldersParams,
   ToolDefinition,
-} from '../interfaces/index';
+} from '../interfaces/index.js';
 
 /**
  * A collection of tools for managing Qmetry test cycle folders.

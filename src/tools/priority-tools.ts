@@ -2,12 +2,12 @@ import { z } from 'zod';
 import {
   getQmetryPriorities,
   getQmetryPriorityReferenceCount,
-} from '../api/qmetry-priorities';
+} from '../api/qmetry-priorities.js';
 import {
   GetPrioritiesParams,
   GetPriorityReferenceCountParams,
-} from '../interfaces/qmetry-priorities';
-import { ToolDefinition } from '../interfaces';
+} from '../interfaces/qmetry-priorities.js';
+import { ToolDefinition } from '../interfaces/index.js';
 
 export const priorityTools: Array<ToolDefinition> = [
   {
