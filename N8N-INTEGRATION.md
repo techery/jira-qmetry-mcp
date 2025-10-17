@@ -10,10 +10,16 @@
 
 This MCP server implements the **Model Context Protocol (MCP) with JSON-RPC 2.0**, making it compatible with N8N and other MCP clients.
 
-### Connection URL
+### Connection URLs
 
+#### For JSON-RPC Transport:
 ```
-https://jira-qmetry-mcp-production.up.railway.app/message
+https://jira-qmetry-mcp-qa.up.railway.app/message
+```
+
+#### For HTTP Streamable (SSE) Transport:
+```
+https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 ### Available Endpoints
@@ -27,13 +33,20 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ### How to Connect with N8N
 
 1. **Open your N8N workflow**
-2. **Add a new node**: Search for "MCP" or "Model Context Protocol"
+2. **Add a new node**: Search for "MCP Client"
 3. **Configure the connection**:
-   - **URL**: `https://jira-qmetry-mcp-production.up.railway.app/message`
-   - **Protocol**: JSON-RPC 2.0
-   - **Protocol Version**: 2024-11-05
+   
+   **Option A: HTTP Streamable (SSE) - Recommended**
+   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/events`
+   - **Server Transport**: `HTTP Streamable`
+   - **Authentication**: `None`
+   
+   **Option B: Standard HTTP (JSON-RPC)**
+   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/message`
+   - **Server Transport**: `HTTP` (if available)
+   - **Authentication**: `None`
 
-4. **Test the connection**: N8N should automatically discover all 50+ available tools
+4. **Test the connection**: N8N should automatically discover all 47 available tools
 
 ### Supported MCP Methods
 
