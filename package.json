@@ -4,6 +4,7 @@
   "description": "MCP Server for QMetry Test Management in Jira",
   "main": "main.ts",
   "type": "module",
+  "packageManager": "pnpm@9.0.0",
   "license": "Apache-2.0",
   "author": "Alberto Zapata",
   "repository": {
@@ -21,7 +22,8 @@
   ],
   "scripts": {
     "start": "npx tsx src/main.ts",
-    "start:sse": "npx tsx src/sse-server.ts",
+    "start:http": "npx tsx src/http-server.ts",
+    "start:sse": "npx tsx src/http-server.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",
