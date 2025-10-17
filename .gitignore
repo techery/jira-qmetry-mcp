@@ -2,8 +2,3 @@ node_modules/
 pnpm-lock.yaml
 dist/
 .vscode/
-
-.eslintrc.json
-.prettierrc
-.prettierignore
-eslint.config.js
