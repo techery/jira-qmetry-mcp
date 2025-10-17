@@ -46,6 +46,37 @@ jobs:
             echo "Version already matches. No update needed."
           fi
 
+      - name: Update version in source files
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Checking versions in source files..."
+
+          # Get current version from main.ts
+          MAIN_VERSION=$(grep -oP "version: '\K[0-9.]+" src/main.ts || echo "")
+          echo "main.ts version: $MAIN_VERSION"
+
+          # Get current version from http-server.ts
+          HTTP_VERSION=$(grep -oP "version: '\K[0-9.]+" src/http-server.ts || echo "")
+          echo "http-server.ts version: $HTTP_VERSION"
+
+          # Update main.ts if needed
+          if [ "$MAIN_VERSION" != "$VERSION" ]; then
+            echo "Updating main.ts version from $MAIN_VERSION to $VERSION..."
+            sed -i "s/version: '[0-9.]*'/version: '$VERSION'/" src/main.ts
+          else
+            echo "main.ts version already matches. No update needed."
+          fi
+
+          # Update http-server.ts if needed
+          if [ "$HTTP_VERSION" != "$VERSION" ]; then
+            echo "Updating http-server.ts version from $HTTP_VERSION to $VERSION..."
+            sed -i "s/version: '[0-9.]*'/version: '$VERSION'/" src/http-server.ts
+          else
+            echo "http-server.ts version already matches. No update needed."
+          fi
+
+          echo "✅ Version check completed"
+
       - name: Build project
         run: pnpm run build
 
