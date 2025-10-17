@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
 import { ToolDefinition } from './interfaces/toolDefinition';
 import { projectTools } from './tools/project-tools';
@@ -409,15 +408,12 @@ registerTools(server, [
 ]);
 
 /**
- * The main function that starts both MCP and SSE servers
+ * The main function that starts the SSE server
+ * Note: MCP server is initialized but not connected to stdio transport
+ * to allow running in Railway/cloud environments without terminal
  */
 async function main() {
   try {
-    // Start MCP server
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    console.log('MCP server connected');
-
     // Start Express SSE server
     app.listen(PORT, () => {
       console.log(`\n🚀 MCP Server running on http://localhost:${PORT}`);
@@ -438,7 +434,7 @@ async function main() {
       event: 'server_status',
       data: JSON.stringify({
         status: 'running',
-        mcpServer: 'connected',
+        protocol: 'MCP JSON-RPC 2.0',
         sseServer: `running on port ${PORT}`,
         availableTools: Array.from(toolRegistry.keys()),
         timestamp: new Date().toISOString(),
