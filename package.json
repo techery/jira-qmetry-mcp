@@ -9,7 +9,7 @@
   "author": "Alberto Zapata",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/jira-qmetry-mcp"
+    "url": "https://github.com/albertor03/jira-qmetry-mcp"
   },
   "bin": {
     "jira-qmetry-mcp": "dist/main.js"
@@ -43,7 +43,7 @@
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
     "run:inspector": "npx @modelcontextprotocol/inspector",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.17.0",
