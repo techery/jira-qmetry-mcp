@@ -28,12 +28,8 @@ export const projectTools: Array<ToolDefinition> = [
           .describe('Starting index for pagination'),
       },
     },
-    handler: async ({
-      projectName,
-      maxResults,
-      startAt,
-    }: GetProjectsParams) => {
-      const result = await getQmetryProjects(projectName, maxResults, startAt);
+    handler: async (params: GetProjectsParams) => {
+      const result = await getQmetryProjects(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

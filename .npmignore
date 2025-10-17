@@ -1,0 +1,35 @@
+# Source files (solo publicamos el dist/)
+src/
+
+# Development files
+.vscode/
+.git/
+.github/
+.railway/
+*.log
+*.swp
+*.swo
+*~
+
+# Config files
+tsconfig.json
+eslint.config.js
+.eslintrc*
+.prettierrc*
+
+# Package manager
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Railway
+railway.toml
+
+# Other
+.DS_Store
+*.tgz
+.env
+.env.local
+.env.*.local
+

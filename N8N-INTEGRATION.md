@@ -15,7 +15,7 @@ This MCP server implements the **Model Context Protocol (MCP) with JSON-RPC 2.0*
 #### For MCP Streamable HTTP Transport:
 
 ```
-https://jira-qmetry-mcp-qa.up.railway.app/mcp
+https://{{url}}/mcp
 ```
 
 ### Available Endpoints
@@ -33,7 +33,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/mcp
 3. **Configure the connection**:
 
    **MCP Streamable HTTP (Recommended)**
-   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/mcp`
+   - **Endpoint**: `https://{{url}}/mcp`
    - **Server Transport**: `HTTP Streamable`
    - **Authentication**: `None`
 
@@ -151,7 +151,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/mcp
 #### Using curl:
 
 ```bash
-curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
+curl -X POST https://{{url}}/message \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -164,7 +164,7 @@ curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
 #### Health Check:
 
 ```bash
-curl https://jira-qmetry-mcp-production.up.railway.app/health
+curl https://{{url}}/health
 ```
 
 ### Troubleshooting
@@ -215,7 +215,7 @@ Este servidor MCP implementa el **Model Context Protocol (MCP) con JSON-RPC 2.0*
 #### Para transporte MCP Streamable HTTP:
 
 ```
-https://jira-qmetry-mcp-production.up.railway.app/mcp
+https://{{url}}/mcp
 ```
 
 ### Endpoints Disponibles
@@ -233,7 +233,7 @@ https://jira-qmetry-mcp-production.up.railway.app/mcp
 3. **Configura la conexión**:
 
    **MCP Streamable HTTP (Recomendado)**
-   - **Endpoint**: `https://jira-qmetry-mcp-production.up.railway.app/mcp`
+   - **Endpoint**: `https://{{url}}/mcp`
    - **Server Transport**: `HTTP Streamable`
    - **Autenticación**: `None`
 
@@ -351,7 +351,7 @@ https://jira-qmetry-mcp-production.up.railway.app/mcp
 #### Usando curl:
 
 ```bash
-curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
+curl -X POST https://{{url}}/message \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -364,7 +364,7 @@ curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
 #### Health Check:
 
 ```bash
-curl https://jira-qmetry-mcp-production.up.railway.app/health
+curl https://{{url}}/health
 ```
 
 ### Solución de Problemas
