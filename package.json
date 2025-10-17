@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "start": "npx tsx src/main.ts",
-    "start:sse": "npx tsx src/sse-server.ts",
+    "start:http": "npx tsx src/http-server.ts",
+    "start:sse": "npx tsx src/http-server.ts",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write src/**/*.ts",

@@ -68,8 +68,8 @@ jira-qmetry-mcp/
 │   │   ├── logger.ts
 │   │   ├── object.utils.ts
 │   │   └── index.ts
-│   ├── main.ts                       # MCP server entry point
-│   ├── sse-server.ts                 # Optional SSE server
+│   ├── main.ts                       # MCP server entry point (stdio)
+│   ├── http-server.ts                # HTTP server with Streamable HTTP transport
 │   └── config.json                   # API configuration
 ├── package.json
 ├── tsconfig.json

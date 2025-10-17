@@ -12,38 +12,29 @@ This MCP server implements the **Model Context Protocol (MCP) with JSON-RPC 2.0*
 
 ### Connection URLs
 
-#### For JSON-RPC Transport:
-```
-https://jira-qmetry-mcp-qa.up.railway.app/message
-```
+#### For MCP Streamable HTTP Transport:
 
-#### For HTTP Streamable (SSE) Transport:
 ```
-https://jira-qmetry-mcp-qa.up.railway.app/events
+https://jira-qmetry-mcp-qa.up.railway.app/mcp
 ```
 
 ### Available Endpoints
 
-| Endpoint | Method | Description | Usage |
-|----------|--------|-------------|-------|
-| `/message` | POST | MCP JSON-RPC 2.0 | **N8N, MCP Clients** |
-| `/events` | GET | Server-Sent Events | SSE Streaming |
-| `/health` | GET | Health check & info | Monitoring |
+| Endpoint  | Method | Description               | Usage                |
+| --------- | ------ | ------------------------- | -------------------- |
+| `/mcp`    | POST   | MCP JSON-RPC 2.0          | **N8N, MCP Clients** |
+| `/mcp`    | GET    | MCP Streamable HTTP (SSE) | SSE Streaming        |
+| `/health` | GET    | Health check & info       | Monitoring           |
 
 ### How to Connect with N8N
 
 1. **Open your N8N workflow**
 2. **Add a new node**: Search for "MCP Client"
 3. **Configure the connection**:
-   
-   **Option A: HTTP Streamable (SSE) - Recommended**
-   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/events`
+
+   **MCP Streamable HTTP (Recommended)**
+   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/mcp`
    - **Server Transport**: `HTTP Streamable`
-   - **Authentication**: `None`
-   
-   **Option B: Standard HTTP (JSON-RPC)**
-   - **Endpoint**: `https://jira-qmetry-mcp-qa.up.railway.app/message`
-   - **Server Transport**: `HTTP` (if available)
    - **Authentication**: `None`
 
 4. **Test the connection**: N8N should automatically discover all 47 available tools
@@ -51,6 +42,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ### Supported MCP Methods
 
 #### 1. Initialize
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -61,6 +53,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -68,7 +61,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
     "protocolVersion": "2024-11-05",
     "capabilities": { "tools": {} },
     "serverInfo": {
-      "name": "Jira Qmetry MCP SSE",
+      "name": "Jira Qmetry MCP HTTP",
       "version": "1.0.0"
     }
   },
@@ -77,6 +70,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 #### 2. List Tools
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -87,6 +81,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -109,6 +104,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 #### 3. Call Tool
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -122,6 +118,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ```
 
 **Response:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -152,6 +149,7 @@ https://jira-qmetry-mcp-qa.up.railway.app/events
 ### Testing the Connection
 
 #### Using curl:
+
 ```bash
 curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
   -H "Content-Type: application/json" \
@@ -164,6 +162,7 @@ curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
 ```
 
 #### Health Check:
+
 ```bash
 curl https://jira-qmetry-mcp-production.up.railway.app/health
 ```
@@ -171,17 +170,20 @@ curl https://jira-qmetry-mcp-production.up.railway.app/health
 ### Troubleshooting
 
 #### N8N doesn't show tools
+
 1. Verify the URL is correct (must include `/message`)
 2. Check the server is running: `GET /health`
 3. Ensure N8N has internet access to Railway
 4. Check N8N supports MCP protocol version `2024-11-05`
 
 #### Connection timeout
+
 1. Check Railway deployment is active
 2. Verify no firewall blocking the connection
 3. Test with curl first
 
 #### Tools execution fails
+
 1. Ensure `QMETRY_API_KEY` environment variable is set in Railway
 2. Check QMetry API is accessible
 3. Verify tool parameters are correct
@@ -193,7 +195,7 @@ N8N
   ↓
   POST /message (JSON-RPC 2.0)
   ↓
-MCP Server (sse-server.ts)
+MCP Server (http-server.ts)
   ↓
 QMetry API (api/*.ts)
   ↓
@@ -210,32 +212,37 @@ Este servidor MCP implementa el **Model Context Protocol (MCP) con JSON-RPC 2.0*
 
 ### URL de Conexión
 
+#### Para transporte MCP Streamable HTTP:
+
 ```
-https://jira-qmetry-mcp-production.up.railway.app/message
+https://jira-qmetry-mcp-production.up.railway.app/mcp
 ```
 
 ### Endpoints Disponibles
 
-| Endpoint | Método | Descripción | Uso |
-|----------|--------|-------------|-----|
-| `/message` | POST | MCP JSON-RPC 2.0 | **N8N, Clientes MCP** |
-| `/events` | GET | Server-Sent Events | Streaming SSE |
-| `/health` | GET | Estado y info del servidor | Monitoreo |
+| Endpoint  | Método | Descripción                | Uso                   |
+| --------- | ------ | -------------------------- | --------------------- |
+| `/mcp`    | POST   | MCP JSON-RPC 2.0           | **N8N, Clientes MCP** |
+| `/mcp`    | GET    | MCP Streamable HTTP (SSE)  | Streaming SSE         |
+| `/health` | GET    | Estado y info del servidor | Monitoreo             |
 
 ### Cómo Conectar con N8N
 
 1. **Abre tu flujo de N8N**
-2. **Agrega un nuevo nodo**: Busca "MCP" o "Model Context Protocol"
+2. **Agrega un nuevo nodo**: Busca "MCP Client"
 3. **Configura la conexión**:
-   - **URL**: `https://jira-qmetry-mcp-production.up.railway.app/message`
-   - **Protocolo**: JSON-RPC 2.0
-   - **Versión del Protocolo**: 2024-11-05
+
+   **MCP Streamable HTTP (Recomendado)**
+   - **Endpoint**: `https://jira-qmetry-mcp-production.up.railway.app/mcp`
+   - **Server Transport**: `HTTP Streamable`
+   - **Autenticación**: `None`
 
 4. **Prueba la conexión**: N8N debería descubrir automáticamente las más de 50 herramientas disponibles
 
 ### Métodos MCP Soportados
 
 #### 1. Inicialización
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -246,6 +253,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ```
 
 **Respuesta:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -253,7 +261,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
     "protocolVersion": "2024-11-05",
     "capabilities": { "tools": {} },
     "serverInfo": {
-      "name": "Jira Qmetry MCP SSE",
+      "name": "Jira Qmetry MCP HTTP",
       "version": "1.0.0"
     }
   },
@@ -262,6 +270,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ```
 
 #### 2. Listar Herramientas
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -272,6 +281,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ```
 
 **Respuesta:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -294,6 +304,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ```
 
 #### 3. Ejecutar Herramienta
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -307,6 +318,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ```
 
 **Respuesta:**
+
 ```json
 {
   "jsonrpc": "2.0",
@@ -337,6 +349,7 @@ https://jira-qmetry-mcp-production.up.railway.app/message
 ### Probar la Conexión
 
 #### Usando curl:
+
 ```bash
 curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
   -H "Content-Type: application/json" \
@@ -349,6 +362,7 @@ curl -X POST https://jira-qmetry-mcp-production.up.railway.app/message \
 ```
 
 #### Health Check:
+
 ```bash
 curl https://jira-qmetry-mcp-production.up.railway.app/health
 ```
@@ -356,17 +370,20 @@ curl https://jira-qmetry-mcp-production.up.railway.app/health
 ### Solución de Problemas
 
 #### N8N no muestra las herramientas
+
 1. Verifica que la URL sea correcta (debe incluir `/message`)
 2. Comprueba que el servidor esté funcionando: `GET /health`
 3. Asegúrate de que N8N tenga acceso a internet hacia Railway
 4. Verifica que N8N soporte la versión del protocolo MCP `2024-11-05`
 
 #### Timeout en la conexión
+
 1. Verifica que el despliegue en Railway esté activo
 2. Comprueba que no haya firewall bloqueando la conexión
 3. Prueba primero con curl
 
 #### Falla la ejecución de herramientas
+
 1. Asegúrate de que la variable de entorno `QMETRY_API_KEY` esté configurada en Railway
 2. Verifica que la API de QMetry sea accesible
 3. Confirma que los parámetros de la herramienta sean correctos
@@ -378,7 +395,7 @@ N8N
   ↓
   POST /message (JSON-RPC 2.0)
   ↓
-Servidor MCP (sse-server.ts)
+Servidor MCP (http-server.ts)
   ↓
 API de QMetry (api/*.ts)
   ↓
@@ -390,4 +407,3 @@ QMetry for Jira
 ## License
 
 Apache License 2.0 - See [LICENSE](LICENSE) for details.
-
