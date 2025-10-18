@@ -77,6 +77,29 @@ jobs:
 
           echo "✅ Version check completed"
 
+      - name: Update version in README files
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Updating version in README files to v$VERSION..."
+
+          # Update README.md (English)
+          if grep -q "^\*\*v[0-9.]*\*\*" README.md; then
+            sed -i "s/^\*\*v[0-9.]*\*\*/\*\*v$VERSION\*\*/" README.md
+            echo "✅ Updated README.md"
+          else
+            echo "⚠️  Could not find version pattern in README.md"
+          fi
+
+          # Update README_ES.md (Spanish)
+          if grep -q "^\*\*v[0-9.]*\*\*" README_ES.md; then
+            sed -i "s/^\*\*v[0-9.]*\*\*/\*\*v$VERSION\*\*/" README_ES.md
+            echo "✅ Updated README_ES.md"
+          else
+            echo "⚠️  Could not find version pattern in README_ES.md"
+          fi
+
+          echo "✅ README files version update completed"
+
       - name: Build project
         run: pnpm run build
 
