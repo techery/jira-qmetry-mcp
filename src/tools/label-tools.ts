@@ -5,16 +5,16 @@ import {
   createQmetryLabel,
   updateQmetryLabel,
   deleteQmetryLabel,
-} from '../api/qmetry-labels';
+} from '../api/qmetry-labels.js';
 
-import { ToolDefinition } from '../interfaces';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   CreateLabelParams,
   DeleteLabelParams,
   GetLabelReferenceCountParams,
   GetLabelsParams,
   UpdateLabelParams,
-} from '../interfaces/qmetry-labels';
+} from '../interfaces/qmetry-labels.js';
 
 export const labelTools: Array<ToolDefinition> = [
   {

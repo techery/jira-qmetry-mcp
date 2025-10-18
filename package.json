@@ -1,6 +1,6 @@
 {
   "name": "jira-qmetry-mcp-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP Server for QMetry Test Management in Jira",
   "main": "dist/main.js",
   "type": "module",
@@ -9,7 +9,7 @@
   "author": "Alberto Zapata",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/jira-qmetry-mcp"
+    "url": "https://github.com/albertor03/jira-qmetry-mcp"
   },
   "bin": {
     "jira-qmetry-mcp": "dist/main.js"
@@ -34,7 +34,7 @@
     "mcp-server"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp src/config.json dist/config.json",
     "start": "npx tsx src/main.ts",
     "start:http": "npx tsx src/http-server.ts",
     "start:sse": "npx tsx src/http-server.ts",
@@ -43,18 +43,18 @@
     "format": "prettier --write src/**/*.ts",
     "format:check": "prettier --check src/**/*.ts",
     "run:inspector": "npx @modelcontextprotocol/inspector",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.17.0",
     "node-fetch": "2.6.7",
     "zod": "3.23.8",
-    "express": "4.18.2",
+    "express": "4.21.2",
     "cors": "2.8.5"
   },
   "devDependencies": {
     "@eslint/js": "9.32.0",
-    "@modelcontextprotocol/inspector": "0.16.2",
+    "@modelcontextprotocol/inspector": "0.16.6",
     "@types/node": "24.1.0",
     "@types/node-fetch": "2.6.13",
     "@types/express": "4.17.21",

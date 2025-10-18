@@ -9,8 +9,8 @@ import {
   UpdateLabelParams,
   DeleteLabelParams,
   GetLabelReferenceCountParams,
-} from '../interfaces/qmetry-labels';
-import { logger } from '../utils/logger';
+} from '../interfaces/qmetry-labels.js';
+import { logger } from '../utils/logger.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

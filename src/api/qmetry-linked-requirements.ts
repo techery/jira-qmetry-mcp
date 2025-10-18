@@ -7,7 +7,7 @@ import {
   GetLinkedRequirementsParams,
   LinkRequirementParams,
   UnlinkRequirementParams,
-} from '../interfaces/qmetry-linked-requirements';
+} from '../interfaces/qmetry-linked-requirements.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

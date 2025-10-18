@@ -10,7 +10,7 @@ import {
   CopyTestCaseFolderParams,
   MoveTestCaseFolderParams,
   SearchTestCaseFoldersParams,
-} from '../interfaces/qmetry-test-case-folders';
+} from '../interfaces/qmetry-test-case-folders.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

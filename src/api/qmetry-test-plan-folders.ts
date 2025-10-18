@@ -9,7 +9,7 @@ import {
   EditTestPlanFolderParams,
   MoveTestPlanFolderParams,
   SearchTestPlanFoldersParams,
-} from '../interfaces/qmetry-test-plan-folders';
+} from '../interfaces/qmetry-test-plan-folders.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

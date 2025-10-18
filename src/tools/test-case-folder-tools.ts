@@ -6,7 +6,7 @@ import {
   searchQmetryTestCaseFolders,
   getQmetryTestCaseFolders,
   editQmetryTestCaseFolder,
-} from '../api/qmetry-test-case-folders';
+} from '../api/qmetry-test-case-folders.js';
 import {
   GetTestCaseFoldersParams,
   EditTestCaseFolderParams,
@@ -15,7 +15,7 @@ import {
   CopyTestCaseFolderParams,
   SearchTestCaseFoldersParams,
   ToolDefinition,
-} from '../interfaces/index';
+} from '../interfaces/index.js';
 
 /**
  * A collection of tools for managing Qmetry test case folders.

@@ -1,15 +1,15 @@
 import { z } from 'zod';
-import { ToolDefinition } from '../interfaces/index';
+import { ToolDefinition } from '../interfaces/index.js';
 import {
   getQmetryLinkedRequirements,
   linkQmetryRequirements,
   unlinkQmetryRequirements,
-} from '../api/qmetry-linked-requirements';
+} from '../api/qmetry-linked-requirements.js';
 import {
   GetLinkedRequirementsParams,
   LinkRequirementParams,
   UnlinkRequirementParams,
-} from '../interfaces/qmetry-linked-requirements';
+} from '../interfaces/qmetry-linked-requirements.js';
 
 export const linkedRequirementsTools: Array<ToolDefinition> = [
   {

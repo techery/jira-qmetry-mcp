@@ -127,3 +127,40 @@ export interface CreateTestCaseParams {
   steps?: TestStep[];
   isAutomated?: boolean;
 }
+
+/**
+ * Defines the parameters for updating a test case version.
+ * @interface UpdateTestCaseVersionParams
+ * @property {string} id - Test Case ID. Refer id from the response of API "Search Test Case".
+ * @property {number} no - Test Case version No. Refer {version.versionNo} from the response of API "Search Test Case".
+ * @property {number} [status] - Status ID. Refer id from the response of API "Get Statuses" for its module.
+ * @property {number} [priority] - Priority ID. Refer id from the response of API "Get Priorities".
+ * @property {string} [assignee] - Jira user Account ID.
+ * @property {string[]} [components] - Array of component IDs. Refer id from the response of API "Get components".
+ * @property {object} [customFields] - Custom fields JSON object.
+ * @property {string} [description] - Description of Test Case.
+ * @property {string} [precondition] - Precondition of Test Case.
+ * @property {string} [estimatedTime] - Estimated time in HH:MM:SS format.
+ * @property {string[]} [fixVersions] - List of JIRA fix version IDs.
+ * @property {string[]} [folders] - Array of folder IDs. Refer id from the response of API "Get test case folders".
+ * @property {string[]} [labels] - Array of label IDs. Refer id from the response of API "Get labels".
+ * @property {string} [reporter] - Jira user Account ID.
+ * @property {string} [sprint] - Jira sprint ID.
+ * @property {string} [summary] - Name of Test Case.
+ * @property {boolean} [isAutomated] - Whether testcase is automated or not.
+ */
+export interface UpdateTestCaseVersionParams {
+  id: string;
+  no: number;
+  status?: number;
+  priority?: number;
+  assignee?: number;
+  description?: string;
+  precondition?: string;
+  estimatedTime?: string;
+  folders?: number;
+  labels?: number;
+  sprint?: number;
+  summary?: string;
+  isAutomated?: boolean;
+}

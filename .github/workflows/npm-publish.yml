@@ -1,0 +1,95 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify package version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          echo "Tag version: $VERSION"
+          echo "Package version: $PACKAGE_VERSION"
+          if [ "$VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "Version mismatch! Updating package.json..."
+            pnpm version $VERSION --no-git-tag-version
+          else
+            echo "Version already matches. No update needed."
+          fi
+
+      - name: Update version in source files
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Checking versions in source files..."
+
+          # Get current version from main.ts
+          MAIN_VERSION=$(grep -oP "version: '\K[0-9.]+" src/main.ts || echo "")
+          echo "main.ts version: $MAIN_VERSION"
+
+          # Get current version from http-server.ts
+          HTTP_VERSION=$(grep -oP "version: '\K[0-9.]+" src/http-server.ts || echo "")
+          echo "http-server.ts version: $HTTP_VERSION"
+
+          # Update main.ts if needed
+          if [ "$MAIN_VERSION" != "$VERSION" ]; then
+            echo "Updating main.ts version from $MAIN_VERSION to $VERSION..."
+            sed -i "s/version: '[0-9.]*'/version: '$VERSION'/" src/main.ts
+          else
+            echo "main.ts version already matches. No update needed."
+          fi
+
+          # Update http-server.ts if needed
+          if [ "$HTTP_VERSION" != "$VERSION" ]; then
+            echo "Updating http-server.ts version from $HTTP_VERSION to $VERSION..."
+            sed -i "s/version: '[0-9.]*'/version: '$VERSION'/" src/http-server.ts
+          else
+            echo "http-server.ts version already matches. No update needed."
+          fi
+
+          echo "✅ Version check completed"
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Run tests (if available)
+        run: pnpm test --if-present
+
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Notify success
+        if: success()
+        run: |
+          echo "✅ Successfully published version ${GITHUB_REF#refs/tags/v} to npm"
+          echo "📦 Package: https://www.npmjs.com/package/jira-qmetry-mcp-server"

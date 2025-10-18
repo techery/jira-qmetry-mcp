@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { getQmetryProjects } from '../api/qmetry-projects';
-import { GetProjectsParams, ToolDefinition } from '../interfaces/index';
+import { getQmetryProjects } from '../api/qmetry-projects.js';
+import { GetProjectsParams, ToolDefinition } from '../interfaces/index.js';
 
 /**
  * A collection of tools for managing Qmetry projects.

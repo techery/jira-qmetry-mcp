@@ -9,8 +9,8 @@ import {
   UpdateTestCycleStatusParams,
   DeleteTestCycleStatusParams,
   GetTestCycleStatusReferenceCountParams,
-} from '../interfaces/qmetry-status';
-import { logger } from '../utils/logger';
+} from '../interfaces/qmetry-status.js';
+import { logger } from '../utils/logger.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);

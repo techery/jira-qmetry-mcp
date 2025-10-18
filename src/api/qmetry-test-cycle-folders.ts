@@ -9,7 +9,7 @@ import {
   EditTestCycleFolderParams,
   MoveTestCycleFolderParams,
   SearchTestCycleFoldersParams,
-} from '../interfaces/qmetry-test-cycle-folders';
+} from '../interfaces/qmetry-test-cycle-folders.js';
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
