@@ -8,6 +8,7 @@ import {
   SearchTestCasesParams,
   CreateTestCaseParams,
   MoveOrCopyTestCaseParams,
+  UpdateTestCaseVersionParams,
 } from '../interfaces/qmetry-test-cases.js';
 
 // Get __dirname equivalent in ES modules
@@ -192,6 +193,98 @@ export async function copyQmetryTestCase(
     return await response.json();
   } catch (error) {
     process.stderr.write(`Error in copyQmetryTestCase: ${error}\n`);
+    throw error;
+  }
+}
+
+/**
+ * Updates a test case version in Qmetry.
+ * @param params The parameters for updating the test case version.
+ * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API.
+ * The content property of the response contains an array with a single
+ * object that has a type property with value "text" and a text property
+ * with the JSON response from the API.
+ */
+export async function updateQmetryTestCaseVersion(
+  params: UpdateTestCaseVersionParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const { id, no, ...bodyParams } = params;
+    const url = new URL(`${qmetry_api_url}testcases/${id}/versions/${no}`);
+
+    const body = cleanObject(bodyParams);
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const errorData = await response
+        .json()
+        .catch(() => ({ message: 'Failed to parse error response' }));
+      throw new Error(
+        `Error updating test case version: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
+          `\nRequest body: ${JSON.stringify(body)}`
+      );
+    } // Handle empty response (common for PUT operations)
+    const responseText = await response.text();
+    if (responseText.trim() === '') {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                success: true,
+                message: 'Test case updated successfully',
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    // Try to parse JSON if there's content
+    try {
+      const jsonResponse = JSON.parse(responseText);
+      return {
+        content: [
+          { type: 'text', text: JSON.stringify(jsonResponse, null, 2) },
+        ],
+      };
+    } catch {
+      // If JSON parsing fails, return the raw text
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                success: true,
+                message: 'Test case updated successfully',
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+  } catch (error) {
+    process.stderr.write(`Error in updateQmetryTestCaseVersion: ${error}\n`);
     throw error;
   }
 }

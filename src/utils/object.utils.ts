@@ -7,7 +7,7 @@
  * @returns {Partial<T>} A new object with empty fields removed
  */
 export function cleanObject<T extends Record<string, any>>(obj: T): Partial<T> {
-  // If the input is not an object, return it as is
+  // Si no es un objeto, retornar como está
   if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
     return obj;
   }
@@ -15,12 +15,12 @@ export function cleanObject<T extends Record<string, any>>(obj: T): Partial<T> {
   const cleaned: Partial<T> = {};
 
   for (const [key, value] of Object.entries(obj)) {
-    // Skip if the value is null or undefined
+    // Skip null o undefined
     if (value === null || value === undefined) {
       continue;
     }
 
-    // Handle empty strings (trim whitespace first)
+    // Manejar strings
     if (typeof value === 'string') {
       const trimmed = value.trim();
       if (trimmed === '') {
@@ -30,27 +30,58 @@ export function cleanObject<T extends Record<string, any>>(obj: T): Partial<T> {
       continue;
     }
 
-    // Handle empty arrays
+    // Manejar arrays
     if (Array.isArray(value)) {
-      if (value.length > 0) {
-        // Recursively clean array items if they are objects
-        cleaned[key as keyof T] = (value as any[]).map(item =>
-          typeof item === 'object' && item !== null ? cleanObject(item) : item
-        ) as T[keyof T];
+      // Saltar arrays vacíos
+      if (value.length === 0) {
+        continue;
+      }
+
+      // Limpiar items del array
+      const cleanedArray = value
+        .map(item => {
+          // Si es un objeto plano, limpiarlo recursivamente
+          if (
+            typeof item === 'object' &&
+            item !== null &&
+            !Array.isArray(item) &&
+            item.constructor === Object
+          ) {
+            return cleanObject(item);
+          }
+          return item;
+        })
+        .filter(item => {
+          // Filtrar objetos vacíos resultantes de la limpieza
+          if (
+            typeof item === 'object' &&
+            item !== null &&
+            !Array.isArray(item) &&
+            item.constructor === Object
+          ) {
+            return Object.keys(item).length > 0;
+          }
+          return true;
+        });
+
+      // Solo incluir el array si tiene elementos después de limpiar
+      if (cleanedArray.length > 0) {
+        cleaned[key as keyof T] = cleanedArray as T[keyof T];
       }
       continue;
     }
 
-    // Handle objects (but not Dates, RegExps, etc.)
+    // Manejar objetos planos (no Date, RegExp, etc.)
     if (typeof value === 'object' && value.constructor === Object) {
       const cleanedNested = cleanObject(value);
+      // Solo incluir si el objeto limpio no está vacío
       if (Object.keys(cleanedNested).length > 0) {
         cleaned[key as keyof T] = cleanedNested as T[keyof T];
       }
       continue;
     }
 
-    // For all other values (numbers, booleans, etc.), include them as is
+    // Para todos los demás valores (numbers, booleans, Date, RegExp, etc.)
     cleaned[key as keyof T] = value;
   }
 
