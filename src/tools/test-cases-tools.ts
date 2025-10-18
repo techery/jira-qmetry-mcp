@@ -5,11 +5,13 @@ import {
   getQmetryTestCases,
   moveQmetryTestCase,
   copyQmetryTestCase,
+  updateQmetryTestCaseVersion,
 } from '../api/qmetry-test-case.js';
 import {
   CreateTestCaseParams,
   SearchTestCasesParams,
   MoveOrCopyTestCaseParams,
+  UpdateTestCaseVersionParams,
 } from '../interfaces/qmetry-test-cases.js';
 
 export const testCasesTools: Array<ToolDefinition> = [
@@ -260,6 +262,65 @@ export const testCasesTools: Array<ToolDefinition> = [
     },
     handler: async (params: MoveOrCopyTestCaseParams) => {
       const result = await copyQmetryTestCase(params);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  },
+  {
+    name: 'update-qmetry-test-case',
+    definition: {
+      title: 'Update a Qmetry test case',
+      description: 'Update a Qmetry test case',
+      inputSchema: {
+        id: z
+          .string()
+          .describe('Refer id from the response of API "Search Test Case".'),
+        no: z
+          .number()
+          .describe(
+            'Test Case version No. Refer {version.versionNo} from the response of API "Search Test Case".'
+          ),
+        status: z
+          .number()
+          .optional()
+          .describe(
+            'Refer id from the response of API "Get Statuses" for its module.'
+          ),
+        priority: z
+          .number()
+          .optional()
+          .describe('Refer id from the response of API "Get Priorities".'),
+        assignee: z.number().optional().describe('Jira user Account ID'),
+        description: z.string().optional().describe('Description of Test Case'),
+        precondition: z
+          .string()
+          .optional()
+          .describe('precondition of Test Case'),
+        estimatedTime: z
+          .string()
+          .optional()
+          .describe('Pass string in HH:MM:SS format'),
+        folders: z
+          .number()
+          .optional()
+          .describe(
+            'Refer id from the response of API "Get test case folders".'
+          ),
+        labels: z
+          .array(z.number())
+          .optional()
+          .describe('Refer id from the response of API "Get labels".'),
+        sprint: z.number().optional().describe('Jira sprint ID'),
+        summary: z.string().optional().describe('Name of Test Case.'),
+        isAutomated: z
+          .boolean()
+          .optional()
+          .describe('Whether testcase is automated or not - true or false'),
+      },
+    },
+    handler: async (params: UpdateTestCaseVersionParams) => {
+      const result = await updateQmetryTestCaseVersion(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };
