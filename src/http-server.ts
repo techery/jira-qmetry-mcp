@@ -10,6 +10,7 @@ import { testCycleFolderTools } from './tools/test-cycle-folder-tools.js';
 import { testPlanFolderTools } from './tools/test-plan-folder-tools.js';
 import { testCasesTools } from './tools/test-cases-tools.js';
 import { testCycleTools } from './tools/test-cycle-tools.js';
+import { testPlanTools } from './tools/test-plan-tools.js';
 import { testStepTools } from './tools/test-step-tools.js';
 import { labelTools } from './tools/label-tools.js';
 import { priorityTools } from './tools/priority-tools.js';
@@ -140,6 +141,7 @@ registerTools(server, [
   ...testPlanFolderTools,
   ...testCasesTools,
   ...testCycleTools,
+  ...testPlanTools,
   ...testStepTools,
   ...priorityTools,
   ...labelTools,

@@ -20,7 +20,7 @@ export interface LogEntry {
   timestamp: string;
   level: string;
   message: string;
-  data?: any;
+  data?: unknown;
   context?: string;
 }
 
@@ -34,7 +34,7 @@ export interface LogEntry {
 export function log(
   level: string,
   message: string,
-  data?: any,
+  data?: unknown,
   context?: string
 ) {
   const logEntry: LogEntry = {
@@ -52,13 +52,13 @@ export function log(
  * Convenience methods for different log levels
  */
 export const logger = {
-  debug: (message: string, data?: any, context?: string) =>
+  debug: (message: string, data?: unknown, context?: string) =>
     log(LOG_LEVELS.DEBUG, message, data, context),
-  info: (message: string, data: any, context?: string) =>
+  info: (message: string, data: unknown, context?: string) =>
     log(LOG_LEVELS.INFO, message, data, context),
-  warn: (message: string, data?: any, context?: string) =>
+  warn: (message: string, data?: unknown, context?: string) =>
     log(LOG_LEVELS.WARN, message, data, context),
-  error: (message: string, data?: any, context?: string) =>
+  error: (message: string, data?: unknown, context?: string) =>
     log(LOG_LEVELS.ERROR, message, data, context),
 };
 
@@ -67,7 +67,7 @@ export const logger = {
  * @param message Message to log
  * @param data Optional data
  */
-export function debug(message: string, data?: any) {
+export function debug(message: string, data?: unknown) {
   if (process.env.NODE_ENV === 'development') {
     process.stderr.write(
       `DEBUG: ${message}${data ? ` - ${JSON.stringify(data)}` : ''}\n`
