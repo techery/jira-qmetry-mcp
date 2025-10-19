@@ -93,7 +93,7 @@ export async function createQmetryTestCycle(
 
   try {
     const url = new URL(`${qmetry_api_url}testcycles/`);
-    const body: any = cleanObject(testCycle);
+    const body: Record<string, unknown> = cleanObject(testCycle);
 
     // Convert labels array to {add: []} format
     if (body.labels && Array.isArray(body.labels)) {
@@ -143,7 +143,7 @@ export async function updateQmetryTestCycle(
 
   try {
     const url = new URL(`${qmetry_api_url}testcycles/${id}`);
-    const body: any = cleanObject(params);
+    const body: Record<string, unknown> = cleanObject(params);
 
     // Convert labels array to {add: []} format
     if (body.labels && Array.isArray(body.labels)) {
