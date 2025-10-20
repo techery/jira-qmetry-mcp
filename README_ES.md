@@ -17,6 +17,7 @@ Este proyecto implementa un servidor basado en el Protocolo de Contexto de Model
 - ✅ **Gestión de Prioridades**: CRUD completo de prioridades con colores personalizados
 - ✅ **Sistema de Labels**: Crear, actualizar y eliminar etiquetas para organización
 - ✅ **Linked Requirements**: Vincular y desvincular requisitos (issues de Jira) con casos de prueba
+- ✅ **Campos Personalizados**: Soporte para campos personalizados en casos de prueba, ciclos, planes y ejecuciones
 - ✅ **Arquitectura robusta**: Sistema de logging, manejo de errores y validación de esquemas con Zod
 
 ## 🏗️ Estructura del Proyecto
@@ -37,7 +38,8 @@ jira-qmetry-mcp/
 │   │   ├── qmetry-priorities.ts
 │   │   ├── qmetry-labels.ts
 │   │   ├── qmetry-components.ts
-│   │   └── qmetry-linked-requirements.ts
+│   │   ├── qmetry-linked-requirements.ts
+│   │   └── qmetry-custom-fields.ts
 │   ├── interfaces/                   # Definiciones de tipos TypeScript
 │   │   ├── qmetry-projects.ts
 │   │   ├── qmetry-test-cases.ts
@@ -49,6 +51,7 @@ jira-qmetry-mcp/
 │   │   ├── qmetry-labels.ts
 │   │   ├── qmetry-status.ts
 │   │   ├── qmetry-linked-requirements.ts
+│   │   ├── qmetry-custom-fields.ts
 │   │   ├── toolDefinition.ts
 │   │   └── index.ts
 │   ├── tools/                        # Definiciones de herramientas MCP
@@ -63,7 +66,8 @@ jira-qmetry-mcp/
 │   │   ├── test-step-tools.ts
 │   │   ├── priority-tools.ts
 │   │   ├── label-tools.ts
-│   │   └── linked-requirements-tools.ts
+│   │   ├── linked-requirements-tools.ts
+│   │   └── custom-field-tools.ts
 │   ├── utils/                        # Utilidades y helpers
 │   │   ├── logger.ts
 │   │   ├── object.utils.ts
@@ -275,6 +279,30 @@ pnpm run:inspector
 - **Obtener**: Listar todos los requisitos (issues de Jira) vinculados a un caso de prueba
 - **Vincular**: Asociar uno o más issues de Jira con un caso de prueba
 - **Desvincular**: Remover la asociación entre requisitos y casos de prueba
+
+---
+
+### 🏷️ Campos Personalizados
+
+**Herramientas**: `get-qmetry-custom-field-types`, `get-qmetry-test-case-custom-fields`, `get-tc-custom-field-ref-count`, `get-qmetry-test-cycle-custom-fields`, `get-tcy-custom-field-ref-count`, `get-qmetry-test-plan-custom-fields`, `get-tp-custom-field-ref-count`, `get-qmetry-te-custom-fields`, `get-te-custom-field-ref-count`
+
+**Campos Personalizados en Test Cases, Cycles y Plans**:
+- Agregar/filtrar por campos personalizados al: crear, actualizar, buscar casos de prueba, ciclos y planes
+- Estructura de campos personalizados: `[{ id: string; value: string }]`
+
+**Obtener Tipos de Campos Personalizados**: Listar todos los tipos de campos disponibles en QMetry
+
+**Obtener Campos Personalizados por Módulo**:
+- **Test Case**: `get-qmetry-test-case-custom-fields` - Obtener detalles de campos personalizados
+- **Test Cycle**: `get-qmetry-test-cycle-custom-fields` - Obtener detalles de campos personalizados
+- **Test Plan**: `get-qmetry-test-plan-custom-fields` - Obtener detalles de campos personalizados
+- **Test Execution**: `get-qmetry-te-custom-fields` - Obtener detalles de campos personalizados
+
+**Contadores de Referencias**: Verificar cuántos elementos referencian cada campo personalizado:
+- `get-tc-custom-field-ref-count` - Referencias de test cases
+- `get-tcy-custom-field-ref-count` - Referencias de test cycles
+- `get-tp-custom-field-ref-count` - Referencias de test plans
+- `get-te-custom-field-ref-count` - Referencias de test executions
 
 ## 🚨 Solución de Problemas
 

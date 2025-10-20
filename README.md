@@ -17,6 +17,7 @@ This project implements a server based on the Model Context Protocol (MCP) that 
 - ✅ **Priority Management**: Full CRUD of priorities with custom colors
 - ✅ **Label System**: Create, update, and delete labels for organization
 - ✅ **Linked Requirements**: Link and unlink requirements (Jira issues) with test cases
+- ✅ **Custom Fields**: Support for custom fields in test cases, test cycles, test plans, and test executions
 - ✅ **Robust Architecture**: Logging system, error handling, and schema validation with Zod
 
 ## 🏗️ Project Structure
@@ -37,7 +38,8 @@ jira-qmetry-mcp/
 │   │   ├── qmetry-priorities.ts
 │   │   ├── qmetry-labels.ts
 │   │   ├── qmetry-components.ts
-│   │   └── qmetry-linked-requirements.ts
+│   │   ├── qmetry-linked-requirements.ts
+│   │   └── qmetry-custom-fields.ts
 │   ├── interfaces/                   # TypeScript type definitions
 │   │   ├── qmetry-projects.ts
 │   │   ├── qmetry-test-cases.ts
@@ -49,6 +51,7 @@ jira-qmetry-mcp/
 │   │   ├── qmetry-labels.ts
 │   │   ├── qmetry-status.ts
 │   │   ├── qmetry-linked-requirements.ts
+│   │   ├── qmetry-custom-fields.ts
 │   │   ├── toolDefinition.ts
 │   │   └── index.ts
 │   ├── tools/                        # MCP tool definitions
@@ -63,7 +66,8 @@ jira-qmetry-mcp/
 │   │   ├── test-step-tools.ts
 │   │   ├── priority-tools.ts
 │   │   ├── label-tools.ts
-│   │   └── linked-requirements-tools.ts
+│   │   ├── linked-requirements-tools.ts
+│   │   └── custom-field-tools.ts
 │   ├── utils/                        # Utilities and helpers
 │   │   ├── logger.ts
 │   │   ├── object.utils.ts
@@ -275,6 +279,30 @@ pnpm run:inspector
 - **Get**: List all requirements (Jira issues) linked to a test case
 - **Link**: Associate one or more Jira issues with a test case
 - **Unlink**: Remove association between requirements and test cases
+
+---
+
+### 🏷️ Custom Fields
+
+**Tools**: `get-qmetry-custom-field-types`, `get-qmetry-test-case-custom-fields`, `get-tc-custom-field-ref-count`, `get-qmetry-test-cycle-custom-fields`, `get-tcy-custom-field-ref-count`, `get-qmetry-test-plan-custom-fields`, `get-tp-custom-field-ref-count`, `get-qmetry-te-custom-fields`, `get-te-custom-field-ref-count`
+
+**Custom Fields in Test Cases, Cycles & Plans**:
+- Add/filter by custom fields when: creating, updating, searching test cases, test cycles, and test plans
+- Custom fields structure: `[{ id: string; value: string }]`
+
+**Get Custom Field Types**: List all available custom field types in QMetry
+
+**Get Custom Fields by Module**:
+- **Test Case**: `get-qmetry-test-case-custom-fields` - Get all test case custom field details
+- **Test Cycle**: `get-qmetry-test-cycle-custom-fields` - Get all test cycle custom field details
+- **Test Plan**: `get-qmetry-test-plan-custom-fields` - Get all test plan custom field details
+- **Test Execution**: `get-qmetry-te-custom-fields` - Get all test execution custom field details
+
+**Reference Counts**: Check how many items reference each custom field:
+- `get-tc-custom-field-ref-count` - Test case references
+- `get-tcy-custom-field-ref-count` - Test cycle references
+- `get-tp-custom-field-ref-count` - Test plan references
+- `get-te-custom-field-ref-count` - Test execution references
 
 ## 🚨 Troubleshooting
 
