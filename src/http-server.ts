@@ -18,6 +18,7 @@ import { testCaseStatusTools } from './tools/test-cases-status-tools.js';
 import { testCycleStatusTools } from './tools/test-cycle-status-tools.js';
 import { testPlanStatusTools } from './tools/test-plan-status-tools.js';
 import { linkedRequirementsTools } from './tools/linked-requirements-tools.js';
+import { customFieldTools } from './tools/custom-field-tools.js';
 
 /**
  * Tool registry for executing QMetry operations
@@ -149,6 +150,7 @@ registerTools(server, [
   ...testCycleStatusTools,
   ...testPlanStatusTools,
   ...linkedRequirementsTools,
+  ...customFieldTools,
 ]);
 
 /**

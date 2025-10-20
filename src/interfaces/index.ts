@@ -5,4 +5,5 @@ export * from './qmetry-projects.js';
 export * from './qmetry-test-cases.js';
 export * from './qmetry-test-steps.js';
 export * from './qmetry-linked-requirements.js';
+export * from './qmetry-custom-fields.js';
 export * from './toolDefinition.js';
