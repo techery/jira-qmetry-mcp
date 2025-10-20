@@ -120,7 +120,7 @@ export const testCaseStatusTools: Array<ToolDefinition> = [
     },
   },
   {
-    name: 'get-qmetry-test-case-status-reference-count',
+    name: 'get-test-case-status-ref-count',
     definition: {
       title: 'Get Qmetry test case status reference count',
       description: 'Get the reference count of a test case status in QMetry',

@@ -247,7 +247,7 @@ export const testPlanTools: Array<ToolDefinition> = [
   // ============================================
 
   {
-    name: 'get-linked-test-cycles-from-test-plan',
+    name: 'get-test-plan-test-cycles',
     definition: {
       title: 'Get linked test cycles from a test plan',
       description: 'Get test cycles linked to a test plan',

@@ -118,7 +118,7 @@ export const testPlanStatusTools: Array<ToolDefinition> = [
     },
   },
   {
-    name: 'get-qmetry-test-plan-status-reference-count',
+    name: 'get-test-plan-status-ref-count',
     definition: {
       title: 'Get Qmetry test plan status reference count',
       description: 'Get the reference count of a test plan status in QMetry',

@@ -118,7 +118,7 @@ export const testCycleStatusTools: Array<ToolDefinition> = [
     },
   },
   {
-    name: 'get-qmetry-test-cycle-status-reference-count',
+    name: 'get-test-cycle-status-ref-count',
     definition: {
       title: 'Get Qmetry test cycle status reference count',
       description: 'Get the reference count of a test cycle status in QMetry',

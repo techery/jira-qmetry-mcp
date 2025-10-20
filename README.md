@@ -146,7 +146,7 @@ pnpm run:inspector
 
 ### 🎯 Test Case Status
 
-**Tools**: `get-qmetry-test-case-statuses`, `create-qmetry-test-case-status`, `update-qmetry-test-case-status`, `delete-qmetry-test-case-status`, `get-qmetry-test-case-status-reference-count`
+**Tools**: `get-qmetry-test-case-statuses`, `create-qmetry-test-case-status`, `update-qmetry-test-case-status`, `delete-qmetry-test-case-status`, `get-test-case-status-ref-count`
 
 - **Get**: List all test case statuses (active/archived)
 - **Create**: Create custom statuses with colors
@@ -156,21 +156,24 @@ pnpm run:inspector
 
 ---
 
-### 🔄 Test Cycle Folders
+### 🔄 Test Cycles
 
-**Tools**: `get-qmetry-test-cycle-folders`, `create-qmetry-test-cycle-folder`, `edit-qmetry-test-cycle-folder`, `move-qmetry-test-cycle-folder`, `search-qmetry-test-cycle-folder`
+**Tools**: `search-qmetry-test-cycles`, `create-qmetry-test-cycle`, `update-qmetry-test-cycle`, `move-qmetry-test-cycle`, `link-test-case-to-test-cycle`, `unlink-test-case-from-test-cycle`, `get-test-cycle-test-plans`, `link-requirements-to-test-cycle`, `unlink-requirements-from-test-cycle`, `archive-qmetry-test-cycle`, `unarchive-qmetry-test-cycle`
 
-- **Get**: List test cycle folders with optional count
-- **Create**: Create new cycle folders with hierarchy
-- **Edit**: Update name and description of folders
-- **Move**: Relocate folders in the hierarchy
-- **Search**: Locate folders by name
+- **Search**: Search and filter test cycles with advanced criteria
+- **Create**: Create new test cycles with configuration
+- **Update**: Modify existing test cycles
+- **Move**: Move test cycles to different folders
+- **Link/Unlink test cases**: Associate or remove test cases from a cycle
+- **Get linked test plans**: View test plans linked to a test cycle
+- **Link/Unlink requirements**: Manage Jira requirements linked to cycles
+- **Archive**: Archive or unarchive test cycles
 
 ---
 
 ### 🔄 Test Cycle Status
 
-**Tools**: `get-qmetry-test-cycle-statuses`, `create-qmetry-test-cycle-status`, `update-qmetry-test-cycle-status`, `delete-qmetry-test-cycle-status`, `get-qmetry-test-cycle-status-reference-count`
+**Tools**: `get-qmetry-test-cycle-statuses`, `create-qmetry-test-cycle-status`, `update-qmetry-test-cycle-status`, `delete-qmetry-test-cycle-status`, `get-test-cycle-status-ref-count`
 
 - **Get**: List test cycle statuses
 - **Create**: Create custom statuses for cycles
@@ -180,21 +183,24 @@ pnpm run:inspector
 
 ---
 
-### 📋 Test Plan Folders
+### 📋 Test Plans
 
-**Tools**: `get-qmetry-test-plan-folders`, `create-qmetry-test-plan-folder`, `edit-qmetry-test-plan-folder`, `move-qmetry-test-plan-folder`, `search-qmetry-test-plan-folder`
+**Tools**: `search-qmetry-test-plans`, `get-qmetry-test-plan`, `create-qmetry-test-plan`, `update-qmetry-test-plan`, `move-qmetry-test-plans`, `get-test-plan-test-cycles`, `link-test-cycles-to-test-plan`, `unlink-test-cycles-from-test-plan`, `archive-qmetry-test-plan`, `unarchive-qmetry-test-plan`
 
-- **Get**: List test plan folders
-- **Create**: Create organizational folders for plans
-- **Edit**: Update folder information
-- **Move**: Reorganize folder hierarchy
-- **Search**: Search for specific folders
+- **Search**: Search and filter test plans
+- **Get**: Retrieve specific test plan details
+- **Create**: Create new test plans
+- **Update**: Modify existing test plans
+- **Move**: Move test plans to different folders
+- **Get linked test cycles**: View test cycles linked to a plan
+- **Link/Unlink test cycles**: Associate or remove test cycles from plans
+- **Archive**: Archive or unarchive test plans
 
 ---
 
 ### 📋 Test Plan Status
 
-**Tools**: `get-qmetry-test-plan-statuses`, `create-qmetry-test-plan-status`, `update-qmetry-test-plan-status`, `delete-qmetry-test-plan-status`, `get-qmetry-test-plan-status-reference-count`
+**Tools**: `get-qmetry-test-plan-statuses`, `create-qmetry-test-plan-status`, `update-qmetry-test-plan-status`, `delete-qmetry-test-plan-status`, `get-test-plan-status-ref-count`
 
 - **Get**: List test plan statuses
 - **Create**: Create custom statuses

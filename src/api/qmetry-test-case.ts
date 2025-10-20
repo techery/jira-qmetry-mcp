@@ -20,8 +20,8 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-export async function getQmetryTestCases(
-  filter: SearchTestCasesParams
+export async function searchQmetryTestCases(
+  params: SearchTestCasesParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -32,8 +32,23 @@ export async function getQmetryTestCases(
 
   try {
     const url = new URL(`${qmetry_api_url}testcases/search/`);
+
+    // Add query parameters if they exist
+    if (params.startAt !== undefined) {
+      url.searchParams.append('startAt', params.startAt.toString());
+    }
+    if (params.maxResults !== undefined) {
+      url.searchParams.append('maxResults', params.maxResults.toString());
+    }
+    if (params.sort) {
+      url.searchParams.append('sort', params.sort);
+    }
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+
     const body = {
-      filter,
+      filter: params.filter,
     };
 
     const response = await fetch(url.toString(), {
@@ -55,7 +70,7 @@ export async function getQmetryTestCases(
 
     return await response.json();
   } catch (error) {
-    process.stderr.write(`Error in getQmetryTestCases: ${error}\n`);
+    process.stderr.write(`Error in searchQmetryTestCases: ${error}\n`);
     throw error;
   }
 }

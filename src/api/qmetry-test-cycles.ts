@@ -32,7 +32,7 @@ const qmetry_api_url = config.qmetry_api_url;
  * @param params The search parameters
  * @returns {Promise<{content: [{type: string, text: string}]}>} The response from the API
  */
-export async function getQmetryTestCycles(
+export async function searchQmetryTestCycles(
   params: SearchTestCyclesParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
@@ -44,12 +44,23 @@ export async function getQmetryTestCycles(
 
   try {
     const url = new URL(`${qmetry_api_url}testcycles/search/`);
+
+    // Add query parameters if they exist
+    if (params.startAt !== undefined) {
+      url.searchParams.append('startAt', params.startAt.toString());
+    }
+    if (params.maxResults !== undefined) {
+      url.searchParams.append('maxResults', params.maxResults.toString());
+    }
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+    if (params.sort) {
+      url.searchParams.append('sort', params.sort);
+    }
+
     const body = {
       filter: params.filter,
-      startAt: params.startAt,
-      maxResults: params.maxResults,
-      fields: params.fields,
-      sort: params.sort,
     };
 
     const response = await fetch(url.toString(), {
@@ -71,7 +82,7 @@ export async function getQmetryTestCycles(
 
     return await response.json();
   } catch (error) {
-    process.stderr.write(`Error in getQmetryTestCycles: ${error}\n`);
+    process.stderr.write(`Error in searchQmetryTestCycles: ${error}\n`);
     throw error;
   }
 }
@@ -398,12 +409,20 @@ export async function getLinkedTestPlans(
 
   try {
     const url = new URL(`${qmetry_api_url}testcycles/${params.id}/testplans`);
-    const body = cleanObject({
-      startAt: params.startAt,
-      maxResults: params.maxResults,
-      fields: params.fields,
-      sort: params.sort,
-    });
+
+    // Add query parameters if they exist
+    if (params.startAt !== undefined) {
+      url.searchParams.append('startAt', params.startAt.toString());
+    }
+    if (params.maxResults !== undefined) {
+      url.searchParams.append('maxResults', params.maxResults.toString());
+    }
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+    if (params.sort) {
+      url.searchParams.append('sort', params.sort);
+    }
 
     const response = await fetch(url.toString(), {
       method: 'POST',
@@ -411,7 +430,6 @@ export async function getLinkedTestPlans(
         'Content-Type': 'application/json',
         apikey: api_key,
       },
-      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -419,8 +437,7 @@ export async function getLinkedTestPlans(
         .json()
         .catch(() => ({ message: 'Failed to parse error response' }));
       throw new Error(
-        `Error getting linked test plans: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
-          `\nRequest body: ${JSON.stringify(body)}`
+        `Error getting linked test plans: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
       );
     }
 

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { ToolDefinition } from '../interfaces/index.js';
 import {
   createQmetryTestCase,
-  getQmetryTestCases,
+  searchQmetryTestCases,
   moveQmetryTestCase,
   copyQmetryTestCase,
   updateQmetryTestCaseVersion,
@@ -16,87 +16,90 @@ import {
 
 export const testCasesTools: Array<ToolDefinition> = [
   {
-    name: 'get-qmetry-test-cases',
+    name: 'search-qmetry-test-cases',
     definition: {
-      title: 'Get all Qmetry test cases for a project',
-      description: 'Get all Qmetry test cases for a project',
+      title: 'Search Qmetry test cases',
+      description: 'Search and list test cases according to filters',
       inputSchema: {
-        projectId: z
-          .number()
-          .describe(
-            'Refer id from the response of API "Get QMetry Enabled Projects".'
-          ),
-        assignee: z.string().optional().describe('Jira user Account ID'),
-        components: z
-          .array(z.string())
-          .optional()
-          .describe(
-            'Array of component names, refer name from ' +
-              'the response of API "Get components".'
-          ),
-        createdBy: z.string().optional().describe('Jira user Account ID'),
-        createdOn: z
-          .string()
-          .optional()
-          .describe(
-            'Comma separated two dates. Pass in ' +
-              '"dd/MMM/yyyy,dd/MMM/yyyy" date format.'
-          ),
-        description: z.string().optional().describe('Description of Test Case'),
-        estimatedTime: z
-          .string()
-          .optional()
-          .describe('Pass string in HH:MM:SS format'),
-        fixVersions: z
-          .array(z.string())
-          .optional()
-          .describe('List of JIRA fix version ID'),
-        folderId: z
-          .string()
-          .optional()
-          .describe(
-            'Refer id from the response of API ' + ' "Get test case folders"'
-          ),
-        key: z.string().optional().describe('Key of Test Case'),
-        labels: z
-          .array(z.string())
-          .optional()
-          .describe(
-            'List of label names,Refer name from ' +
-              'the response of API "Get labels".'
-          ),
-        priority: z.string().optional().describe('Priority of the test case'),
-        reporter: z.string().optional().describe('Jira user Account ID'),
-        sprint: z.string().optional().describe('Jira sprint ID'),
-        status: z
-          .array(z.string())
-          .optional()
-          .describe(
-            'Refer name from the response of API' +
-              ' "Get Statuses" for its module.'
-          ),
-        summary: z.string().optional().describe('Name of Test Case.'),
-        updatedBy: z.string().optional().describe('Jira user Account ID'),
-        updatedOn: z
-          .string()
-          .optional()
-          .describe(
-            'Comma separated two dates. Pass in ' +
-              '"dd/MMM/yyyy,dd/MMM/yyyy" date format.'
-          ),
-        maxResults: z
-          .number()
-          .optional()
-          .describe('The maximum number of results to return.'),
-        sort: z.string().optional().describe('The sorting criteria.'),
+        filter: z
+          .object({
+            projectId: z
+              .number()
+              .describe(
+                'Refer id from the response of API "Get QMetry Enabled Projects".'
+              ),
+            assignee: z.string().optional().describe('Jira user Account ID'),
+            createdBy: z.string().optional().describe('Jira user Account ID'),
+            createdOn: z
+              .string()
+              .optional()
+              .describe(
+                'Comma separated two dates. Pass in "dd/MMM/yyyy,dd/MMM/yyyy" date format.'
+              ),
+            description: z
+              .string()
+              .optional()
+              .describe('Description of Test Case'),
+            estimatedTime: z
+              .string()
+              .optional()
+              .describe('Pass string in HH:MM:SS format'),
+            folderId: z
+              .string()
+              .optional()
+              .describe(
+                'Refer id from the response of API "Get test case folders"'
+              ),
+            key: z.string().optional().describe('Key of Test Case'),
+            labels: z
+              .array(z.string())
+              .optional()
+              .describe(
+                'List of label names,Refer name from the response of API "Get labels".'
+              ),
+            priority: z
+              .array(z.string())
+              .optional()
+              .describe('Priority of the test case'),
+            reporter: z.string().optional().describe('Jira user Account ID'),
+            status: z
+              .array(z.string())
+              .optional()
+              .describe(
+                'Refer name from the response of API "Get Statuses" for its module.'
+              ),
+            summary: z.string().optional().describe('Name of Test Case.'),
+            updatedBy: z.string().optional().describe('Jira user Account ID'),
+            updatedOn: z
+              .string()
+              .optional()
+              .describe(
+                'Comma separated two dates. Pass in "dd/MMM/yyyy,dd/MMM/yyyy" date format.'
+              ),
+          })
+          .describe('Filter criteria for searching test cases'),
         startAt: z
           .number()
           .optional()
-          .describe('The starting index for pagination.'),
+          .describe('Starting index for pagination (default 0)'),
+        maxResults: z
+          .number()
+          .optional()
+          .describe('Maximum results per page (default 50, max 100)'),
+        sort: z
+          .string()
+          .optional()
+          .describe('Sort field and order (e.g., key:asc)'),
+        fields: z
+          .string()
+          .optional()
+          .describe(
+            'summary,description,priority,status,assignee,isAutomated,reporter,estimatedTime,labels,folders,updated,created,executed'
+          ),
       },
     },
     handler: async (params: SearchTestCasesParams) => {
-      const testCases = await getQmetryTestCases(params);
+      const testCases = await searchQmetryTestCases(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(testCases, null, 2) }],
       };

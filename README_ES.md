@@ -146,7 +146,7 @@ pnpm run:inspector
 
 ### 🎯 Test Case Status
 
-**Herramientas**: `get-qmetry-test-case-statuses`, `create-qmetry-test-case-status`, `update-qmetry-test-case-status`, `delete-qmetry-test-case-status`, `get-qmetry-test-case-status-reference-count`
+**Herramientas**: `get-qmetry-test-case-statuses`, `create-qmetry-test-case-status`, `update-qmetry-test-case-status`, `delete-qmetry-test-case-status`, `get-test-case-status-ref-count`
 
 - **Obtener**: Listar todos los estados de casos de prueba (activos/archivados)
 - **Crear**: Crear nuevos estados personalizados con colores
@@ -156,21 +156,24 @@ pnpm run:inspector
 
 ---
 
-### 🔄 Test Cycle Folders
+### 🔄 Test Cycles
 
-**Herramientas**: `get-qmetry-test-cycle-folders`, `create-qmetry-test-cycle-folder`, `edit-qmetry-test-cycle-folder`, `move-qmetry-test-cycle-folder`, `search-qmetry-test-cycle-folder`
+**Herramientas**: `search-qmetry-test-cycles`, `create-qmetry-test-cycle`, `update-qmetry-test-cycle`, `move-qmetry-test-cycle`, `link-test-case-to-test-cycle`, `unlink-test-case-from-test-cycle`, `get-test-cycle-test-plans`, `link-requirements-to-test-cycle`, `unlink-requirements-from-test-cycle`, `archive-qmetry-test-cycle`, `unarchive-qmetry-test-cycle`
 
-- **Obtener**: Listar carpetas de ciclos de prueba con conteo opcional
-- **Crear**: Crear nuevas carpetas de ciclos con jerarquía
-- **Editar**: Actualizar nombre y descripción de carpetas
-- **Mover**: Reubicar carpetas en la jerarquía
-- **Buscar**: Localizar carpetas por nombre
+- **Buscar**: Buscar y filtrar ciclos de prueba con criterios avanzados
+- **Crear**: Crear nuevos ciclos de prueba con configuración
+- **Actualizar**: Modificar ciclos de prueba existentes
+- **Mover**: Mover ciclos de prueba a diferentes carpetas
+- **Vincular/Desvincular casos de prueba**: Asociar o remover casos de prueba de un ciclo
+- **Obtener planes de prueba vinculados**: Ver planes de prueba vinculados a un ciclo
+- **Vincular/Desvincular requisitos**: Gestionar requisitos de Jira vinculados a ciclos
+- **Archivar**: Archivar o desarchivar ciclos de prueba
 
 ---
 
 ### 🔄 Test Cycle Status
 
-**Herramientas**: `get-qmetry-test-cycle-statuses`, `create-qmetry-test-cycle-status`, `update-qmetry-test-cycle-status`, `delete-qmetry-test-cycle-status`, `get-qmetry-test-cycle-status-reference-count`
+**Herramientas**: `get-qmetry-test-cycle-statuses`, `create-qmetry-test-cycle-status`, `update-qmetry-test-cycle-status`, `delete-qmetry-test-cycle-status`, `get-test-cycle-status-ref-count`
 
 - **Obtener**: Listar estados de ciclos de prueba
 - **Crear**: Crear estados personalizados para ciclos
@@ -180,21 +183,24 @@ pnpm run:inspector
 
 ---
 
-### 📋 Test Plan Folders
+### 📋 Test Plans
 
-**Herramientas**: `get-qmetry-test-plan-folders`, `create-qmetry-test-plan-folder`, `edit-qmetry-test-plan-folder`, `move-qmetry-test-plan-folder`, `search-qmetry-test-plan-folder`
+**Herramientas**: `search-qmetry-test-plans`, `get-qmetry-test-plan`, `create-qmetry-test-plan`, `update-qmetry-test-plan`, `move-qmetry-test-plans`, `get-test-plan-test-cycles`, `link-test-cycles-to-test-plan`, `unlink-test-cycles-from-test-plan`, `archive-qmetry-test-plan`, `unarchive-qmetry-test-plan`
 
-- **Obtener**: Listar carpetas de planes de prueba
-- **Crear**: Crear carpetas organizacionales para planes
-- **Editar**: Actualizar información de carpetas
-- **Mover**: Reorganizar jerarquía de carpetas
-- **Buscar**: Buscar carpetas específicas
+- **Buscar**: Buscar y filtrar planes de prueba
+- **Obtener**: Obtener detalles de un plan de prueba específico
+- **Crear**: Crear nuevos planes de prueba
+- **Actualizar**: Modificar planes de prueba existentes
+- **Mover**: Mover planes de prueba a diferentes carpetas
+- **Obtener ciclos de prueba vinculados**: Ver ciclos de prueba vinculados a un plan
+- **Vincular/Desvincular ciclos de prueba**: Asociar o remover ciclos de prueba de los planes
+- **Archivar**: Archivar o desarchivar planes de prueba
 
 ---
 
 ### 📋 Test Plan Status
 
-**Herramientas**: `get-qmetry-test-plan-statuses`, `create-qmetry-test-plan-status`, `update-qmetry-test-plan-status`, `delete-qmetry-test-plan-status`, `get-qmetry-test-plan-status-reference-count`
+**Herramientas**: `get-qmetry-test-plan-statuses`, `create-qmetry-test-plan-status`, `update-qmetry-test-plan-status`, `delete-qmetry-test-plan-status`, `get-test-plan-status-ref-count`
 
 - **Obtener**: Listar estados de planes de prueba
 - **Crear**: Crear estados personalizados

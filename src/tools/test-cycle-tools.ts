@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ToolDefinition } from '../interfaces/index.js';
 import {
-  getQmetryTestCycles,
+  searchQmetryTestCycles,
   createQmetryTestCycle,
   updateQmetryTestCycle,
   moveQmetryTestCycle,
@@ -34,7 +34,7 @@ export const testCycleTools: Array<ToolDefinition> = [
   // ============================================
 
   {
-    name: 'get-qmetry-test-cycles',
+    name: 'search-qmetry-test-cycles',
     definition: {
       title: 'Search Qmetry test cycles',
       description: 'Search and list test cycles according to filters',
@@ -105,7 +105,7 @@ export const testCycleTools: Array<ToolDefinition> = [
       },
     },
     handler: async (params: SearchTestCyclesParams) => {
-      const testCycles = await getQmetryTestCycles(params);
+      const testCycles = await searchQmetryTestCycles(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(testCycles, null, 2) }],
       };
@@ -366,7 +366,7 @@ export const testCycleTools: Array<ToolDefinition> = [
   // ============================================
 
   {
-    name: 'get-linked-test-plans-from-test-cycle',
+    name: 'get-test-cycle-test-plans',
     definition: {
       title: 'Get linked test plans for a test cycle',
       description: 'Get all test plans linked to a test cycle',
@@ -402,7 +402,7 @@ export const testCycleTools: Array<ToolDefinition> = [
   // ============================================
 
   {
-    name: 'get-linked-requirements-from-test-cycle',
+    name: 'get-test-cycle-requirements',
     definition: {
       title: 'Get linked requirements for a test cycle',
       description: 'Get all requirements (stories) linked to a test cycle',
