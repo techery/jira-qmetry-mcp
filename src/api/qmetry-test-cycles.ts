@@ -16,6 +16,7 @@ import {
   LinkRequirementsParams,
   UnlinkRequirementsParams,
   ArchiveTestCycleParams,
+  GetTestCycleParams,
 } from '../interfaces/qmetry-test-cycles.js';
 
 // Get __dirname equivalent in ES modules
@@ -709,6 +710,45 @@ export async function unarchiveTestCycle(
     return await response.json();
   } catch (error) {
     process.stderr.write(`Error in unarchiveTestCycle: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function getTestCycle(
+  params: GetTestCycleParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcycles/${params.idOrKey}`);
+
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error getting test cycle: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in getTestCycle: ${error}\n`);
     throw error;
   }
 }

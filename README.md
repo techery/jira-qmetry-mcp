@@ -122,12 +122,35 @@ pnpm run:inspector
 
 ### 📝 Test Cases
 
-**Tools**: `get-qmetry-test-cases`, `create-qmetry-test-case`, `move-qmetry-test-case`, `copy-qmetry-test-case`
+**Tools**: `get-qmetry-test-cases`, `create-qmetry-test-case`, `move-qmetry-test-case`, `copy-qmetry-test-case`, `update-qmetry-test-case`
 
 - **Get**: Search test cases with advanced filters (assignee, status, labels, etc.)
 - **Create**: Create new test cases with steps, descriptions, and configurations
 - **Move**: Move test cases between folders
 - **Copy**: Copy test cases to different locations
+- **Update**: Update test case information
+
+---
+
+### 🔄 Test Case Versions
+
+**Tools**: `get-test-case-version-details`, `add-test-case-version`, `delete-test-case-version`, `get-test-case-versions-list`
+
+- **Get version details**: Retrieve specific version information
+- **Add version**: Create new version from existing version
+- **Delete version**: Remove a specific version
+- **Get versions list**: View all versions of a test case
+
+---
+
+### 📦 Test Case Lifecycle
+
+**Tools**: `archive-qmetry-test-case`, `unarchive-qmetry-test-case`, `clone-qmetry-test-case`, `get-test-case-test-cycles`
+
+- **Archive**: Archive a test case
+- **Unarchive**: Restore archived test case
+- **Clone**: Duplicate test case with options
+- **Get linked cycles**: View test cycles linked to a test case
 
 ---
 
