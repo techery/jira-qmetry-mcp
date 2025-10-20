@@ -1,55 +1,34 @@
 /**
- * Defines the parameters for the getQmetryTestCycleFolders function.
+ * Defines the parameters for searching/listing Test Cases.
  * @interface SearchTestCasesParams
- * @property {number} projectId - The ID of the project.
- * @property {string} [assignee] - Jira user Account ID.
- * @property {string[]} [components] - Array of component names, refer name from the response' +
-                    ' of API "Get components".
- * @property {string} [createdBy] - Jira user Account ID.
- * @property {string} [createdOn] - Comma separated two dates. Pass in ' +
-                    '"dd/MMM/yyyy,dd/MMM/yyyy" date format.
- * @property {string} [description] - Description of Test Case
- * @property {string} [estimatedTime] - Pass string in HH:MM:SS format.
- * @property {string[]} [fixVersions] - List of JIRA fix version ID.
- * @property {string} [folderId] - Refer id from the response of API ' +
-                    ' "Get test case folders"
- * @property {string} [key] - Key of Test Case
- * @property {string[]} [labels] - List of label names,Refer name from ' +
-                    'the response of API "Get labels".
- * @property {string} [priority] - Priority of the test case.
- * @property {string} [reporter] - Jira user Account ID.
- * @property {string} [sprint] - Jira sprint ID.
- * @property {string[]} [status] - The status of the test case.
- * @property {string} [summary] - Name of Test Case.
- * @property {string} [updatedBy] - Jira user Account ID.
- * @property {string} [updatedOn] - Comma separated two dates. Pass in ' +
-                    '"dd/MMM/yyyy,dd/MMM/yyyy" date format.
- * @property {number} [maxResults] - The maximum number of results to return.
- * @property {string} [sort] - The sorting criteria.
- * @property {number} [startAt] - The starting index for pagination.
+ * @property {object} filter - Filter criteria for searching test cases
+ * @property {number} [startAt] - Starting index for pagination (default 0)
+ * @property {number} [maxResults] - Maximum results per page (default 50, max 100)
+ * @property {string} [sort] - Sort field and order
+ * @property {string} [fields] - Comma separated fields to be fetched
  */
 export interface SearchTestCasesParams {
-  projectId: number;
-  assignee?: string;
-  components?: string[];
-  createdBy?: string;
-  createdOn?: string;
-  description?: string;
-  estimatedTime?: string;
-  fixVersions?: string[];
-  folderId?: string;
-  key?: string;
-  labels?: string[];
-  priority?: string;
-  reporter?: string;
-  sprint?: string;
-  status?: string[];
-  summary?: string;
-  updatedBy?: string;
-  updatedOn?: string;
+  filter: {
+    projectId: number;
+    assignee?: string;
+    createdBy?: string;
+    createdOn?: string;
+    description?: string;
+    estimatedTime?: string;
+    folderId?: string;
+    key?: string;
+    labels?: string[];
+    priority?: string[];
+    reporter?: string;
+    status?: string[];
+    summary?: string;
+    updatedBy?: string;
+    updatedOn?: string;
+  };
+  startAt?: number;
   maxResults?: number;
   sort?: string;
-  startAt?: number;
+  fields?: string;
 }
 
 /**
@@ -163,4 +142,132 @@ export interface UpdateTestCaseVersionParams {
   sprint?: number;
   summary?: string;
   isAutomated?: boolean;
+}
+
+/**
+ * Defines the parameters for getting test case version details.
+ * @interface GetTestCaseVersionParams
+ * @property {string} id - Test Case ID
+ * @property {number} no - Version number
+ * @property {string} [fields] - Comma separated fields
+ */
+export interface GetTestCaseVersionParams {
+  id: string;
+  no: number;
+  fields?: string;
+}
+
+/**
+ * Defines the parameters for adding a new test case version.
+ * @interface AddTestCaseVersionParams
+ * @property {string} id - Test Case ID
+ * @property {number} copyFromVersion - Version number to copy from
+ * @property {object} [fields] - Fields to override in the new version
+ */
+export interface AddTestCaseVersionParams {
+  id: string;
+  copyFromVersion: number;
+  fields?: {
+    assignee?: number;
+    description?: string;
+    precondition?: string;
+    estimatedTime?: string;
+    folderId?: number;
+    labels?: number[];
+    priority?: number;
+    projectId?: number;
+    reporter?: number;
+    status?: number;
+    steps?: Array<{
+      stepDetails: string;
+      testData: string;
+      expectedResult: string;
+    }>;
+    summary?: string;
+    isAutomated?: boolean;
+    withRequirements?: boolean;
+  };
+}
+
+/**
+ * Defines the parameters for deleting a test case version.
+ * @interface DeleteTestCaseVersionParams
+ * @property {string} id - Test Case ID
+ * @property {number} no - Version number
+ */
+export interface DeleteTestCaseVersionParams {
+  id: string;
+  no: number;
+}
+
+/**
+ * Defines the parameters for archiving a test case.
+ * @interface ArchiveTestCaseParams
+ * @property {string} id - Test Case ID
+ */
+export interface ArchiveTestCaseParams {
+  id: string;
+}
+
+/**
+ * Defines the parameters for unarchiving a test case.
+ * @interface UnarchiveTestCaseParams
+ * @property {string} id - Test Case ID
+ */
+export interface UnarchiveTestCaseParams {
+  id: string;
+}
+
+/**
+ * Defines the parameters for cloning a test case.
+ * @interface CloneTestCaseParams
+ * @property {string} id - Test Case ID
+ * @property {string} summary - Summary for cloned test case
+ * @property {number} [folderId] - Folder ID
+ * @property {string} [version] - Version number to clone, pass "*" for all versions
+ * @property {boolean} [withComments] - Clone test case comments
+ * @property {boolean} [withAttachments] - Clone attachments
+ * @property {number} [requirementToLink] - JIRA Issue ID to link
+ * @property {boolean} [withRequirements] - Clone and preserve linkage with stories
+ */
+export interface CloneTestCaseParams {
+  id: string;
+  summary: string;
+  folderId?: number;
+  version?: string;
+  withComments?: boolean;
+  withAttachments?: boolean;
+  requirementToLink?: number;
+  withRequirements?: boolean;
+}
+
+/**
+ * Defines the parameters for getting test cycles linked to a test case.
+ * @interface GetTestCaseLinkedCyclesParams
+ * @property {string} id - Test Case ID
+ * @property {number} tcVersionNo - Test Case version number
+ * @property {string} [fields] - Comma separated fields
+ * @property {number} [startAt] - Starting index for pagination
+ * @property {number} [maxResults] - Maximum results per page
+ * @property {string} [sort] - Sort field and order
+ */
+export interface GetTestCaseLinkedCyclesParams {
+  id: string;
+  tcVersionNo: number;
+  fields?: string;
+  startAt?: number;
+  maxResults?: number;
+  sort?: string;
+}
+
+/**
+ * Defines the parameters for getting list of test case versions.
+ * @interface GetTestCaseVersionsListParams
+ * @property {string} id - Test Case ID
+ * @property {number} [startAt] - Starting index for pagination
+ * @property {number} [maxResults] - Maximum results per page
+ * @property {string} [sort] - Sort field and order
+ */
+export interface GetTestCaseVersionsListParams {
+  id: string;
 }

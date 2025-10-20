@@ -9,6 +9,14 @@ import {
   CreateTestCaseParams,
   MoveOrCopyTestCaseParams,
   UpdateTestCaseVersionParams,
+  GetTestCaseVersionParams,
+  AddTestCaseVersionParams,
+  DeleteTestCaseVersionParams,
+  ArchiveTestCaseParams,
+  UnarchiveTestCaseParams,
+  CloneTestCaseParams,
+  GetTestCaseLinkedCyclesParams,
+  GetTestCaseVersionsListParams,
 } from '../interfaces/qmetry-test-cases.js';
 
 // Get __dirname equivalent in ES modules
@@ -20,8 +28,8 @@ const configPath = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 const qmetry_api_url = config.qmetry_api_url;
 
-export async function getQmetryTestCases(
-  filter: SearchTestCasesParams
+export async function searchQmetryTestCases(
+  params: SearchTestCasesParams
 ): Promise<{ content: [{ type: string; text: string }] }> {
   const api_key = process.env.QMETRY_API_KEY;
   if (!api_key) {
@@ -32,8 +40,23 @@ export async function getQmetryTestCases(
 
   try {
     const url = new URL(`${qmetry_api_url}testcases/search/`);
+
+    // Add query parameters if they exist
+    if (params.startAt !== undefined) {
+      url.searchParams.append('startAt', params.startAt.toString());
+    }
+    if (params.maxResults !== undefined) {
+      url.searchParams.append('maxResults', params.maxResults.toString());
+    }
+    if (params.sort) {
+      url.searchParams.append('sort', params.sort);
+    }
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+
     const body = {
-      filter,
+      filter: params.filter,
     };
 
     const response = await fetch(url.toString(), {
@@ -55,7 +78,7 @@ export async function getQmetryTestCases(
 
     return await response.json();
   } catch (error) {
-    process.stderr.write(`Error in getQmetryTestCases: ${error}\n`);
+    process.stderr.write(`Error in searchQmetryTestCases: ${error}\n`);
     throw error;
   }
 }
@@ -285,6 +308,375 @@ export async function updateQmetryTestCaseVersion(
     }
   } catch (error) {
     process.stderr.write(`Error in updateQmetryTestCaseVersion: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function getTestCaseVersion(
+  params: GetTestCaseVersionParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}testcases/${params.id}/versions/${params.no}`
+    );
+
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error getting test case version: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in getTestCaseVersion: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function addTestCaseVersion(
+  params: AddTestCaseVersionParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}/versions`);
+
+    const body = {
+      copyFromVersion: params.copyFromVersion,
+      ...(params.fields && { fields: params.fields }),
+    };
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error adding test case version: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
+          `\nRequest body: ${JSON.stringify(body)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in addTestCaseVersion: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function deleteTestCaseVersion(
+  params: DeleteTestCaseVersionParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(
+      `${qmetry_api_url}testcases/${params.id}/versions/${params.no}`
+    );
+
+    const response = await fetch(url.toString(), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error deleting test case version: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    // Handle 204 No Content response
+    if (response.status === 204) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                success: true,
+                message: 'Test case version deleted successfully',
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in deleteTestCaseVersion: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function archiveTestCase(
+  params: ArchiveTestCaseParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}/archive`);
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error archiving test case: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    // Handle 204 No Content response
+    if (response.status === 204) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              { success: true, message: 'Test case archived successfully' },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in archiveTestCase: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function unarchiveTestCase(
+  params: UnarchiveTestCaseParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}/unarchive`);
+
+    const response = await fetch(url.toString(), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify({}),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error unarchiving test case: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    // Handle 204 No Content response
+    if (response.status === 204) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              { success: true, message: 'Test case unarchived successfully' },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in unarchiveTestCase: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function cloneTestCase(
+  params: CloneTestCaseParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}/clone`);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...cloneData } = params;
+    const body = cloneData;
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error cloning test case: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}` +
+          `\nRequest body: ${JSON.stringify(body)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in cloneTestCase: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function getTestCaseLinkedCycles(
+  params: GetTestCaseLinkedCyclesParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}/testcycles`);
+
+    url.searchParams.append('tcVersionNo', params.tcVersionNo.toString());
+
+    if (params.startAt !== undefined) {
+      url.searchParams.append('startAt', params.startAt.toString());
+    }
+    if (params.maxResults !== undefined) {
+      url.searchParams.append('maxResults', params.maxResults.toString());
+    }
+    if (params.fields) {
+      url.searchParams.append('fields', params.fields);
+    }
+    if (params.sort) {
+      url.searchParams.append('sort', params.sort);
+    }
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error getting test case linked cycles: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in getTestCaseLinkedCycles: ${error}\n`);
+    throw error;
+  }
+}
+
+export async function getTestCaseVersionsList(
+  params: GetTestCaseVersionsListParams
+): Promise<{ content: [{ type: string; text: string }] }> {
+  const api_key = process.env.QMETRY_API_KEY;
+  if (!api_key) {
+    throw new Error(
+      'The environment variable QMETRY_API_KEY is not configured.'
+    );
+  }
+
+  try {
+    const url = new URL(`${qmetry_api_url}testcases/${params.id}`);
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: api_key,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        `Error getting test case versions list: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    process.stderr.write(`Error in getTestCaseVersionsList: ${error}\n`);
     throw error;
   }
 }
