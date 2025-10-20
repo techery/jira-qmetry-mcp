@@ -348,4 +348,4 @@ Para guías detalladas de contribución, consulta [CONTRIBUTING.md](CONTRIBUTING
 
 ## 🔄 Versión
 
-**v1.0.0** - Versión actual del servidor MCP
+**v1.1.0** - Versión actual del servidor MCP
