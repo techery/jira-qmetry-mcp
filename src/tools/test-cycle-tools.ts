@@ -13,6 +13,7 @@ import {
   unlinkRequirementsFromTestCycle,
   archiveTestCycle,
   unarchiveTestCycle,
+  getTestCycle,
 } from '../api/qmetry-test-cycles.js';
 import {
   SearchTestCyclesParams,
@@ -26,6 +27,7 @@ import {
   LinkRequirementsParams,
   UnlinkRequirementsParams,
   ArchiveTestCycleParams,
+  GetTestCycleParams,
 } from '../interfaces/qmetry-test-cycles.js';
 
 export const testCycleTools: Array<ToolDefinition> = [
@@ -532,6 +534,29 @@ export const testCycleTools: Array<ToolDefinition> = [
     },
     handler: async (params: ArchiveTestCycleParams) => {
       const result = await unarchiveTestCycle(params);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  },
+
+  {
+    name: 'get-qmetry-test-cycle',
+    definition: {
+      title: 'Get Test Cycle',
+      description: 'Get details of a specific test cycle',
+      inputSchema: {
+        idOrKey: z.string().describe('Test Cycle Id or Test Cycle Key'),
+        fields: z
+          .string()
+          .optional()
+          .describe(
+            'Comma separated field names to be fetched. Allowed: id,key,summary,description,projectId,folder,created,updated,labels,priority,status,assignee,reporter,isRebuildSeqNotRequired,automationRule'
+          ),
+      },
+    },
+    handler: async (params: GetTestCycleParams) => {
+      const result = await getTestCycle(params);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

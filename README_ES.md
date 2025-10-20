@@ -122,12 +122,35 @@ pnpm run:inspector
 
 ### 📝 Test Cases
 
-**Herramientas**: `get-qmetry-test-cases`, `create-qmetry-test-case`, `move-qmetry-test-case`, `copy-qmetry-test-case`
+**Herramientas**: `get-qmetry-test-cases`, `create-qmetry-test-case`, `move-qmetry-test-case`, `copy-qmetry-test-case`, `update-qmetry-test-case`
 
-- **Obtener**: Buscar casos de prueba con filtros avanzados (assignee, status, labels, etc.)
+- **Obtener**: Buscar casos de prueba con filtros avanzados (asignado a, estado, etiquetas, etc.)
 - **Crear**: Crear nuevos casos de prueba con pasos, descripciones y configuraciones
 - **Mover**: Mover casos de prueba entre carpetas
 - **Copiar**: Copiar casos de prueba a diferentes ubicaciones
+- **Actualizar**: Actualizar información del caso de prueba
+
+---
+
+### 🔄 Versiones de Test Case
+
+**Herramientas**: `get-test-case-version-details`, `add-test-case-version`, `delete-test-case-version`, `get-test-case-versions-list`
+
+- **Obtener detalles de versión**: Recuperar información de versión específica
+- **Agregar versión**: Crear nueva versión desde versión existente
+- **Eliminar versión**: Remover una versión específica
+- **Obtener lista de versiones**: Ver todas las versiones de un caso de prueba
+
+---
+
+### 📦 Ciclo de Vida de Test Case
+
+**Herramientas**: `archive-qmetry-test-case`, `unarchive-qmetry-test-case`, `clone-qmetry-test-case`, `get-test-case-test-cycles`
+
+- **Archivar**: Archivar un caso de prueba
+- **Desarchivar**: Restaurar caso de prueba archivado
+- **Clonar**: Duplicar caso de prueba con opciones
+- **Obtener cycles vinculados**: Ver ciclos de prueba vinculados a un caso de prueba
 
 ---
 

@@ -223,3 +223,14 @@ export interface UnlinkRequirementsParams {
 export interface ArchiveTestCycleParams {
   idOrKey: string;
 }
+
+/**
+ * Defines the parameters for getting test cycle details.
+ * @interface GetTestCycleParams
+ * @property {string} idOrKey - Test Cycle ID or Key
+ * @property {string} [fields] - Comma separated fields
+ */
+export interface GetTestCycleParams {
+  idOrKey: string;
+  fields?: string;
+}
