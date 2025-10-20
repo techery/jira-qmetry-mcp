@@ -21,6 +21,7 @@ export interface SearchTestPlansParams {
     createdOn?: string; // dd/MMM/yyyy,dd/MMM/yyyy
     updatedBy?: string[];
     updatedOn?: string; // dd/MMM/yyyy,dd/MMM/yyyy
+    customFields?: { id: string; value: string }[];
   };
   startAt?: number;
   maxResults?: number;
@@ -51,6 +52,7 @@ export interface GetTestPlanParams {
  * @property {number[]} [labels] - List of label Ids
  * @property {object} [testcycles] - Test cycles to link
  * @property {string} [description] - Test Plan description
+ * @property {{ id: string; value: string }[]} [customFields] - Custom fields for the test plan
  */
 export interface CreateTestPlanParams {
   summary: string;
@@ -64,6 +66,7 @@ export interface CreateTestPlanParams {
     testcycleIds: string[];
   };
   description?: string;
+  customFields?: { id: string; value: string }[];
 }
 
 /**
@@ -77,6 +80,7 @@ export interface CreateTestPlanParams {
  * @property {number} [reporter] - Jira user account uuid
  * @property {number[]} [labels] - List of label Ids
  * @property {string} [description] - Test Plan description
+ * @property {{ id: string; value: string }[]} [customFields] - Custom fields for the test plan
  */
 export interface UpdateTestPlanParams {
   id: string;
@@ -87,6 +91,7 @@ export interface UpdateTestPlanParams {
   reporter?: number;
   labels?: number[];
   description?: string;
+  customFields?: { id: string; value: string }[];
 }
 
 /**
