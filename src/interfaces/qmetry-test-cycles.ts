@@ -37,6 +37,7 @@ export interface SearchTestCyclesParams {
     updatedOn?: string;
     plannedStartDate?: string;
     plannedEndDate?: string;
+    customFields?: { id: string; value: string }[];
   };
   startAt?: number;
   maxResults?: number;
@@ -61,6 +62,7 @@ export interface SearchTestCyclesParams {
  * @property {number} [actualTime] - Actual time in milliseconds
  * @property {boolean} [isAutomated] - Whether test cycle is automated or not
  * @property {number} [assignee] - Jira user account uuid to assign test cycle
+ * @property {{ id: string; value: string }[]} [customFields] - Custom fields for the test cycle
  */
 export interface CreateTestCycleParams {
   summary: string;
@@ -77,6 +79,7 @@ export interface CreateTestCycleParams {
   actualTime?: number;
   isAutomated?: boolean;
   assignee?: number;
+  customFields?: { id: string; value: string }[];
 }
 
 /**
@@ -96,6 +99,7 @@ export interface CreateTestCycleParams {
  * @property {number} [actualTime] - Actual time in milliseconds
  * @property {boolean} [isAutomated] - Whether test cycle is automated or not
  * @property {number} [assignee] - Jira user account uuid
+ * @property {{ id: string; value: string }[]} [customFields] - Custom fields for the test cycle
  */
 export interface UpdateTestCycleParams {
   summary: string;
@@ -112,6 +116,7 @@ export interface UpdateTestCycleParams {
   actualTime?: number;
   isAutomated?: boolean;
   assignee?: number;
+  customFields?: { id: string; value: string }[];
 }
 
 /**

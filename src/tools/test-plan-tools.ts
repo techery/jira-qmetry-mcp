@@ -72,6 +72,18 @@ export const testPlanTools: Array<ToolDefinition> = [
               .string()
               .optional()
               .describe('Update date range (dd/MMM/yyyy,dd/MMM/yyyy)'),
+            customFields: z
+              .array(
+                z.object({
+                  id: z.string().describe('Custom field ID'),
+                  value: z.string().describe('Custom field value'),
+                })
+              )
+              .optional()
+              .describe(
+                'Custom fields filter as array of objects with id and value. ' +
+                  'Refer to "Get Test Plan Custom Fields" to get available custom fields.'
+              ),
           })
           .describe('Filter criteria for searching test plans'),
         startAt: z
@@ -172,6 +184,18 @@ export const testPlanTools: Array<ToolDefinition> = [
             'Test cycles to link. Format: {testcycleIds: ["id1", "id2"]}'
           ),
         description: z.string().optional().describe('Test Plan description'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields as array of objects with id and value. ' +
+              'Refer to "Get Test Plan Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: CreateTestPlanParams) => {
@@ -205,6 +229,18 @@ export const testPlanTools: Array<ToolDefinition> = [
             'Refer ids from the response of API "Get Labels". Will be sent as {add: [labelId1, ...]} to API'
           ),
         description: z.string().optional().describe('Test Plan description'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields as array of objects with id and value. ' +
+              'Refer to "Get Test Plan Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: UpdateTestPlanParams) => {

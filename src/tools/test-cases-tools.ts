@@ -92,6 +92,18 @@ export const testCasesTools: Array<ToolDefinition> = [
               .describe(
                 'Comma separated two dates. Pass in "dd/MMM/yyyy,dd/MMM/yyyy" date format.'
               ),
+            customFields: z
+              .array(
+                z.object({
+                  id: z.string().describe('Custom field ID'),
+                  value: z.string().describe('Custom field value'),
+                })
+              )
+              .optional()
+              .describe(
+                'Custom fields filter JSON object with field IDs as keys. ' +
+                  'Refer to "Get Test Case Custom Fields" to get available custom fields.'
+              ),
           })
           .describe('Filter criteria for searching test cases'),
         startAt: z
@@ -207,6 +219,18 @@ export const testCasesTools: Array<ToolDefinition> = [
           .boolean()
           .optional()
           .describe('Whether testcase is automated or not - true or false'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields JSON object with field IDs as keys. ' +
+              'Refer to "Get Test Case Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: CreateTestCaseParams) => {
@@ -336,6 +360,18 @@ export const testCasesTools: Array<ToolDefinition> = [
           .boolean()
           .optional()
           .describe('Whether testcase is automated or not - true or false'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields JSON object with field IDs as keys. ' +
+              'Refer to "Get Test Case Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: UpdateTestCaseVersionParams) => {
@@ -460,6 +496,18 @@ export const testCasesTools: Array<ToolDefinition> = [
               .optional()
               .describe(
                 'If true then it will copy linked stories of the previous version to the newer version.'
+              ),
+            customFields: z
+              .array(
+                z.object({
+                  id: z.string().describe('Custom field ID'),
+                  value: z.string().describe('Custom field value'),
+                })
+              )
+              .optional()
+              .describe(
+                'Custom fields JSON object with field IDs as keys. ' +
+                  'Refer to "Get Test Case Custom Fields" to get available custom fields.'
               ),
           })
           .optional()

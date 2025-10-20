@@ -24,6 +24,7 @@ export interface SearchTestCasesParams {
     summary?: string;
     updatedBy?: string;
     updatedOn?: string;
+    customFields?: { id: string; value: string }[];
   };
   startAt?: number;
   maxResults?: number;
@@ -87,6 +88,7 @@ interface TestStep {
  * @property {string} [status] - The status of the test case.
  * @property {TestStep[]} [steps] - The list of test steps with details, test data, and expected results.
  * @property {boolean} [isAutomated] - Indicates whether the test case is automated.
+ * @property {{ id: string; value: string }[]} [customFields] - Custom fields for the test case.
  */
 export interface CreateTestCaseParams {
   summary: string;
@@ -105,6 +107,7 @@ export interface CreateTestCaseParams {
   status?: string;
   steps?: TestStep[];
   isAutomated?: boolean;
+  customFields?: { id: string; value: string }[];
 }
 
 /**
@@ -142,6 +145,7 @@ export interface UpdateTestCaseVersionParams {
   sprint?: number;
   summary?: string;
   isAutomated?: boolean;
+  customFields?: { id: string; value: string }[];
 }
 
 /**
@@ -186,6 +190,7 @@ export interface AddTestCaseVersionParams {
     summary?: string;
     isAutomated?: boolean;
     withRequirements?: boolean;
+    customFields?: { id: string; value: string }[];
   };
 }
 

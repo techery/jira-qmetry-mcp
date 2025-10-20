@@ -86,6 +86,18 @@ export const testCycleTools: Array<ToolDefinition> = [
               .optional()
               .describe('Planned start date'),
             plannedEndDate: z.string().optional().describe('Planned end date'),
+            customFields: z
+              .array(
+                z.object({
+                  id: z.string().describe('Custom field ID'),
+                  value: z.string().describe('Custom field value'),
+                })
+              )
+              .optional()
+              .describe(
+                'Custom fields filter as array of objects with id and value. ' +
+                  'Refer to "Get Test Cycle Custom Fields" to get available custom fields.'
+              ),
           })
           .describe('Filter criteria for searching test cycles'),
         startAt: z
@@ -181,6 +193,18 @@ export const testCycleTools: Array<ToolDefinition> = [
           .number()
           .optional()
           .describe('Pass Jira user account uuid to assign test cycle'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields as array of objects with id and value. ' +
+              'Refer to "Get Test Cycle Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: CreateTestCycleParams) => {
@@ -255,6 +279,18 @@ export const testCycleTools: Array<ToolDefinition> = [
           .optional()
           .describe('Whether test cycle is automated or not'),
         assignee: z.number().optional().describe('Pass Jira user account uuid'),
+        customFields: z
+          .array(
+            z.object({
+              id: z.string().describe('Custom field ID'),
+              value: z.string().describe('Custom field value'),
+            })
+          )
+          .optional()
+          .describe(
+            'Custom fields as array of objects with id and value. ' +
+              'Refer to "Get Test Cycle Custom Fields" to get available custom fields.'
+          ),
       },
     },
     handler: async (params: UpdateTestCycleParams & { id: string }) => {
