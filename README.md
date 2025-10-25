@@ -114,56 +114,6 @@ To use the MCP inspector:
 pnpm run:inspector
 ```
 
-## 🐳 Docker Setup
-
-### Building with Docker
-
-Build the Docker image:
-
-```bash
-docker build -t jira-qmetry-mcp .
-```
-
-Run the Docker container:
-
-```bash
-docker run --rm -i -e QMETRY_API_KEY="your-api-key-here" jira-qmetry-mcp
-```
-
-### Claude Desktop Configuration with Docker
-
-To use this MCP server with Claude Desktop via Docker, add the following configuration to your Claude Desktop config file:
-
-**Location**:
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-**Configuration**:
-
-```json
-{
-    "mcpServers": {
-        "jira-qmetry": {
-            "command": "docker",
-            "args": [
-                "run",
-                "--rm",
-                "-i",
-                "-e", "QMETRY_API_KEY",
-                "jira-qmetry-mcp"
-            ],
-            "env": {
-                "QMETRY_API_KEY": "your-qmetry-api-key"
-            }
-        }
-    }
-}
-```
-
-> 💡 **Note**: Replace `your-qmetry-api-key` with your actual QMetry API key
-
-After updating the configuration, restart Claude Desktop for the changes to take effect.
-
 ## 🛠️ Available Tools
 
 ### 📁 Projects
